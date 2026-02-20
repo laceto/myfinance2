@@ -38,17 +38,17 @@ data = massive_handler.download_data(
     end=today
 )
 
-summary = massive_handler.list_available_data()
-zero_row_symbols = [symbol for symbol, info in summary.items() if info["rows"] == 0]
+# summary = massive_handler.list_available_data()
+# zero_row_symbols = [symbol for symbol, info in summary.items() if info["rows"] == 0]
 
 
-data = massive_handler.download_data(
-    symbols=zero_row_symbols,
-    use_cache=False,        # Use cache to avoid re-downloading
-    threads=True,           # Enable multi-threading,
-    start=yesterday,
-    end=today
-)
+# data = massive_handler.download_data(
+#     symbols=zero_row_symbols,
+#     use_cache=False,        # Use cache to avoid re-downloading
+#     threads=True,           # Enable multi-threading,
+#     start=yesterday,
+#     end=today
+# )
 
 output_dir = Path("./data/ohlc/today/it")
 
