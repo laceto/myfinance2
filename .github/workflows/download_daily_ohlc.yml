@@ -7,6 +7,9 @@ on:
     - cron: '0 21 * * 1-5'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   download-ohlc:
     runs-on: ubuntu-latest
@@ -32,10 +35,10 @@ jobs:
       - name: Run OHLC download script
         run: python get_daily_ohlc_data.py
 
-      - name: Upload OHLC data as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ohlc-data-it-${{ github.run_id }}
-          path: data/ohlc/today/it/ohlc_data.parquet
-          if-no-files-found: warn
-          retention-days: 7
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/ohlc/today/it/ohlc_data.parquet
+          git commit -m "chore: update daily OHLC data [skip ci]" || echo "No changes to commit"
+          git push
