@@ -15,7 +15,7 @@ tickers = pd.read_excel("data/ticker/it/ticker.xlsx")
 
 # from tickers column 'ticker' to a list
 ticker_list = tickers['ticker'].tolist()
-ticker_list = ticker_list[:10]  # Limit to first 100 tickers for testing
+# ticker_list = ticker_list[:10]  # Limit to first 100 tickers for testing
 # ticker_list = ['AVIO.MI', 'AZM.MI', 'BAMI.MI', 'BMED.MI']  # Example tickers
 
 massive_handler = YFinanceDataHandler(
