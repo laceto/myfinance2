@@ -19,7 +19,7 @@ ticker_list = ticker_list[:10]  # Limit to first 100 tickers for testing
 # ticker_list = ['AVIO.MI', 'AZM.MI', 'BAMI.MI', 'BMED.MI']  # Example tickers
 
 massive_handler = YFinanceDataHandler(
-    cache_dir="../data/ohlc/today/it",  # Cache directory
+    cache_dir="data/ohlc/today/it",  # Cache directory
     enable_logging=True,
     chunk_size=20,                       # Smaller chunks for stability
     log_level=logging.INFO

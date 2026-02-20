@@ -1,0 +1,41 @@
+name: Download Daily OHLC Data
+
+on:
+  # 21:00 UTC = 22:00 CET (winter) / 23:00 CEST (summer, UTC+2)
+  # Runs Mon–Fri only (Borsa Italiana is closed on weekends)
+  schedule:
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  download-ohlc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas openpyxl pyarrow
+          pip install algoshort-0.1.0-py3-none-any.whl
+
+      - name: Create output directory
+        run: mkdir -p data/ohlc/today/it
+
+      - name: Run OHLC download script
+        run: python get_daily_ohlc_data.py
+
+      - name: Upload OHLC data as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ohlc-data-it-${{ github.run_id }}
+          path: data/ohlc/today/it/ohlc_data.parquet
+          if-no-files-found: warn
+          retention-days: 7
