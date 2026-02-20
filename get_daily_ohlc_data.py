@@ -27,15 +27,14 @@ massive_handler = YFinanceDataHandler(
 
 # Get today's date
 today = date.today()
-# get yesterday's date
-yesterday = today - pd.Timedelta(days=1)
+tomorrow = today + pd.Timedelta(days=1)
 
 data = massive_handler.download_data(
     symbols=ticker_list,
     use_cache=False,        # Use cache to avoid re-downloading
     threads=True,           # Enable multi-threading,
-    start=yesterday,
-    end=today
+    start=today,
+    end=tomorrow
 )
 
 # summary = massive_handler.list_available_data()
