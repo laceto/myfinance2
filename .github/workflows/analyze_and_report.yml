@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install yfinance pandas openpyxl pyarrow joblib
+          pip install yfinance pandas openpyxl pyarrow joblib tqdm
           pip install algoshort-0.1.1-py3-none-any.whl
 
       - name: Run signal analysis
