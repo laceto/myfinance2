@@ -27,7 +27,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install yfinance pandas openpyxl pyarrow joblib
-          pip install algoshort-0.1.0-py3-none-any.whl
+          pip install algoshort-0.1.1-py3-none-any.whl
 
       - name: Create output directory
         run: mkdir -p data/ohlc/today/it

@@ -32,7 +32,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install yfinance pandas openpyxl pyarrow joblib
-          pip install algoshort-0.1.0-py3-none-any.whl
+          pip install algoshort-0.1.1-py3-none-any.whl
 
       - name: Run signal analysis
         run: python analyze_stock.py
@@ -41,12 +41,20 @@ jobs:
         # tee writes to file AND streams to the workflow log simultaneously.
         run: python trading_report.py | tee data/results/it/trading_report.txt
 
+      # analysis_results.parquet is ~500 MB — too large for a git commit.
+      # Upload it as a workflow artifact (retained for 30 days) instead.
+      - name: Upload analysis parquet as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-results-${{ github.run_id }}
+          path: data/results/it/analysis_results.parquet
+          retention-days: 30
+
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/results/it/analysis_results.parquet \
-                  data/results/it/trading_dashboard.csv \
+          git add data/results/it/trading_dashboard.csv \
                   data/results/it/trading_report.txt
-          git commit -m "chore: update analysis results and trading report [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: update trading dashboard and report [skip ci]" || echo "No changes to commit"
           git push

@@ -1,0 +1,71 @@
+{
+  "regimes": {
+    "breakout": {
+      "bo_window": 150,
+      "relative": true
+    },
+    "turtle": {
+      "slow_window": 50,
+      "fast_window": 20,
+      "relative": true
+    },
+    "ma_crossover": {
+      "short_window": 50,
+      "medium_window": 100,
+      "long_window": 150,
+      "ma_type": ["sma", "ema"],
+      "relative": true
+    },
+    "floor_ceiling": {
+      "relative": true,
+      "vlty_n": 63,
+      "dist_pct": 0.05,
+      "retrace_pct": 0.05,
+      "threshold": 1.5,
+      "dgt": 2,
+      "d_vol": 5,
+      "r_vol": 2.5,
+      "lvl": 3
+    }
+  },
+  "relative": {
+    "dgt": 4,
+    "rebase": true
+  },
+  "stop_loss": {
+    "atr_window": 14,
+    "atr_multiplier": 2.0,
+    "swing_window": 50,
+    "retracement_level": 0.618,
+    "magnitude_level": 2,
+    "min_distance": 0.5,
+    "max_distance": 4.0
+  },
+  "returns": {
+    "fast": 20,
+    "relative": false
+  },
+  "metrics": {
+    "risk_window": 252,
+    "percentile": 0.05,
+    "limit": 5
+  },
+  "position_sizing": {
+    "starting_capital": 1000000,
+    "lot": 100,
+    "equal_weight": 0.05,
+    "amortized_root": 2
+  },
+  "benchmark": "FTSEMIB.MI",
+  "floor_ceiling": {
+    "relative": true,
+    "vlty_n": 63,
+    "dist_pct": 0.05,
+    "retrace_pct": 0.05,
+    "threshold": 1.5,
+    "dgt": 2,
+    "d_vol": 5,
+    "r_vol": 2.5,
+    "lvl": 3
+  }
+}
