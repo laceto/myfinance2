@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 
 RESULTS_PATH = Path("./data/results/it/analysis_results.parquet")
-DASHBOARD_PATH = Path("./data/results/it/trading_dashboard.csv")
+DASHBOARD_PATH = Path("./data/results/it/trading_dashboard.xlsx")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     dashboard = pd.concat(all_dashboards, ignore_index=True)
     DASHBOARD_PATH.parent.mkdir(parents=True, exist_ok=True)
-    dashboard.to_csv(DASHBOARD_PATH, index=False)
+    dashboard.to_excel(DASHBOARD_PATH, index=False)
 
     # --- DATE LOGIC ---
     # Get all unique dates and identify the cutoff for the last 4 trading days
@@ -196,7 +196,7 @@ if __name__ == "__main__":
 # sys.stderr.reconfigure(encoding="utf-8")
 
 # RESULTS_PATH = Path("./data/results/it/analysis_results.parquet")
-# DASHBOARD_PATH = Path("./data/results/it/trading_dashboard.csv")
+# DASHBOARD_PATH = Path("./data/results/it/trading_dashboard.xlsx")
 
 # logging.basicConfig(
 #     level=logging.INFO,
@@ -310,7 +310,7 @@ if __name__ == "__main__":
 #     # -----------------------------------------------------------------------
 #     dashboard = pd.concat(all_dashboards, ignore_index=True)
 #     DASHBOARD_PATH.parent.mkdir(parents=True, exist_ok=True)
-#     dashboard.to_csv(DASHBOARD_PATH, index=False)
+#     dashboard.to_excel(DASHBOARD_PATH, index=False)
 #     log.info(
 #         "Dashboard saved to %s (%d rows, %d signals × %d symbols)",
 #         DASHBOARD_PATH,

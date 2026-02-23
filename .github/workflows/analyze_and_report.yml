@@ -54,7 +54,7 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/results/it/trading_dashboard.csv \
+          git add data/results/it/trading_dashboard.xlsx \
                   data/results/it/trading_report.txt
           git commit -m "chore: update trading dashboard and report [skip ci]" || echo "No changes to commit"
           git push
