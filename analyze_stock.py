@@ -34,6 +34,7 @@ from pipeline import (
 CONFIG_PATH = Path("config.json")
 DATA_PATH = Path("./data/ohlc/historical/it/ohlc_data.parquet")
 OUTPUT_PATH = Path("./data/results/it/")
+TRADE_SUMMARY_PATH = OUTPUT_PATH / "trade_summary.xlsx"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -96,31 +97,35 @@ for _df in dfs:
 
 trade_summary = (
     pd.DataFrame(_summary_rows)
-    .sort_values("total_trades", ascending=True)
+    .sort_values("total_entries", ascending=True)
     .reset_index(drop=True)
 )
+trade_summary = trade_summary[["symbol", "signal", "total_entries"]]
 print(trade_summary.to_string())
+OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+trade_summary.to_excel(OUTPUT_PATH / "trade_summary.xlsx", index=False)
+log.info("Trade summary saved to %s", OUTPUT_PATH / "trade_summary.xlsx")
 
 log.info("Calculating returns")
 dfs = calculate_returns(dfs, all_signals)
 
-log.info("Calculating stop losses")
-dfs = calculate_stop_losses(
-    dfs,
-    all_signals,
-    atr_window=stop_loss_cfg["atr_window"],
-    atr_multiplier=stop_loss_cfg["atr_multiplier"],
-)
-
-# log.info("Calculating position sizing")
-# sizer = PositionSizing(
-#     tolerance=-0.1,
-#     mn=0.0025,
-#     mx=0.05,
-#     equal_weight=ps_cfg["equal_weight"],
-#     avg=0.03,
-#     lot=ps_cfg["lot"],
+# log.info("Calculating stop losses")
+# dfs = calculate_stop_losses(
+#     dfs,
+#     all_signals,
+#     atr_window=stop_loss_cfg["atr_window"],
+#     atr_multiplier=stop_loss_cfg["atr_multiplier"],
 # )
-# dfs = calculate_position_sizing(dfs, all_signals, sizer)
+
+# # log.info("Calculating position sizing")
+# # sizer = PositionSizing(
+# #     tolerance=-0.1,
+# #     mn=0.0025,
+# #     mx=0.05,
+# #     equal_weight=ps_cfg["equal_weight"],
+# #     avg=0.03,
+# #     lot=ps_cfg["lot"],
+# # )
+# # dfs = calculate_position_sizing(dfs, all_signals, sizer)
 
 save_results(dfs, OUTPUT_PATH)
