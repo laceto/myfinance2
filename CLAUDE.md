@@ -179,3 +179,7 @@ Complete, runnable code examples
 Inline comments explaining non-obvious logic
 Suggestions for testing approach
 Notes on potential improvements or future considerations
+
+### Git guideline
+
+Never Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com> in the commit message
