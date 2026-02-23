@@ -51,8 +51,8 @@
     "limit": 5
   },
   "position_sizing": {
-    "starting_capital": 1000000,
-    "lot": 100,
+    "starting_capital": 100000,
+    "lot": 1,
     "equal_weight": 0.05,
     "amortized_root": 2
   },
