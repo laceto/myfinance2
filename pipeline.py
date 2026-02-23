@@ -123,7 +123,7 @@ def generate_all_signals(
 
 def run_grid_search(
     dfs: list[pd.DataFrame], signal_columns: list[str]
-) -> list[pd.DataFrame]:
+) -> tuple[list[pd.DataFrame], list[str]]:
     # Generate the combination grid once — it only depends on the signal
     # columns, not on any individual stock's data.
     searcher = SignalGridSearch(
@@ -132,6 +132,9 @@ def run_grid_search(
         direction_col=REGIME_COL,
     )
     grid = searcher.generate_grid()
+    # Extract combined signal names before the loop so callers can merge them
+    # with the original signal list and pass everything to downstream stages.
+    combined_signal_names = [combo["name"] for combo in grid]
     log.info("Grid search: %d combinations × %d symbols", len(grid), len(dfs))
 
     result_dfs = []
@@ -155,7 +158,7 @@ def run_grid_search(
         log.info("Grid search complete for %s: %d combinations applied", symbol, len(grid))
         result_dfs.append(df)
 
-    return result_dfs
+    return result_dfs, combined_signal_names
 
 
 def calculate_returns(

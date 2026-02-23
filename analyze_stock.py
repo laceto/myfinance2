@@ -62,15 +62,22 @@ dfs, signal_columns = generate_all_signals(
 )
 
 log.info("Running grid search")
-dfs = run_grid_search(dfs, signal_columns)
+dfs, combined_signals = run_grid_search(dfs, signal_columns)
+# Downstream stages receive both the original signals and every
+# combined signal produced by the grid search.
+all_signals = signal_columns + combined_signals
+log.info(
+    "Total signals for downstream stages: %d original + %d combined = %d",
+    len(signal_columns), len(combined_signals), len(all_signals),
+)
 
 log.info("Calculating returns")
-dfs = calculate_returns(dfs, signal_columns)
+dfs = calculate_returns(dfs, all_signals)
 
 log.info("Calculating stop losses")
 dfs = calculate_stop_losses(
     dfs,
-    signal_columns,
+    all_signals,
     atr_window=stop_loss_cfg["atr_window"],
     atr_multiplier=stop_loss_cfg["atr_multiplier"],
 )
@@ -84,6 +91,6 @@ sizer = PositionSizing(
     avg=0.03,
     lot=ps_cfg["lot"],
 )
-dfs = calculate_position_sizing(dfs, signal_columns, sizer)
+dfs = calculate_position_sizing(dfs, all_signals, sizer)
 
 save_results(dfs, OUTPUT_PATH)
