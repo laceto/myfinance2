@@ -82,15 +82,15 @@ dfs = calculate_stop_losses(
     atr_multiplier=stop_loss_cfg["atr_multiplier"],
 )
 
-log.info("Calculating position sizing")
-sizer = PositionSizing(
-    tolerance=-0.1,
-    mn=0.0025,
-    mx=0.05,
-    equal_weight=ps_cfg["equal_weight"],
-    avg=0.03,
-    lot=ps_cfg["lot"],
-)
-dfs = calculate_position_sizing(dfs, all_signals, sizer)
+# log.info("Calculating position sizing")
+# sizer = PositionSizing(
+#     tolerance=-0.1,
+#     mn=0.0025,
+#     mx=0.05,
+#     equal_weight=ps_cfg["equal_weight"],
+#     avg=0.03,
+#     lot=ps_cfg["lot"],
+# )
+# dfs = calculate_position_sizing(dfs, all_signals, sizer)
 
 save_results(dfs, OUTPUT_PATH)
