@@ -2,15 +2,19 @@ import logging
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 # algoshort prints unicode characters (e.g. ✓) that cp1252 (Windows default)
 # cannot encode. Reconfigure stdout/stderr to UTF-8 before any import that
 # triggers those prints.
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 
+from algoshort.combiner import HybridSignalCombiner
 from algoshort.position_sizing import PositionSizing
 
 from pipeline import (
+    REGIME_COL,
     load_config,
     build_search_spaces,
     load_data,
@@ -70,6 +74,32 @@ log.info(
     "Total signals for downstream stages: %d original + %d combined = %d",
     len(signal_columns), len(combined_signals), len(all_signals),
 )
+
+# -----------------------------------------------------------------------
+# Trade summary — one row per (symbol, signal), sorted by total_trades asc
+# -----------------------------------------------------------------------
+log.info("Computing trade summaries")
+# entry_col / exit_col are not referenced inside get_trade_summary /
+# add_signal_metadata, so one instance is reused across all signals.
+_summarizer = HybridSignalCombiner(
+    direction_col=REGIME_COL,
+    entry_col=all_signals[0],
+    exit_col=all_signals[0],
+)
+_summary_rows = []
+for _df in dfs:
+    _symbol = _df["symbol"].iloc[0]
+    for _signal in all_signals:
+        # Pass only the signal column to avoid a full-DataFrame copy.
+        _summary = _summarizer.get_trade_summary(_df[[_signal]].copy(), _signal)
+        _summary_rows.append({"symbol": _symbol, "signal": _signal, **_summary})
+
+trade_summary = (
+    pd.DataFrame(_summary_rows)
+    .sort_values("total_trades", ascending=True)
+    .reset_index(drop=True)
+)
+print(trade_summary.to_string())
 
 log.info("Calculating returns")
 dfs = calculate_returns(dfs, all_signals)
