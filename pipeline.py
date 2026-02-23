@@ -14,10 +14,12 @@ import pandas as pd
 
 from algoshort.ohlcprocessor import OHLCProcessor
 from algoshort.wrappers import generate_signals
-from algoshort.combiner import SignalGridSearch
+from tqdm import tqdm
+
+from algoshort.combiner import HybridSignalCombiner, SignalGridSearch
 from algoshort.returns import ReturnsCalculator
 from algoshort.stop_loss import StopLossCalculator
-from algoshort.position_sizing import PositionSizing, run_position_sizing_parallel_over_stocks
+from algoshort.position_sizing import PositionSizing
 
 # ---------------------------------------------------------------------------
 # Column name constants — change once here if the schema ever evolves
@@ -65,7 +67,7 @@ def load_data(data_path: Path, benchmark: str) -> tuple[pd.DataFrame, list[str]]
     log.info("Loading OHLC data from %s", data_path)
     ohlc_data = pd.read_parquet(data_path)
     symbols = [s for s in ohlc_data["symbol"].unique() if s != benchmark]
-    # symbols = symbols[:10]  # limit to 10 stocks for faster testing; remove for full run
+    symbols = symbols[:1]  # limit to first symbol for testing; remove for full run
     log.info("Found %d symbols (excluding benchmark %s)", len(symbols), benchmark)
     return ohlc_data, symbols
 
@@ -122,29 +124,38 @@ def generate_all_signals(
 def run_grid_search(
     dfs: list[pd.DataFrame], signal_columns: list[str]
 ) -> list[pd.DataFrame]:
-    # Build a symbol-keyed dict; insertion order (Python 3.7+) matches dfs.
-    stock_dfs = {df["symbol"].iloc[0]: df for df in dfs}
-
-    # A single searcher is sufficient — available_signals and direction_col
-    # are identical across every symbol; the parallel variant iterates stocks.
+    # Generate the combination grid once — it only depends on the signal
+    # columns, not on any individual stock's data.
     searcher = SignalGridSearch(
-        df=next(iter(stock_dfs.values())),
+        df=dfs[0],
         available_signals=signal_columns,
         direction_col=REGIME_COL,
     )
-    per_stock_results = searcher.run_grid_search_parallel_over_stocks(
-        stock_dfs=stock_dfs,
-        allow_flips=True,
-        require_regime_alignment=True,
-        add_signals_to_dfs=True,  # writes combined-signal cols back in-place
-    )
-    for symbol, results_df in per_stock_results.items():
-        log.info(
-            "Grid search complete for %s: %d candidate combinations evaluated",
-            symbol,
-            len(results_df),
-        )
-    return list(stock_dfs.values())
+    grid = searcher.generate_grid()
+    log.info("Grid search: %d combinations × %d symbols", len(grid), len(dfs))
+
+    result_dfs = []
+    for df in dfs:
+        symbol = df["symbol"].iloc[0]
+        for combo in tqdm(grid, desc=symbol, leave=False):
+            combiner = HybridSignalCombiner(
+                direction_col=REGIME_COL,
+                entry_col=combo["entry"],
+                exit_col=combo["exit"],
+                verbose=False,
+            )
+            output_col = combo["name"]
+            df = combiner.combine_signals(
+                df,
+                output_col=output_col,
+                allow_flips=True,
+                require_regime_alignment=True,
+            )
+            df = combiner.add_signal_metadata(df, output_col)
+        log.info("Grid search complete for %s: %d combinations applied", symbol, len(grid))
+        result_dfs.append(df)
+
+    return result_dfs
 
 
 def calculate_returns(
@@ -160,7 +171,9 @@ def calculate_returns(
             close_col=OHLC_COLS["close"],
             relative_prefix=RELATIVE_PREFIX,
         )
-        result_dfs.append(calc.get_returns_multiple(df, signals=signal_columns, relative=True))
+        for signal in signal_columns:
+            df = calc.get_returns(df, signal=signal, relative=True, inplace=False)
+        result_dfs.append(df)
     return result_dfs
 
 
@@ -195,19 +208,20 @@ def calculate_position_sizing(
     signal_columns: list[str],
     sizer: PositionSizing,
 ) -> list[pd.DataFrame]:
-    stock_dfs = {df["symbol"].iloc[0]: df for df in dfs}
-    results = run_position_sizing_parallel_over_stocks(
-        sizer=sizer,
-        stock_dfs=stock_dfs,
-        signals=signal_columns,
-        chg_suffix="_chg1D_fx",
-        sl_suffix="_stop_loss",
-        close_col=OHLC_COLS["close"],
-        n_jobs=-1,
-    )
-    for symbol in results:
+    result_dfs = []
+    for df in dfs:
+        symbol = df["symbol"].iloc[0]
+        for signal in signal_columns:
+            df = sizer.calculate_shares_for_signal(
+                df=df,
+                signal=signal,
+                daily_chg=f"{signal}_chg1D_fx",
+                sl=f"{signal}_stop_loss",
+                close=OHLC_COLS["close"],
+            )
         log.info("Position sizing complete for %s", symbol)
-    return list(results.values())
+        result_dfs.append(df)
+    return result_dfs
 
 
 # ---------------------------------------------------------------------------
