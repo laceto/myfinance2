@@ -228,6 +228,40 @@ def calculate_position_sizing(
 
 
 # ---------------------------------------------------------------------------
+# Returns snapshot
+# ---------------------------------------------------------------------------
+
+def extract_cumul_snapshot(
+    dfs: list[pd.DataFrame], signal_columns: list[str]
+) -> pd.DataFrame:
+    """Return a tidy long DataFrame — one row per (symbol, signal, cumul metric).
+
+    Schema: date | symbol | signal | key_metrics | value
+        ``key_metrics`` contains only columns whose name ends with ``_cumul``.
+        ``value`` is the terminal (last bar) value of that metric.
+    """
+    rows: list[pd.DataFrame] = []
+
+    for df in dfs:
+        id_cols = [c for c in ("date", "symbol") if c in df.columns]
+        for signal in signal_columns:
+            cumul_cols = [c for c in df.columns if c.startswith(signal) and c.endswith("_cumul")]
+            if not cumul_cols:
+                log.warning("No _cumul columns found for signal %s — skipping", signal)
+                continue
+            last_row = df[id_cols + cumul_cols].tail(1).copy()
+            melted = last_row.melt(id_vars=id_cols, var_name="key_metrics", value_name="value")
+            melted.insert(melted.columns.get_loc("symbol") + 1, "signal", signal)
+            rows.append(melted)
+
+    if not rows:
+        log.warning("extract_cumul_snapshot: no rows collected — returning empty DataFrame")
+        return pd.DataFrame()
+
+    return pd.concat(rows, ignore_index=True)
+
+
+# ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
 

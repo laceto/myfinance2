@@ -25,6 +25,7 @@ from pipeline import (
     calculate_returns,
     calculate_stop_losses,
     calculate_position_sizing,
+    extract_cumul_snapshot,
     save_results,
 )
 
@@ -35,6 +36,7 @@ CONFIG_PATH = Path("config.json")
 DATA_PATH = Path("./data/ohlc/historical/it/ohlc_data.parquet")
 OUTPUT_PATH = Path("./data/results/it/")
 TRADE_SUMMARY_PATH = OUTPUT_PATH / "trade_summary.xlsx"
+CUMUL_SNAPSHOT_PATH = OUTPUT_PATH / "cumul_snapshot.xlsx"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -108,6 +110,17 @@ log.info("Trade summary saved to %s", OUTPUT_PATH / "trade_summary.xlsx")
 
 log.info("Calculating returns")
 dfs = calculate_returns(dfs, all_signals)
+
+log.info("Extracting cumulative return snapshots")
+cumul_snapshot = (
+    extract_cumul_snapshot(dfs, all_signals)
+    .sort_values("value", ascending=False)
+    .reset_index(drop=True)
+)
+print("\n--- Cumulative Return Snapshot (last bar) ---")
+print(cumul_snapshot.to_string(index=False))
+cumul_snapshot.to_excel(CUMUL_SNAPSHOT_PATH, index=False)
+log.info("Cumulative return snapshot saved to %s", CUMUL_SNAPSHOT_PATH)
 
 # log.info("Calculating stop losses")
 # dfs = calculate_stop_losses(
