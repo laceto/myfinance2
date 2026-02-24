@@ -67,7 +67,7 @@ def load_data(data_path: Path, benchmark: str) -> tuple[pd.DataFrame, list[str]]
     log.info("Loading OHLC data from %s", data_path)
     ohlc_data = pd.read_parquet(data_path)
     symbols = [s for s in ohlc_data["symbol"].unique() if s != benchmark]
-    symbols = symbols[:1]  # limit to first symbol for testing; remove for full run
+    # symbols = symbols[:1]  # limit to first symbol for testing; remove for full run
     log.info("Found %d symbols (excluding benchmark %s)", len(symbols), benchmark)
     return ohlc_data, symbols
 
