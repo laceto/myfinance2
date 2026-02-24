@@ -122,7 +122,7 @@ def generate_all_signals(
 
 
 def run_grid_search(
-    dfs: list[pd.DataFrame], signal_columns: list[str]
+    dfs: list[pd.DataFrame], signal_columns: list[str], show_progress: bool = False
 ) -> tuple[list[pd.DataFrame], list[str]]:
     # Generate the combination grid once — it only depends on the signal
     # columns, not on any individual stock's data.
@@ -140,7 +140,7 @@ def run_grid_search(
     result_dfs = []
     for df in dfs:
         symbol = df["symbol"].iloc[0]
-        for combo in tqdm(grid, desc=symbol, leave=False):
+        for combo in tqdm(grid, desc=symbol, leave=False, disable=not show_progress):
             combiner = HybridSignalCombiner(
                 direction_col=REGIME_COL,
                 entry_col=combo["entry"],
