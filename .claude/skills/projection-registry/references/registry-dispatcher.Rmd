@@ -1,0 +1,523 @@
+---
+title: "Multi-Dimensional Projection Registry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Multi-Dimensional Projection Registry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 6,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+## Overview
+
+This vignette covers the **projection registry** pattern for dispatching projections based on multiple dimensions. This is particularly useful in reinsurance scenarios where projection logic varies by:
+
+- **Ceding company**: Different insurers you reinsure
+- **Product type**: Term life, whole life, annuity, etc.
+- **Underwriting year**: Policies written in different years may have different terms
+- **Risk category**: Different risk classes or treaty structures
+
+The registry uses a tibble-based lookup table pattern, consistent with pricingr's `set_assumption()` philosophy.
+
+```{r setup}
+library(pricingr)
+library(dplyr)
+```
+
+## Motivation
+
+The basic `create_product_registry()` and `create_product_dispatcher()` functions dispatch based on a single product type column. In real-world reinsurance, this is often insufficient:
+
+```{r, eval=FALSE}
+# Simple single-dimension approach - too limited for reinsurance
+registry <- create_product_registry()
+register_product(registry, "term_life", proj_term_life)
+dispatcher <- create_product_dispatcher(registry, product_col = "product_type")
+```
+
+What if the same product from different ceding companies requires different projection logic? Or policies written before 2020 use legacy assumptions?
+
+The **projection registry** solves this with multi-dimensional matching and priority-based rule selection.
+
+## Creating a Projection Registry
+
+Use `create_projection_registry()` to define the dimensions your registry will match on:
+
+```{r}
+# Registry with exact match columns
+registry <- create_projection_registry(
+ceding = "exact",
+  product = "exact",
+  risk = "exact"
+)
+
+print(registry)
+```
+
+### Range Columns
+
+For dimensions like underwriting year where you want to match ranges rather than exact values, specify min/max column names:
+```{r}
+# Registry with a range column
+registry <- create_projection_registry(
+  ceding = "exact",
+  product = "exact",
+  uw_year = c("uw_year_min", "uw_year_max")
+)
+
+print(registry)
+```
+
+## Registering Projection Rules
+
+Use `register_projection()` to add rules. Each rule specifies:
+
+- **Matching criteria**: Values for each dimension (use `NA` as a wildcard)
+- **Projection function**: The function to execute when the rule matches
+- **Priority** (optional): For tie-breaking when multiple rules match
+
+### Basic Rules
+
+```{r}
+# Create a fresh registry
+registry <- create_projection_registry(
+  ceding = "exact",
+  product = "exact"
+)
+
+# Specific rule: ABC ceding, term product
+registry <- register_projection(registry,
+  ceding = "ABC", product = "term",
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "ABC_term_specific")
+  },
+  proj_fn_name = "proj_abc_term"
+)
+
+# Broader rule: Any product from ABC (NA = wildcard)
+registry <- register_projection(registry,
+  ceding = "ABC", product = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "ABC_default")
+  },
+  proj_fn_name = "proj_abc_default"
+)
+
+# Catch-all rule: Any ceding, any product
+registry <- register_projection(registry,
+  ceding = NA, product = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "global_default")
+  },
+  proj_fn_name = "proj_global_default"
+)
+
+print(registry)
+```
+### Understanding Priority
+
+When multiple rules match a model point, the rule with highest priority wins. Priority is automatically calculated based on specificity (fewer wildcards = higher priority):
+
+| Rule | NA Count | Auto Priority |
+|------|----------|---------------|
+| ceding="ABC", product="term" | 0 | 100 |
+| ceding="ABC", product=NA | 1 | 90 |
+| ceding=NA, product=NA | 2 | 80 |
+
+You can override automatic priority:
+
+```{r}
+registry <- create_projection_registry(ceding = "exact")
+
+# Force a wildcard rule to have high priority
+registry <- register_projection(registry,
+  ceding = NA,
+  proj_fn = function(mp) mp,
+  priority = 999L,  # Override automatic priority
+  proj_fn_name = "high_priority_default",
+  .verbose = FALSE
+)
+
+print(registry)
+```
+
+## Range Matching
+
+Range columns enable matching on numeric ranges, useful for underwriting year, policy duration, or age bands:
+
+```{r}
+registry <- create_projection_registry(
+  ceding = "exact",
+  uw_year = c("uw_year_min", "uw_year_max")
+)
+
+# Policies written 2023 onwards
+registry <- register_projection(registry,
+  ceding = "ABC", uw_year_min = 2023L, uw_year_max = NA,  # NA = unbounded
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "ABC_2023_onwards", assumptions = "new_mortality_table")
+  },
+  proj_fn_name = "proj_abc_2023_plus",
+  .verbose = FALSE
+)
+
+# Legacy policies: before 2023
+registry <- register_projection(registry,
+  ceding = "ABC", uw_year_min = NA, uw_year_max = 2022L,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "ABC_legacy", assumptions = "old_mortality_table")
+  },
+  proj_fn_name = "proj_abc_legacy",
+  .verbose = FALSE
+)
+
+# Default for other ceding companies
+registry <- register_projection(registry,
+  ceding = NA, uw_year_min = NA, uw_year_max = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(
+        n_months = duration_months,
+        start_date = inception_date,
+        entry_age = entry_age
+      ) %>%
+      mutate(source = "default", assumptions = "standard_table")
+  },
+  proj_fn_name = "proj_default",
+  .verbose = FALSE
+)
+
+print(registry)
+```
+
+## Using the Dispatcher
+
+Create a dispatcher from the registry and use it with `project_policies()`:
+
+```{r}
+# Create dispatcher
+dispatcher <- create_registry_dispatcher(registry)
+
+# Sample portfolio with different ceding companies and underwriting years
+portfolio <- tibble(
+  policy_id = 1:5,
+  ceding = c("ABC", "ABC", "ABC", "XYZ", "XYZ"),
+  uw_year = c(2024L, 2021L, 2023L, 2022L, 2024L),
+  inception_date = lubridate::ymd("2023-01-01"),
+  duration_months = 12L,
+  entry_age = c(30L, 35L, 40L, 45L, 50L)
+)
+
+portfolio
+```
+
+```{r}
+# Run batch projection
+results <- project_policies(
+  mp_df = portfolio,
+  proj_fn = dispatcher,
+  .progress = FALSE,
+  .policy_id = "policy_id"
+)
+
+# Check which projection was used for each policy
+results %>%
+  select(policy_id, ceding, uw_year, source, assumptions) %>%
+  distinct()
+```
+
+## Complete Reinsurance Example
+
+Here's a realistic example with multiple dimensions:
+
+```{r}
+# Create registry for a reinsurance portfolio
+registry <- create_projection_registry(
+  ceding = "exact",
+  product = "exact",
+  uw_year = c("uw_year_min", "uw_year_max")
+)
+
+# ABC Life - Term products, new business (2023+)
+registry <- register_projection(registry,
+  ceding = "ABC_Life", product = "term", uw_year_min = 2023L, uw_year_max = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(n_months = duration_months, start_date = inception_date, entry_age = entry_age) %>%
+      mutate(
+        treaty = "QS_2023",
+        cession_rate = 0.30,
+        commission_rate = 0.25,
+        source = "ABC_term_2023+"
+      )
+  },
+  proj_fn_name = "ABC_term_new",
+  .verbose = FALSE
+)
+
+# ABC Life - Term products, legacy (before 2023)
+registry <- register_projection(registry,
+  ceding = "ABC_Life", product = "term", uw_year_min = NA, uw_year_max = 2022L,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(n_months = duration_months, start_date = inception_date, entry_age = entry_age) %>%
+      mutate(
+        treaty = "QS_2018",
+        cession_rate = 0.25,
+        commission_rate = 0.20,
+        source = "ABC_term_legacy"
+      )
+  },
+  proj_fn_name = "ABC_term_legacy",
+  .verbose = FALSE
+)
+
+# ABC Life - All other products (whole life, etc.)
+registry <- register_projection(registry,
+  ceding = "ABC_Life", product = NA, uw_year_min = NA, uw_year_max = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(n_months = duration_months, start_date = inception_date, entry_age = entry_age) %>%
+      mutate(
+        treaty = "SURPLUS_2020",
+        cession_rate = 0.40,
+        commission_rate = 0.22,
+        source = "ABC_other"
+      )
+  },
+  proj_fn_name = "ABC_other",
+  .verbose = FALSE
+)
+
+# XYZ Insurance - All products
+registry <- register_projection(registry,
+  ceding = "XYZ_Insurance", product = NA, uw_year_min = NA, uw_year_max = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(n_months = duration_months, start_date = inception_date, entry_age = entry_age) %>%
+      mutate(
+        treaty = "XS_2021",
+        cession_rate = 0.50,
+        commission_rate = 0.18,
+        source = "XYZ_all"
+      )
+  },
+  proj_fn_name = "XYZ_all",
+  .verbose = FALSE
+)
+
+# Global default
+registry <- register_projection(registry,
+  ceding = NA, product = NA, uw_year_min = NA, uw_year_max = NA,
+  proj_fn = function(mp) {
+    mp %>%
+      setup_projection(n_months = duration_months, start_date = inception_date, entry_age = entry_age) %>%
+      mutate(
+        treaty = "FACULTATIVE",
+        cession_rate = 0.20,
+        commission_rate = 0.15,
+        source = "default"
+      )
+  },
+  proj_fn_name = "default",
+  .verbose = FALSE
+)
+
+print(registry)
+```
+
+```{r}
+# Create mixed portfolio
+portfolio <- tibble(
+  policy_id = 1:8,
+  ceding = c("ABC_Life", "ABC_Life", "ABC_Life", "ABC_Life",
+             "XYZ_Insurance", "XYZ_Insurance", "Other_Co", "Other_Co"),
+  product = c("term", "term", "whole_life", "term",
+              "term", "whole_life", "term", "annuity"),
+  uw_year = c(2024L, 2020L, 2022L, 2023L,
+              2021L, 2023L, 2024L, 2022L),
+  inception_date = lubridate::ymd("2024-01-01"),
+  duration_months = 12L,
+  entry_age = 40L
+)
+
+# Run projections
+dispatcher <- create_registry_dispatcher(registry)
+results <- project_policies(portfolio, dispatcher, .progress = FALSE, .policy_id = "policy_id")
+
+# Summary by source
+results %>%
+  select(policy_id, ceding, product, uw_year, source, treaty, cession_rate) %>%
+  distinct() %>%
+  arrange(policy_id)
+```
+
+## Inspecting the Registry
+
+The registry is a tibble, making it easy to inspect, filter, and export:
+
+```{r}
+# View as tibble (excluding function column)
+registry %>%
+  select(-proj_fn) %>%
+  arrange(desc(priority))
+```
+
+```{r}
+# Export for documentation or review
+# write.csv(select(registry, -proj_fn), "projection_rules.csv")
+```
+
+## Error Handling
+
+The dispatcher provides clear error messages when no rule matches:
+
+```{r, error=TRUE}
+# Registry with only specific rules (no catch-all)
+strict_registry <- create_projection_registry(ceding = "exact")
+strict_registry <- register_projection(strict_registry,
+  ceding = "ABC",
+  proj_fn = function(mp) mp,
+  .verbose = FALSE
+)
+
+dispatcher <- create_registry_dispatcher(strict_registry)
+
+# This will fail - no rule for "XYZ"
+bad_mp <- tibble(ceding = "XYZ", inception_date = lubridate::today(), duration_months = 12L, entry_age = 40L)
+dispatcher(bad_mp)
+```
+
+## Best Practices
+
+### 1
+. Always Include a Catch-All Rule
+
+Unless you want strict validation, include a default rule that matches everything:
+
+```{r, eval=FALSE}
+register_projection(registry,
+  ceding = NA, product = NA, uw_year_min = NA, uw_year_max = NA,
+  proj_fn = proj_default
+)
+```
+
+### 2. Order Rules from Specific to General
+
+Register specific rules first, then broader rules. The priority system handles matching, but logical ordering improves readability.
+
+### 3. Use Meaningful proj_fn_name
+
+The `proj_fn_name` parameter helps with debugging and audit trails:
+
+```{r, eval=FALSE}
+register_projection(registry,
+  ceding = "ABC", product = "term",
+  proj_fn = proj_abc_term,
+  proj_fn_name = "proj_abc_term_v2_2024"  # Version and date for audit
+)
+```
+
+### 4. Separate Registry from pricingr
+
+Consider packaging your registry configuration separately:
+
+```{r, eval=FALSE}
+# In your company's registry package (e.g., mycompany.treaties)
+#' @export
+get_production_registry <- function() {
+  registry <- create_projection_registry(
+    ceding = "exact",
+    product = "exact",
+    uw_year = c("uw_year_min", "uw_year_max")
+  )
+
+  # Register all production rules...
+
+  registry
+}
+```
+
+This allows:
+
+- Version control of business rules separate from pricingr
+- Different registries for different environments (test, UAT, production)
+- Easier auditing and governance
+
+### 5. Validate the Registry
+
+Before production use, verify all expected combinations have rules:
+
+```{r}
+# Check what rule would match each portfolio row
+check_matching <- function(registry, portfolio) {
+  portfolio %>%
+    rowwise() %>%
+    mutate(
+      match = list(find_matching_projection(registry, pick(everything()))),
+      matched_rule = if (!is.null(match)) match$proj_fn_name else "NO MATCH",
+      priority = if (!is.null(match)) match$priority else NA_integer_
+    ) %>%
+    ungroup() %>%
+    select(-match)
+}
+
+check_matching(registry, portfolio) %>%
+  select(policy_id, ceding, product, uw_year, matched_rule, priority)
+```
+
+## Summary
+
+The projection registry provides flexible multi-dimensional dispatching:
+
+| Feature | Function | Purpose |
+|---------|----------|---------|
+| Create registry | `create_projection_registry()` | Define matching dimensions |
+| Add rules | `register_projection()` | Map criteria to projection functions |
+| Wildcard matching | `NA` values | Match any value in a dimension |
+| Range matching | `c("min", "max")` | Match numeric ranges |
+| Priority | Automatic or manual | Resolve multiple matches |
+| Dispatching | `create_registry_dispatcher()` | Create function for `project_policies()` |
+| Inspection | Standard tibble ops | Review and export rules |
+
+This pattern enables clean separation of projection logic from business rules, making it easier to manage complex reinsurance portfolios with varying terms across ceding companies, products, and time periods.

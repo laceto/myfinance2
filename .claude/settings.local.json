@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add R/product_registry.R)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(scaling\\): add product registry for multi-product batching\n\nAdd product registry pattern for routing projections by product type:\n\n- create_product_registry\\(\\): environment-based O\\(1\\) lookup\n- register_product\\(\\): add product/function mapping with validation\n- get_product_fn\\(\\): retrieve projection function by product type\n- list_products\\(\\): list all registered products\n- create_product_dispatcher\\(\\): create router for project_policies\\(\\)\n\nEnables batch processing of heterogeneous portfolios with different\nprojection logic per product type.\nEOF\n\\)\")",
+      "Bash(Rscript -e \"devtools::test\\(filter = ''projection_factory|registry_builder''\\)\")",
+      "Bash(Rscript -e \"devtools::load_all\\(\\); rmarkdown::render\\(''vignettes/projection-templates.Rmd'', output_dir = ''vignettes''\\)\")",
+      "Bash(Rscript -e \"devtools::test\\(filter = ''registry|projection_factory''\\)\")",
+      "Bash(tar:*)"
+    ]
+  },
+  "outputStyle": "Cognitive Debt–Aware Engineering"
+}
