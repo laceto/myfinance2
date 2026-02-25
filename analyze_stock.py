@@ -72,7 +72,8 @@ log.info("Running grid search")
 dfs, combined_signals = run_grid_search(dfs, signal_columns)
 # Downstream stages receive both the original signals and every
 # combined signal produced by the grid search.
-all_signals = signal_columns + combined_signals
+all_signals = signal_columns 
+# all_signals = signal_columns + combined_signals
 log.info(
     "Total signals for downstream stages: %d original + %d combined = %d",
     len(signal_columns), len(combined_signals), len(all_signals),
