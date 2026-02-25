@@ -68,46 +68,46 @@ dfs, signal_columns = generate_all_signals(
     dfs, tt_search_space, bo_search_space, ma_search_space
 )
 
-log.info("Running grid search")
-dfs, combined_signals = run_grid_search(dfs, signal_columns)
+# log.info("Running grid search")
+# dfs, combined_signals = run_grid_search(dfs, signal_columns)
 # Downstream stages receive both the original signals and every
 # combined signal produced by the grid search.
 all_signals = signal_columns 
-# all_signals = signal_columns + combined_signals
-log.info(
-    "Total signals for downstream stages: %d original + %d combined = %d",
-    len(signal_columns), len(combined_signals), len(all_signals),
-)
+# # all_signals = signal_columns + combined_signals
+# log.info(
+#     "Total signals for downstream stages: %d original + %d combined = %d",
+#     len(signal_columns), len(combined_signals), len(all_signals),
+# )
 
-# -----------------------------------------------------------------------
-# Trade summary — one row per (symbol, signal), sorted by total_trades asc
-# -----------------------------------------------------------------------
-log.info("Computing trade summaries")
-# entry_col / exit_col are not referenced inside get_trade_summary /
-# add_signal_metadata, so one instance is reused across all signals.
-_summarizer = HybridSignalCombiner(
-    direction_col=REGIME_COL,
-    entry_col=all_signals[0],
-    exit_col=all_signals[0],
-)
-_summary_rows = []
-for _df in dfs:
-    _symbol = _df["symbol"].iloc[0]
-    for _signal in all_signals:
-        # Pass only the signal column to avoid a full-DataFrame copy.
-        _summary = _summarizer.get_trade_summary(_df[[_signal]].copy(), _signal)
-        _summary_rows.append({"symbol": _symbol, "signal": _signal, **_summary})
+# # -----------------------------------------------------------------------
+# # Trade summary — one row per (symbol, signal), sorted by total_trades asc
+# # -----------------------------------------------------------------------
+# log.info("Computing trade summaries")
+# # entry_col / exit_col are not referenced inside get_trade_summary /
+# # add_signal_metadata, so one instance is reused across all signals.
+# _summarizer = HybridSignalCombiner(
+#     direction_col=REGIME_COL,
+#     entry_col=all_signals[0],
+#     exit_col=all_signals[0],
+# )
+# _summary_rows = []
+# for _df in dfs:
+#     _symbol = _df["symbol"].iloc[0]
+#     for _signal in all_signals:
+#         # Pass only the signal column to avoid a full-DataFrame copy.
+#         _summary = _summarizer.get_trade_summary(_df[[_signal]].copy(), _signal)
+#         _summary_rows.append({"symbol": _symbol, "signal": _signal, **_summary})
 
-trade_summary = (
-    pd.DataFrame(_summary_rows)
-    .sort_values("total_entries", ascending=True)
-    .reset_index(drop=True)
-)
-trade_summary = trade_summary[["symbol", "signal", "total_entries"]]
-print(trade_summary.to_string())
-OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
-trade_summary.to_excel(OUTPUT_PATH / "trade_summary.xlsx", index=False)
-log.info("Trade summary saved to %s", OUTPUT_PATH / "trade_summary.xlsx")
+# trade_summary = (
+#     pd.DataFrame(_summary_rows)
+#     .sort_values("total_entries", ascending=True)
+#     .reset_index(drop=True)
+# )
+# trade_summary = trade_summary[["symbol", "signal", "total_entries"]]
+# print(trade_summary.to_string())
+# OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+# trade_summary.to_excel(OUTPUT_PATH / "trade_summary.xlsx", index=False)
+# log.info("Trade summary saved to %s", OUTPUT_PATH / "trade_summary.xlsx")
 
 log.info("Calculating returns")
 dfs = calculate_returns(dfs, all_signals)
