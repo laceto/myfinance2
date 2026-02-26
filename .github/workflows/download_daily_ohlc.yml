@@ -1,66 +1,66 @@
-name: Download Daily OHLC Data
+# name: Download Daily OHLC Data
 
-on:
-  # 21:00 UTC = 22:00 CET (winter) / 23:00 CEST (summer, UTC+2)
-  # Runs Mon–Fri only (Borsa Italiana is closed on weekends)
-  schedule:
-    - cron: '0 21 * * 1-5'
-  workflow_dispatch:
+# on:
+#   # 21:00 UTC = 22:00 CET (winter) / 23:00 CEST (summer, UTC+2)
+#   # Runs Mon–Fri only (Borsa Italiana is closed on weekends)
+#   schedule:
+#     - cron: '0 21 * * 1-5'
+#   workflow_dispatch:
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
-jobs:
-  download-ohlc:
-    runs-on: ubuntu-latest
+# jobs:
+#   download-ohlc:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install yfinance pandas openpyxl pyarrow joblib tqdm
-          pip install algoshort-0.1.1-py3-none-any.whl
+#       - name: Install dependencies
+#         run: |
+#           pip install --upgrade pip
+#           pip install yfinance pandas openpyxl pyarrow joblib tqdm
+#           pip install algoshort-0.1.1-py3-none-any.whl
 
-      - name: Create output directory
-        run: mkdir -p data/ohlc/today/it
+#       - name: Create output directory
+#         run: mkdir -p data/ohlc/today/it
 
-      - name: Run OHLC download script
-        run: python get_daily_ohlc_data.py
+#       - name: Run OHLC download script
+#         run: python get_daily_ohlc_data.py
 
-      - name: Append today data to historical
-        run: |
-          python - <<'EOF'
-          import pandas as pd
-          from pathlib import Path
+#       - name: Append today data to historical
+#         run: |
+#           python - <<'EOF'
+#           import pandas as pd
+#           from pathlib import Path
 
-          today_path = Path("data/ohlc/today/it/ohlc_data.parquet")
-          historical_path = Path("data/ohlc/historical/it/ohlc_data.parquet")
+#           today_path = Path("data/ohlc/today/it/ohlc_data.parquet")
+#           historical_path = Path("data/ohlc/historical/it/ohlc_data.parquet")
 
-          today_df = pd.read_parquet(today_path)
+#           today_df = pd.read_parquet(today_path)
 
-          if historical_path.exists():
-              historical_df = pd.read_parquet(historical_path)
-              combined = pd.concat([historical_df, today_df], ignore_index=True)
-          else:
-              historical_path.parent.mkdir(parents=True, exist_ok=True)
-              combined = today_df
+#           if historical_path.exists():
+#               historical_df = pd.read_parquet(historical_path)
+#               combined = pd.concat([historical_df, today_df], ignore_index=True)
+#           else:
+#               historical_path.parent.mkdir(parents=True, exist_ok=True)
+#               combined = today_df
 
-          combined.to_parquet(historical_path, index=False)
-          print(f"Historical data updated: {len(combined)} rows")
-          EOF
+#           combined.to_parquet(historical_path, index=False)
+#           print(f"Historical data updated: {len(combined)} rows")
+#           EOF
 
-      - name: Commit results
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add data/ohlc/today/it/ohlc_data.parquet data/ohlc/historical/it/ohlc_data.parquet
-          git commit -m "chore: update daily OHLC data [skip ci]" || echo "No changes to commit"
-          git push
+#       - name: Commit results
+#         run: |
+#           git config --local user.email "actions@github.com"
+#           git config --local user.name "GitHub Actions"
+#           git add data/ohlc/today/it/ohlc_data.parquet data/ohlc/historical/it/ohlc_data.parquet
+#           git commit -m "chore: update daily OHLC data [skip ci]" || echo "No changes to commit"
+#           git push
