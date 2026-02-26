@@ -101,6 +101,25 @@ if __name__ == "__main__":
     signal_columns = detect_signal_columns(first_df)
     available_cols = set(first_df.columns)
 
+    if not signal_columns:
+        stop_loss_cols = sorted(c for c in available_cols if c.endswith("_stop_loss"))
+        all_cols = sorted(available_cols)
+        log.error(
+            "No signal columns detected. "
+            "detect_signal_columns requires each signal column to have a matching "
+            "'<signal>_stop_loss' column, but none were found.\n"
+            "  stop_loss columns found: %s\n"
+            "  all columns: %s",
+            stop_loss_cols,
+            all_cols,
+        )
+        sys.exit(
+            "Error: No signal columns found in the results parquet. "
+            "Re-run analyze_stock.py to regenerate results with stop-loss columns."
+        )
+
+    log.info("Detected %d signal columns: %s", len(signal_columns), signal_columns)
+
     all_summaries: dict[str, list[dict]] = {}
     all_dashboards: list[pd.DataFrame] = []
 

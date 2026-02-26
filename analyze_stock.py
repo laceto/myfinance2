@@ -123,13 +123,13 @@ print(cumul_snapshot.to_string(index=False))
 cumul_snapshot.to_excel(CUMUL_SNAPSHOT_PATH, index=False)
 log.info("Cumulative return snapshot saved to %s", CUMUL_SNAPSHOT_PATH)
 
-# log.info("Calculating stop losses")
-# dfs = calculate_stop_losses(
-#     dfs,
-#     all_signals,
-#     atr_window=stop_loss_cfg["atr_window"],
-#     atr_multiplier=stop_loss_cfg["atr_multiplier"],
-# )
+log.info("Calculating stop losses")
+dfs = calculate_stop_losses(
+    dfs,
+    all_signals,
+    atr_window=stop_loss_cfg["atr_window"],
+    atr_multiplier=stop_loss_cfg["atr_multiplier"],
+)
 
 # # log.info("Calculating position sizing")
 # # sizer = PositionSizing(
