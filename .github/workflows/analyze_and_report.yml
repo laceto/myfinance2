@@ -1,60 +1,60 @@
-# name: Analyze Stocks and Generate Report
+name: Analyze Stocks and Generate Report
 
-# on:
-#   # Runs automatically after the OHLC download workflow succeeds.
-#   # workflow_run fires on the default branch once the named workflow completes.
-#   workflow_run:
-#     workflows: ["Download Daily OHLC Data"]
-#     types: [completed]
-#   # Allow manual trigger for testing or catch-up runs.
-#   workflow_dispatch:
+on:
+  # Runs automatically after the OHLC download workflow succeeds.
+  # workflow_run fires on the default branch once the named workflow completes.
+  workflow_run:
+    workflows: ["Download Daily OHLC Data"]
+    types: [completed]
+  # Allow manual trigger for testing or catch-up runs.
+  workflow_dispatch:
 
-# permissions:
-#   contents: write
+permissions:
+  contents: write
 
-# jobs:
-#   analyze:
-#     runs-on: ubuntu-latest
-#     # Skip if triggered by a failed download run (but always run on manual dispatch).
-#     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
-#     timeout-minutes: 90
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    # Skip if triggered by a failed download run (but always run on manual dispatch).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 90
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-#       - name: Install dependencies
-#         run: |
-#           pip install --upgrade pip
-#           pip install yfinance pandas openpyxl pyarrow joblib tqdm
-#           pip install algoshort-0.1.1-py3-none-any.whl
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas openpyxl pyarrow joblib tqdm
+          pip install algoshort-0.1.1-py3-none-any.whl
 
-#       - name: Run signal analysis
-#         run: python analyze_stock.py
+      - name: Run signal analysis
+        run: python analyze_stock.py
 
-#       - name: Generate trading report
-#         # tee writes to file AND streams to the workflow log simultaneously.
-#         run: python trading_report.py | tee data/results/it/trading_report.txt
+      - name: Generate trading report
+        # tee writes to file AND streams to the workflow log simultaneously.
+        run: python trading_report.py | tee data/results/it/trading_report.txt
 
-#       # analysis_results.parquet is ~500 MB — too large for a git commit.
-#       # Upload it as a workflow artifact (retained for 30 days) instead.
-#       - name: Upload analysis parquet as artifact
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: analysis-results-${{ github.run_id }}
-#           path: data/results/it/analysis_results.parquet
-#           retention-days: 30
+      # analysis_results.parquet is ~500 MB — too large for a git commit.
+      # Upload it as a workflow artifact (retained for 30 days) instead.
+      - name: Upload analysis parquet as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-results-${{ github.run_id }}
+          path: data/results/it/analysis_results.parquet
+          retention-days: 30
 
-#       - name: Commit results
-#         run: |
-#           git config --local user.email "actions@github.com"
-#           git config --local user.name "GitHub Actions"
-#           git add data/results/it/trading_dashboard.xlsx \
-#                   data/results/it/trading_report.txt
-#           git commit -m "chore: update trading dashboard and report [skip ci]" || echo "No changes to commit"
-#           git push
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/results/it/trading_dashboard.xlsx \
+                  data/results/it/trading_report.txt
+          git commit -m "chore: update trading dashboard and report [skip ci]" || echo "No changes to commit"
+          git push
