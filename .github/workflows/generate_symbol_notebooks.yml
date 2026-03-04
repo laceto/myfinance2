@@ -1,0 +1,70 @@
+name: Generate Symbol Notebooks
+
+on:
+  # Runs automatically after the analysis workflow succeeds.
+  workflow_run:
+    workflows: ["Analyze Stocks and Generate Report"]
+    types: [completed]
+  # Manual trigger: requires the run ID of the Analyze workflow to download
+  # the analysis_results.parquet artifact from.
+  workflow_dispatch:
+    inputs:
+      analyze_run_id:
+        description: 'Run ID of the "Analyze Stocks and Generate Report" workflow'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate-notebooks:
+    runs-on: ubuntu-latest
+    # Skip if triggered by a failed analysis run (but always run on manual dispatch).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install papermill ipykernel matplotlib pandas pyarrow
+          pip install algoshort-0.1.1-py3-none-any.whl
+          # Register the Python kernel so papermill can find it by name.
+          python -m ipykernel install --user --name python3
+
+      - name: Resolve analyze workflow run ID
+        id: resolve-run-id
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run_id=${{ inputs.analyze_run_id }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_id=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download analysis results artifact
+        uses: actions/download-artifact@v4
+        with:
+          # Artifact name matches what analyze_and_report.yml uploads.
+          name: analysis-results-${{ steps.resolve-run-id.outputs.run_id }}
+          path: data/results/it/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ steps.resolve-run-id.outputs.run_id }}
+
+      - name: Generate symbol notebooks
+        run: python generate_symbol_notebooks.py
+
+      - name: Upload notebooks as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: symbol-notebooks-${{ github.run_id }}
+          path: notebooks/
+          retention-days: 30
