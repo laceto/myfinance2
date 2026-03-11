@@ -1,17 +1,19 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-05 to 2026-03-10 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-06 to 2026-03-11 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-03-10 rtt_5020  BFG.MI  4.400000   EXIT LONG   4.112857       NaN
-2026-03-10 rtt_5020 CALT.MI  9.600000   EXIT LONG   8.757143       NaN
-2026-03-10 rtt_5020  CRL.MI 22.200001  EXIT SHORT  22.028572       NaN
-2026-03-10 rtt_5020  DBA.MI  3.590000 ENTER SHORT   3.841428  7.003582
-2026-03-10 rtt_5020  EUK.MI  0.610000 ENTER SHORT   0.669286  9.718971
-2026-03-10 rtt_5020  FRE.MI  0.226000  ENTER LONG   0.212857  5.815424
-2026-03-10 rtt_5020  GHC.MI  5.270000   EXIT LONG   5.005714       NaN
-2026-03-10 rtt_5020  MTV.MI  0.047000 ENTER SHORT   0.051943 10.516718
+ last_date   signal  ticker   price     action  stop_loss  risk_pct
+2026-03-11 rtt_5020  ACE.MI 24.0000  EXIT LONG  22.717142       NaN
+2026-03-11 rtt_5020  ADB.MI 10.6000  EXIT LONG   9.964285       NaN
+2026-03-11 rtt_5020  COP.MI  6.3500 EXIT SHORT   7.307143       NaN
+2026-03-11 rtt_5020  EPH.MI  0.0998 EXIT SHORT   0.099857       NaN
+2026-03-11 rtt_5020 GROW.MI  2.6700 EXIT SHORT   2.514286       NaN
+2026-03-11 rtt_5020  IOT.MI  2.7450 EXIT SHORT   3.020000       NaN
+2026-03-11 rtt_5020  MFT.MI  1.8750 EXIT SHORT   1.995000       NaN
+2026-03-11 rtt_5020   PQ.MI  2.6000 EXIT SHORT   2.710000       NaN
+2026-03-11 rtt_5020  PTR.MI  3.3800  EXIT LONG   3.097143       NaN
+2026-03-11 rtt_5020  TPS.MI  8.1000 EXIT SHORT   8.364286       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-10)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-11)
 ===============================================================================================
