@@ -1,19 +1,26 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-06 to 2026-03-11 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-09 to 2026-03-12 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker   price     action  stop_loss  risk_pct
-2026-03-11 rtt_5020  ACE.MI 24.0000  EXIT LONG  22.717142       NaN
-2026-03-11 rtt_5020  ADB.MI 10.6000  EXIT LONG   9.964285       NaN
-2026-03-11 rtt_5020  COP.MI  6.3500 EXIT SHORT   7.307143       NaN
-2026-03-11 rtt_5020  EPH.MI  0.0998 EXIT SHORT   0.099857       NaN
-2026-03-11 rtt_5020 GROW.MI  2.6700 EXIT SHORT   2.514286       NaN
-2026-03-11 rtt_5020  IOT.MI  2.7450 EXIT SHORT   3.020000       NaN
-2026-03-11 rtt_5020  MFT.MI  1.8750 EXIT SHORT   1.995000       NaN
-2026-03-11 rtt_5020   PQ.MI  2.6000 EXIT SHORT   2.710000       NaN
-2026-03-11 rtt_5020  PTR.MI  3.3800  EXIT LONG   3.097143       NaN
-2026-03-11 rtt_5020  TPS.MI  8.1000 EXIT SHORT   8.364286       NaN
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-03-12 rtt_5020 AEDES.MI  0.088400  EXIT SHORT   0.096286       NaN
+2026-03-12 rtt_5020   ITD.MI  8.500000 ENTER SHORT   9.062857  6.621851
+2026-03-12 rtt_5020  SFER.MI  6.750000  EXIT SHORT   6.647857       NaN
+2026-03-12 rtt_5020   REY.MI 82.099998 ENTER SHORT  90.310711 10.000869
+2026-03-12 rtt_5020   PTR.MI  3.390000  ENTER LONG   3.181429  6.152550
+2026-03-12 rtt_5020    PQ.MI  2.610000  ENTER LONG   2.440000  6.513412
+2026-03-12 rtt_5020    OS.MI 24.200001  ENTER LONG  22.542857  6.847700
+2026-03-12 rtt_5020   NWL.MI 19.160000   EXIT LONG  17.814999       NaN
+2026-03-12 rtt_5020   IRE.MI  2.546000   EXIT LONG   2.408571       NaN
+2026-03-12 rtt_5020  ECNL.MI  1.250000 ENTER SHORT   1.378571 10.285713
+2026-03-12 rtt_5020   INW.MI  7.775000   EXIT LONG   7.614286       NaN
+2026-03-12 rtt_5020   IGV.MI  2.270000  EXIT SHORT   2.522857       NaN
+2026-03-12 rtt_5020   HER.MI  4.028000   EXIT LONG   3.833429       NaN
+2026-03-12 rtt_5020   GIS.MI  1.385000 ENTER SHORT   1.486429  7.323364
+2026-03-12 rtt_5020   FPE.MI 39.400002  EXIT SHORT  39.542858       NaN
+2026-03-12 rtt_5020  EDAC.MI  4.200000 ENTER SHORT   4.541428  8.129248
+2026-03-12 rtt_5020   ZUC.MI  0.632000 ENTER SHORT   0.665429  5.289326
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-11)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-12)
 ===============================================================================================
