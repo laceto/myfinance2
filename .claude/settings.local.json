@@ -6,7 +6,10 @@
       "Bash(Rscript -e \"devtools::test\\(filter = ''projection_factory|registry_builder''\\)\")",
       "Bash(Rscript -e \"devtools::load_all\\(\\); rmarkdown::render\\(''vignettes/projection-templates.Rmd'', output_dir = ''vignettes''\\)\")",
       "Bash(Rscript -e \"devtools::test\\(filter = ''registry|projection_factory''\\)\")",
-      "Bash(tar:*)"
+      "Bash(tar:*)",
+      "Bash(python:*)",
+      "Bash(rm:*)",
+      "Bash(gh run:*)"
     ]
   },
   "outputStyle": "Cognitive Debt–Aware Engineering"

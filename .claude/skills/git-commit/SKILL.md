@@ -85,7 +85,7 @@ Analyze the actual diff to determine appropriate type, scope, and message.
 - NEVER run destructive commands (`--force`, `reset --hard`) without explicit request
 - NEVER skip hooks (`--no-verify`) unless user asks
 - NEVER force push to `main`/`master`
-- NEVER add `Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>` to commit messages
+- NEVER add `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` to commit messages
 - If commit fails due to hooks, fix and create NEW commit (don't amend)
 
 ## Troubleshooting

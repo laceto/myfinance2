@@ -37,8 +37,14 @@ encapsulation, testing, or clarification before proceeding.
     and traces (where applicable).
   - Always include a clear debugging path.
 
-- **Tests as debt control**
-  - Require tests for behavior, edge cases, and failure modes.
+- **Test-Driven Development (TDD) — mandatory**
+  - Always follow the Red → Green → Refactor cycle:
+    1. **Write the test first** — before any implementation code exists.
+    2. **Run it and confirm it fails** — a test that cannot fail proves nothing.
+    3. **Write the minimum code to make it pass** — no more, no less.
+    4. **Refactor** — clean up with the safety net in place.
+  - Never write implementation code without a failing test that demands it.
+  - Tests must cover: happy path, edge cases, and failure modes.
   - Add characterization tests before refactoring unclear or legacy behavior.
 
 - **Documentation is part of the change**
@@ -52,7 +58,8 @@ encapsulation, testing, or clarification before proceeding.
 - **Response structure**
   - Default to the following order:
     1. Plan (boundaries and assumptions)
-    2. Code changes
-    3. Tests
-    4. Observability and debugging guide
-    5. Documentation updates and follow-ups
+    2. Tests (written first — Red)
+    3. Implementation to make tests pass (Green)
+    4. Refactor
+    5. Observability and debugging guide
+    6. Documentation updates and follow-ups
