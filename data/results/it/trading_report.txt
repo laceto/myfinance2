@@ -1,24 +1,19 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-04 to 2026-03-16 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-04 to 2026-03-17 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-03-16 rtt_5020  BEC.MI 13.300000  EXIT SHORT  13.921429       NaN
-2026-03-16 rtt_5020 CALT.MI  9.100000 ENTER SHORT   9.697143  6.562011
-2026-03-16 rtt_5020   FF.MI  8.960000 ENTER SHORT  10.178571 13.600124
-2026-03-16 rtt_5020 FILA.MI  8.550000 ENTER SHORT   8.955714  4.745193
-2026-03-16 rtt_5020   GE.MI 10.100000   EXIT LONG   9.664286       NaN
-2026-03-16 rtt_5020  INC.MI  0.205000  EXIT SHORT   0.231700       NaN
-2026-03-16 rtt_5020  IWB.MI 19.100000 ENTER SHORT  20.192858  5.721766
-2026-03-16 rtt_5020  NWL.MI 17.620001 ENTER SHORT  19.403573 10.122427
-2026-03-16 rtt_5020  REC.MI 44.980000 ENTER SHORT  46.942857  4.363846
-2026-03-16 rtt_5020   SL.MI 29.250000 ENTER SHORT  31.450000  7.521367
-2026-03-16 rtt_5020  SOM.MI 13.050000   EXIT LONG  12.707143       NaN
-2026-03-16 rtt_5020  TXT.MI 31.000000  ENTER LONG  28.349999  8.548389
-2026-03-16 rtt_5020 ZEST.MI  0.126000   EXIT LONG   0.118071       NaN
-2026-03-13 rtt_5020  COP.MI  6.650000 ENTER SHORT   6.914286  3.974221
-2026-03-13 rtt_5020  ECK.MI  2.360000  EXIT SHORT   2.634286       NaN
+ last_date   signal   ticker  price      action  stop_loss  risk_pct
+2026-03-17 rtt_5020   A2A.MI  2.441  ENTER LONG   2.288429  6.250363
+2026-03-17 rtt_5020   CAI.MI  2.495 ENTER SHORT   2.627143  5.296304
+2026-03-17 rtt_5020   GAB.MI  0.582 ENTER SHORT   0.618000  6.185565
+2026-03-17 rtt_5020 MAIRE.MI 12.630 ENTER SHORT  14.082857 11.503220
+2026-03-17 rtt_5020  MARP.MI  2.100   EXIT LONG   2.071429       NaN
+2026-03-17 rtt_5020  MASI.MI  4.320   EXIT LONG   3.970000       NaN
+2026-03-17 rtt_5020   PTR.MI  3.250   EXIT LONG   3.100000       NaN
+2026-03-17 rtt_5020   SAB.MI 12.950   EXIT LONG  12.678571       NaN
+2026-03-17 rtt_5020    UD.MI  3.010 ENTER SHORT   3.227143  7.214046
+2026-03-13 rtt_5020   COP.MI  6.650 ENTER SHORT   6.914286  3.974221
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-16)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-17)
 ===============================================================================================
