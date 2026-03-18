@@ -1,18 +1,7 @@
 name: Generate Symbol Notebooks
 
-on:
-  # Runs automatically after the analysis workflow succeeds.
-  workflow_run:
-    workflows: ["Analyze Stocks and Generate Report"]
-    types: [completed]
-  # Manual trigger: requires the run ID of the Analyze workflow to download
-  # the analysis_results.parquet artifact from.
-  workflow_dispatch:
-    inputs:
-      analyze_run_id:
-        description: 'Run ID of the "Analyze Stocks and Generate Report" workflow'
-        required: true
-        type: string
+# Disabled: no triggers. To re-enable, restore workflow_run and/or workflow_dispatch.
+on: {}
 
 permissions:
   contents: read
