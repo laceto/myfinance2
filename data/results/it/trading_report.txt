@@ -1,15 +1,13 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-20 to 2026-03-26 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-23 to 2026-03-27 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker  price      action  stop_loss  risk_pct
-2026-03-26 rtt_5020  CFV.MI 1.9500  ENTER LONG   1.843571  5.457875
-2026-03-26 rtt_5020  CSP.MI 0.2910  ENTER LONG   0.267000  8.247423
-2026-03-26 rtt_5020 FARM.MI 0.1595 ENTER SHORT   0.174071  9.135693
-2026-03-26 rtt_5020 FILA.MI 9.3800  EXIT SHORT   9.677143       NaN
-2026-03-26 rtt_5020  GVS.MI 3.6750  EXIT SHORT   4.066428       NaN
-2026-03-26 rtt_5020  PLC.MI 2.3800  ENTER LONG   2.097143 11.884761
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-03-27 rtt_5020 GAMB.MI  0.250000  ENTER LONG   0.243143  2.742858
+2026-03-27 rtt_5020 MAPS.MI  2.430000  EXIT SHORT   2.571429       NaN
+2026-03-27 rtt_5020 MONC.MI 50.139999 ENTER SHORT  53.591429  6.883585
+2026-03-27 rtt_5020  PWS.MI 17.000000  ENTER LONG  15.585715  8.319325
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-26)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-27)
 ===============================================================================================
