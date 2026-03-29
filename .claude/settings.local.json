@@ -9,7 +9,11 @@
       "Bash(tar:*)",
       "Bash(python:*)",
       "Bash(rm:*)",
-      "Bash(gh run:*)"
+      "Bash(gh run:*)",
+      "Bash(venv/Scripts/python -m pytest tests/test_trend_scorer.py -v)",
+      "Bash(venv/Scripts/python trending_dashboard.py)",
+      "Bash(venv/Scripts/python -m pytest tests/test_trend_scorer.py::TestComputeScoreHistory -v)",
+      "Bash(venv/Scripts/python -c \"import matplotlib; print\\(matplotlib.__version__\\)\")"
     ]
   },
   "outputStyle": "Cognitive Debt–Aware Engineering"

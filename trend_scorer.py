@@ -298,18 +298,27 @@ def compute_score_history(
             - Columns: date values in ascending order
             - Values: integer score_vs_bm for that ticker on that date
     """
+    # --- Pass 1: build full per-ticker score series (no date slicing yet) ---
     series: dict[str, pd.Series] = {}
-
     for ticker, df in data_dict.items():
-        # Deduplicate by date (keep last row per date) before slicing,
+        # Deduplicate by date (keep last row per date) before indexing,
         # so duplicate-date tickers don't cause reindex failures.
         deduped = df.drop_duplicates(subset="date", keep="last")
-        tail = deduped.tail(n_days)
-        scores = tail[signal_cols].sum(axis=1).astype(int)
-        scores.index = pd.to_datetime(tail["date"]).dt.normalize()
+        scores = deduped[signal_cols].sum(axis=1).astype(int)
+        scores.index = pd.to_datetime(deduped["date"]).dt.normalize()
         series[ticker] = scores
 
-    result = pd.DataFrame(series).T
+    # --- Determine the shared date window ---
+    # Take the last n_days dates from the union of all tickers' dates so that
+    # every ticker is aligned to an identical date axis.  Tickers that have no
+    # data for a particular date receive NaN rather than a shifted window.
+    all_dates = sorted(set().union(*[s.index for s in series.values()]))
+    window: pd.DatetimeIndex = pd.DatetimeIndex(all_dates[-n_days:])
+
+    # --- Pass 2: reindex each ticker to the common window ---
+    result = pd.DataFrame(
+        {ticker: s.reindex(window) for ticker, s in series.items()}
+    ).T
     result.index.name = "ticker"
 
     # Ensure columns (dates) are in ascending order.
