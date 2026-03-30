@@ -1,13 +1,17 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-23 to 2026-03-27 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-25 to 2026-03-30 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-03-27 rtt_5020 GAMB.MI  0.250000  ENTER LONG   0.243143  2.742858
-2026-03-27 rtt_5020 MAPS.MI  2.430000  EXIT SHORT   2.571429       NaN
-2026-03-27 rtt_5020 MONC.MI 50.139999 ENTER SHORT  53.591429  6.883585
-2026-03-27 rtt_5020  PWS.MI 17.000000  ENTER LONG  15.585715  8.319325
+ last_date   signal  ticker     price     action  stop_loss  risk_pct
+2026-03-30 rtt_5020  BFG.MI  4.280000  EXIT LONG   3.975714       NaN
+2026-03-30 rtt_5020  CED.MI  1.700000  EXIT LONG   1.677143       NaN
+2026-03-30 rtt_5020  LDO.MI 55.660000  EXIT LONG  51.639998       NaN
+2026-03-30 rtt_5020  LMG.MI  1.100000  EXIT LONG   1.108571       NaN
+2026-03-30 rtt_5020   SL.MI 30.799999 EXIT SHORT  32.128572       NaN
+2026-03-30 rtt_5020  WBS.MI  1.420000 ENTER LONG   1.318571  7.142863
+2026-03-27 rtt_5020 GAMB.MI  0.250000 ENTER LONG   0.243143  2.742858
+2026-03-27 rtt_5020 MAPS.MI  2.430000 EXIT SHORT   2.571429       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-27)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-30)
 ===============================================================================================
