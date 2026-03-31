@@ -1,17 +1,21 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-25 to 2026-03-30 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-26 to 2026-03-31 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price     action  stop_loss  risk_pct
-2026-03-30 rtt_5020  BFG.MI  4.280000  EXIT LONG   3.975714       NaN
-2026-03-30 rtt_5020  CED.MI  1.700000  EXIT LONG   1.677143       NaN
-2026-03-30 rtt_5020  LDO.MI 55.660000  EXIT LONG  51.639998       NaN
-2026-03-30 rtt_5020  LMG.MI  1.100000  EXIT LONG   1.108571       NaN
-2026-03-30 rtt_5020   SL.MI 30.799999 EXIT SHORT  32.128572       NaN
-2026-03-30 rtt_5020  WBS.MI  1.420000 ENTER LONG   1.318571  7.142863
-2026-03-27 rtt_5020 GAMB.MI  0.250000 ENTER LONG   0.243143  2.742858
-2026-03-27 rtt_5020 MAPS.MI  2.430000 EXIT SHORT   2.571429       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-03-31 rtt_5020  CED.MI  1.740000 ENTER SHORT   1.815714  4.351396
+2026-03-31 rtt_5020  CY4.MI  6.800000 ENTER SHORT   7.527143 10.693275
+2026-03-31 rtt_5020  DGT.MI  1.825000 ENTER SHORT   1.903571  4.305282
+2026-03-31 rtt_5020   GE.MI  9.900000 ENTER SHORT  10.678571  7.864361
+2026-03-31 rtt_5020   IB.MI 11.700000   EXIT LONG  11.042857       NaN
+2026-03-31 rtt_5020  ICF.MI  5.840000 ENTER SHORT   6.002857  2.788647
+2026-03-31 rtt_5020  ITW.MI  1.130000  EXIT SHORT   1.114286       NaN
+2026-03-31 rtt_5020 LUVE.MI 39.349998  EXIT SHORT  40.971428       NaN
+2026-03-31 rtt_5020  MTS.MI  1.700000  EXIT SHORT   1.870000       NaN
+2026-03-31 rtt_5020 POPR.MI  0.470000 ENTER SHORT   0.491000  4.468084
+2026-03-31 rtt_5020  SAB.MI 13.950000  EXIT SHORT  14.321429       NaN
+2026-03-27 rtt_5020 GAMB.MI  0.250000  ENTER LONG   0.243143  2.742858
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-30)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-03-31)
 ===============================================================================================
