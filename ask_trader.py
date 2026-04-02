@@ -1,35 +1,43 @@
 """
-ask_trader.py — Send a ticker snapshot to an OpenAI model as an AI trader assistant.
+ask_trader.py — Range breakout trader AI assistant.
 
 Usage:
     python ask_trader.py --ticker A2A.MI
     python ask_trader.py --ticker A2A.MI --question "Should I add to this position?"
 
+Scope: range breakout analysis only.
+    Moving average crossover signals (rema_*, rsma_*) are intentionally excluded —
+    they belong to a separate MA trader assistant.  The turtle signal (rtt_5020) is
+    kept as an independent price-channel breakout confirmation, not an MA signal.
+
 What it does:
     1. Loads analysis_results.parquet
-    2. Filters to the requested ticker and selects the actionable columns
-    3. Computes two derived fields:
-         - range_position_pct: where rclose sits in the 20-day relative range (0=low, 100=high)
-         - signal_age_bars:    how many bars rbo_20 has held its current value
-    4. Takes the last bar (current state) and serialises it to JSON
-    5. Sends the JSON to gpt-4o with a professional trader system prompt
-    6. Prints the model's analysis to stdout
+    2. Filters to the requested ticker
+    3. Computes the range breakout snapshot (last bar): rbo/rhi/rlo levels, swing levels,
+       range_position_pct, distances, momentum, signal age/flip flags, vol_trend, turtle
+    4. Enriches the snapshot with RangeSetup and VolumeProfile (computed over full history)
+    5. Sends the JSON to the OpenAI model with a range-breakout-specific system prompt
+    6. Prints the structured analysis to stdout
 
 Environment:
     OPENAI_API_KEY must be set.
 
 Columns included (last bar only):
     - Identity:       symbol, date, rrg (regime direction)
-    - Relative OHLC:  ropen, rhigh, rlow, rclose
-    - 20-day context: rhi_20, rlo_20, rbo_20 (breakout signal), rbo_20_stop_loss excluded
-    - Swing levels:   rh1..rh4, rl1..rl4 (forward-filled to avoid NaN gaps)
-    - Derived:        range_position_pct, signal_age_bars
-    - Volume:         volume (absolute — used for liquidity context)
+    - Relative OHLC:  rclose (EOD close — open/high/low excluded as intraday noise)
+    - Breakout bands: rhi_20/50/150 (resistance), rlo_20/50/150 (support)
+    - Breakout sigs:  rbo_20/50/150 (+1 long / -1 short / 0 flat), age, flip
+    - Swing levels:   rh3, rh4, rl3, rl4 (forward-filled; minor pivots rh1/2/rl1/2 excluded)
+    - Turtle:         rtt_5020 (independent price-channel confirmation)
+    - Derived:        range_position_pct, dist_to_rhi/rlo per window, rclose_chg_Nd, vol_trend
+    - Enrichments:    range_setup (RangeSetup), volatility_compression (VolatilityState),
+                      volume_profile (VolumeProfile)
 
-Excluded on purpose (too noisy / intermediate):
-    - All *_cumul, *_returns, *_chg*, *_PL_cum columns
-    - rbo_20_stop_loss, rbo_50_stop_loss, rbo_150_stop_loss
-    - 50/150-day breakout detail (focus is the 20-day window per user intent)
+Excluded on purpose:
+    - rema_*, rsma_* (MA crossover signals and MA level values) → MA trader assistant
+    - ropen, rhigh, rlow — intraday OHLC; only EOD rclose matters for signal logic
+    - *_stop_loss — ATR stops not in scope for the breakout snapshot
+    - *_cumul, *_returns, *_chg* (intermediate analytics), *_PL_cum
 """
 
 import argparse
@@ -44,6 +52,9 @@ import pandas as pd
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import Literal
+
+from breakout.range_quality import assess_range, RangeSetup, measure_volatility_compression, VolatilityState
+from breakout.volume import assess_volume_profile, VolumeProfile
 
 load_dotenv()  # reads .env from the project root into os.environ
 
@@ -87,39 +98,96 @@ Field definitions:
     -1 = enter short (price broke below rlo_20),
      0 = exit / no trade (price back inside the range).
 - rbo_50, rbo_150: same breakout signal logic on the 50 and 150-day windows.
-  Confluence of rbo_20 = rbo_50 = rbo_150 = +1 signals the strongest long setup.
+  Full confluence: rbo_20 = rbo_50 = rbo_150 = +1 → strongest long setup.
+                   rbo_20 = rbo_50 = rbo_150 = -1 → strongest short setup.
+  Fighting the 150-day signal (e.g., rbo_150=-1 while rbo_20=+1) is a low-quality trade.
 - range_position_pct: where rclose sits between rlo_20 and rhi_20.
-  0% = at support, 100% = at resistance. Above 100% = breakout long in progress.
+  0%   = at support. 100% = at resistance.
+  >100% = breakout long in progress (price above rhi_20).
+  <0%   = breakout short in progress (price below rlo_20).
 - rbo_20_age, rbo_50_age, rbo_150_age: bars each signal has held its current value.
-  A rbo_150_age=90 with rbo_20_age=3 = mature long-term trend, fresh short-term re-entry.
+  rbo_150_age=90, rbo_20_age=1 = mature structural trend, fresh short-term re-entry.
 - rbo_20_flip, rbo_50_flip, rbo_150_flip: 1 if signal changed on the last bar, else 0.
-- dist_to_rhi_{N}_pct: % distance from rclose to resistance. Negative = already above it.
-- dist_to_rlo_{N}_pct: % distance from rclose to support (= stop distance for longs).
+- dist_to_rhi_{N}_pct: % distance from rclose to resistance.
+  Negative = price already above resistance (long breakout active).
+  For shorts: this is the stop distance (how far price must rally to invalidate the trade).
+- dist_to_rlo_{N}_pct: % distance from rclose to support.
+  Negative = price already below support (short breakout active).
+  For longs: this is the stop distance (how far price must fall to invalidate the trade).
 - rclose_chg_20d/50d/150d: % change in relative price over 20/50/150 bars.
   Use these to assess whether outperformance vs benchmark is accelerating or fading.
 - vol_trend: current volume / 20-bar average volume. >1.0 = expanding (confirming),
   <1.0 = contracting (caution — move lacks conviction).
-- rema_50100150: triple EMA stack signal (+1 = EMA50>EMA100>EMA150, -1 = inverted, 0 = mixed).
-- rsma_50100150: triple SMA stack signal (+1 = SMA50>SMA100>SMA150, -1 = inverted, 0 = mixed).
-- rema_short_50, rema_medium_100, rema_long_150: actual EMA levels on relative price.
-- rsma_short_50, rsma_medium_100, rsma_long_150: actual SMA levels on relative price.
-- rtt_5020: turtle breakout signal (fast=20, slow=50). Independent confirmation of rbo_*.
+- rtt_5020: turtle breakout signal (fast=20-day high, slow=50-day high).
+  +1 = price broke above the 20-day high (bullish channel breakout).
+  -1 = price broke below the 20-day low.
+   0 = inside channel.
+  Independent confirmation of rbo_*: both signals firing together is stronger than either alone.
 - rh3, rh4: magnitude-ordered swing highs. rh4 = highest (strongest resistance).
 - rl3, rl4: magnitude-ordered swing lows. rl4 = deepest (strongest support / major floor).
 
-Output format — start with a description, then analyse each timeframe separately:
-0. description: 3-5 sentence narrative of the full technical picture. Regime, signal
-   confluence, MA alignment, key levels, trend quality. Exact numbers. No filler.
-1. Short term (20-day): rbo_20 signal, age, flip, range_position_pct, dist_to_rhi_20_pct,
-   rclose_chg_20d, vol_trend.
-2. Medium term (50-day): rbo_50 signal, age, flip, dist_to_rhi_50_pct, rclose_chg_50d.
-   Note if EMA/SMA crossover signals (rema_50100, rsma_50100) agree with rbo_50.
-3. Long term (150-day): rbo_150 signal, age, dist_to_rhi_150_pct, rclose_chg_150d,
-   rh4 (peak resistance) and rl4 (major floor). Note turtle signal (rtt_5020) alignment.
-4. MA crossover synthesis: rema_50100150 and rsma_50100150 are the triple stack signals.
-   Both +1 = full EMA and SMA alignment. Add turtle (rtt_5020) for independent confirmation.
-5. Risk: short-term stop = rlo_20, structural stop = rlo_150.
-6. Verdict: one actionable sentence using exact numbers.
+Range setup (range_setup — computed over the most recent consolidation window):
+- n_resistance_touches: distinct times price approached rhi_20 without breaking through.
+  2–4 = clean range; < 2 = poorly defined; > 5 = very mature, energy highly compressed.
+- n_support_touches: same for rlo_20.
+- is_sideways: True when OLS slope of rclose is below 0.15%/day — confirms real consolidation.
+- slope_pct_per_day: signed OLS slope of rclose (%/day). ~0 = ideal sideways; >0 = drifting up.
+- consolidation_bars: total consecutive bars rbo_20 has held 0. Higher = more mature range.
+- band_width_pct: (rhi_20 - rlo_20) / rclose * 100 at the last consolidation bar.
+  Low = tight range = compressed energy. Watch for compressing band_width over time.
+- null: assess_range failed (e.g., ticker currently in a trend with no recent consolidation).
+
+Volatility compression (volatility_compression — computed over the full ticker history):
+- band_width_pct: (rhi_20 - rlo_20) / rclose * 100 at the last bar.
+  Measures how wide the current 20-day range envelope is. Low = price in a tight cage.
+- band_width_slope: OLS slope of band_width_pct over the last 40 bars (%/bar).
+  Negative = the envelope is actively narrowing = energy building toward a breakout.
+  Positive = the envelope is expanding = consolidation may be dissolving.
+- band_width_pct_rank: percentile rank of band_width_pct vs the last 252 bars (0–100).
+  Low rank = historically tight for this specific ticker — not just quiet, but compressed
+  relative to its own baseline. This normalises for ticker-specific volatility.
+- is_compressed: True when band_width_slope < 0 AND band_width_pct_rank < 25.
+  Both conditions required: the range must be both actively narrowing AND in the bottom
+  quartile of its own history. This is the "coiled spring" signal.
+- null: measure_volatility_compression failed (e.g., insufficient history).
+
+Volume profile (volume_profile — computed over the same consolidation window):
+- vol_trend_mean: mean vol_trend over the consolidation window. < 1.0 = quiet (healthy).
+- vol_trend_slope: OLS slope of vol_trend per bar. Negative = volume drying up (ideal).
+  A slightly positive slope with low mean = quiet accumulation — also valid.
+- is_quiet: True when vol_trend_mean < 1.0 (the primary gate for consolidation quality).
+- is_declining: True when vol_trend_slope < 0 (informational; callers may use as extra filter).
+- breakout_confirmed: True/False only on the exact breakout flip bar (rbo_20 just changed to
+  non-zero). True = vol_trend_now >= 1.2 (institutional participation). False = fakeout risk.
+  None = not a flip bar (in consolidation or mid-trend).
+- null: assess_volume_profile failed (e.g., no consolidation history in the series).
+
+Output format — start with a description, then analyse each section.
+Apply symmetric logic for longs (+1) and shorts (-1) throughout.
+0. description: 3-5 sentence narrative. Regime, multi-timeframe breakout confluence
+   (both long and short signals treated equally), range quality, key levels, vol_trend.
+   Exact numbers. No filler.
+1. Short term (20-day): rbo_20 signal, age, flip, range_position_pct, vol_trend.
+   For longs: dist_to_rhi_20_pct (how close to resistance / already above).
+   For shorts: dist_to_rlo_20_pct (how close to support / already below).
+   Note rtt_5020 turtle confirmation.
+2. Medium term (50-day): rbo_50 signal, age, flip, rclose_chg_50d.
+3. Long term (150-day): rbo_150 signal, age, rclose_chg_150d,
+   rh4 (peak resistance / short target) and rl4 (major floor / long target).
+4. Range quality (range_quality): touch count, sideways confirmation, consolidation_bars,
+   band_width_pct. State direction bias (slope_pct_per_day sign).
+   If null, ticker is in an active trend with no recent consolidation.
+5. Volatility compression (volatility_compression): band_width_slope, band_width_pct_rank,
+   is_compressed. State whether the range is actively coiling and historically tight.
+   If null, state insufficient history.
+6. Volume quality (volume_quality): is_quiet, is_declining, breakout_confirmed.
+   If breakout_confirmed is True/False, comment on conviction. If null, state unavailable.
+7. Risk — always state both sides:
+   Long stop  = rlo_20 (short-term), rlo_150 (structural).
+   Short stop = rhi_20 (short-term), rhi_150 (structural).
+   Highlight the relevant side given the active signal.
+8. Verdict: one actionable sentence — state direction (long/short/flat), exact entry
+   trigger levels, and the relevant stop.
 
 Be concise. No padding. Use numbers from the data, not generic statements.\
 """
@@ -131,56 +199,47 @@ Be concise. No padding. Use numbers from the data, not generic statements.\
 
 def select_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Select and compute the actionable column set for a single-ticker DataFrame.
+    Select and compute the range-breakout column set for a single-ticker DataFrame.
 
     Columns kept:
-      - Identity:    symbol, date, rrg (regime: +1 bullish / 0 sideways / -1 bearish)
-      - Relative OHLC: ropen, rhigh, rlow, rclose (stock / FTSEMIB.MI)
-      - 20-day levels: rhi_20 (resistance), rlo_20 (support)
-      - 20-day signal: rbo_20 (+1 enter long / -1 enter short / 0 exit–no trade)
-      - Swing levels:  rh1..rh4, rl1..rl4 (forward-filled)
-      - Volume:        absolute volume for liquidity context
-      - Derived:       range_position_pct, signal_age_bars
+      - Identity:        date, rrg (regime: +1 bullish / 0 sideways / -1 bearish)
+      - Relative close:  rclose only (ropen/rhigh/rlow excluded — intraday noise)
+      - Breakout bands:  rhi_20/50/150 (resistance), rlo_20/50/150 (support)
+      - Breakout sigs:   rbo_20/50/150 (+1 enter long / -1 enter short / 0 flat)
+      - Swing levels:    rh3, rh4, rl3, rl4 (forward-filled; minor pivots excluded)
+      - Turtle:          rtt_5020 (price-channel breakout confirmation)
+      - Volume:          absolute volume for liquidity context
+      - Derived:         range_position_pct, dist_to_rhi/rlo per window,
+                         rclose_chg_Nd, vol_trend, rbo_*_age, rbo_*_flip
 
     Columns excluded:
-      - *_cumul, *_returns, *_chg*, *_PL_cum  — intermediate analytics, not needed per-bar
-      - rbo_*_stop_loss                        — ATR stop not in scope for 20-day snapshot
+      - rema_*, rsma_* (MA crossover signals + MA level values) → MA trader assistant
+      - ropen, rhigh, rlow — intraday OHLC, not needed for EOD range breakout logic
+      - rh1, rh2, rl1, rl2 — minor recent pivots, too noisy
+      - *_stop_loss, *_cumul, *_returns, *_chg*, *_PL_cum — intermediate analytics
     """
     cols = df.columns
 
-    range_cols = cols[cols.get_loc("ropen"): cols.get_loc("rclose") + 1].tolist()
-    rbo_cols   = [c for c in cols if "rbo" in c]
-    # rhi_* / rlo_* — breakout band columns (rhi_20, rhi_50, rhi_150, rlo_*).
-    # Underscore suffix excludes "rhigh" and "rlow" which are already in range_cols.
-    rhi_cols   = [c for c in cols if c.startswith("rhi_")]
-    rlo_cols   = [c for c in cols if c.startswith("rlo_")]
-    # rh\d / rl\d — swing level columns only (rh1..rh4, rl1..rl4).
-    # Deliberately excludes "rhigh" and "rlow" which are already in range_cols.
-    rh_cols    = [c for c in cols if re.match(r"rh\d", c)]
-    rl_cols    = [c for c in cols if re.match(r"rl\d", c)]
-
-    # MA value columns: actual EMA/SMA levels at each window (used for alignment context).
-    ema_val_cols = [c for c in cols if re.match(r"rema_(short|medium|long)_\d+$", c)]
-    sma_val_cols = [c for c in cols if re.match(r"rsma_(short|medium|long)_\d+$", c)]
-    # MA crossover signal columns: triple stack only (50/100/150).
-    # +1 = EMA50 > EMA100 > EMA150 (full bullish stack).
-    # -1 = inverted. 0 = mixed / flat.
-    ema_sig_cols = [c for c in cols if c == "rema_50100150"]
-    sma_sig_cols = [c for c in cols if c == "rsma_50100150"]
-    # Turtle signal: independent breakout confirmation.
-    turtle_cols  = [c for c in cols if c == "rtt_5020"]
+    rbo_cols = [c for c in cols if "rbo" in c]
+    # rhi_* / rlo_* — breakout band columns only (rhi_20/50/150, rlo_20/50/150).
+    # startswith("rhi_") / startswith("rlo_") excludes "rhigh" / "rlow".
+    rhi_cols = [c for c in cols if c.startswith("rhi_")]
+    rlo_cols = [c for c in cols if c.startswith("rlo_")]
+    # Turtle signal only — no rema_*/rsma_* in this assistant.
+    turtle_cols = [c for c in cols if c == "rtt_5020"]
 
     selected = (
-        ["symbol", "rrg", "date"]
-        + range_cols
+        ["symbol", "rrg", "date", "rclose"]
         + ["volume"]
         + rbo_cols
         + rhi_cols + rlo_cols
-        + rh_cols + rl_cols
-        + ema_val_cols + sma_val_cols
-        + ema_sig_cols + sma_sig_cols
         + turtle_cols
     )
+    # Add significant swing levels only (rh3/rh4/rl3/rl4; skip minor pivots rh1/2/rl1/2).
+    for sw in ["rh3", "rh4", "rl3", "rl4"]:
+        if sw in cols:
+            selected.append(sw)
+
     df = df[selected].copy()
 
     # Drop intermediate / noisy columns.
@@ -249,11 +308,9 @@ def select_columns(df: pd.DataFrame) -> pd.DataFrame:
             groups = (df[sig] != df[sig].shift()).cumsum()
             df[f"{sig}_age"] = df.groupby(groups).cumcount() + 1
 
-    # Final column order: rclose + 20-day levels/signal + significant swing levels + derived.
-    # rh3/rh4 = 2nd-highest / highest relative swing high (magnitude order, not time order).
-    # rl3/rl4 = 2nd-deepest / deepest relative swing low.
-    # rh1/rh2 and rl1/rl2 are minor recent pivots — excluded as noise.
-    # ropen/rhigh/rlow are intraday relative OHLC — excluded; only rclose matters EOD.
+    # Final column order: rclose → breakout bands/signals → swing levels → derived.
+    # rh3/rh4 = 2nd-highest / highest swing high (magnitude order, not time order).
+    # rl3/rl4 = 2nd-deepest / deepest swing low — major structural floor.
     # symbol is redundant with ticker injected by main() — excluded.
     significant_swings = [
         c for c in ["rh3", "rh4", "rl3", "rl4"]
@@ -267,8 +324,6 @@ def select_columns(df: pd.DataFrame) -> pd.DataFrame:
     flip_cols     = [c for c in df.columns if c.endswith("_flip")]
     dist_cols     = sorted(c for c in df.columns if re.match(r"dist_to_r(hi|lo)_\d+_pct", c))
     momentum_cols = sorted(c for c in df.columns if re.match(r"rclose_chg_\d+d", c))
-    ma_sig_cols   = [c for c in df.columns if re.match(r"r(ema|sma)_\d+", c) and "_stop" not in c]
-    ma_val_cols   = [c for c in df.columns if re.match(r"r(ema|sma)_(short|medium|long)_\d+", c)]
     turtle        = [c for c in df.columns if c == "rtt_5020"]
 
     final_cols = (
@@ -281,9 +336,8 @@ def select_columns(df: pd.DataFrame) -> pd.DataFrame:
         + age_cols               # rbo_20/50/150_age
         + flip_cols              # rbo_20/50/150_flip
         + ["vol_trend"]
-        + turtle                 # rtt_5020
-        + ma_sig_cols            # rema/rsma crossover signals
-        + ma_val_cols            # rema/rsma actual MA levels
+        + turtle                 # rtt_5020 (price-channel breakout confirmation)
+        # rema_*/rsma_* intentionally omitted → MA trader assistant
     )
     # Deduplicate while preserving order.
     seen: set[str] = set()
@@ -297,9 +351,87 @@ def select_columns(df: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 
+def _dataclass_to_dict(obj) -> dict:
+    """Convert a frozen dataclass to a plain JSON-safe dict (handles bool | None fields)."""
+    return {k: v for k, v in obj.__dataclass_fields__.items()
+            if True} | {k: getattr(obj, k) for k in obj.__dataclass_fields__}
+
+
+def _compute_range_setup(df: pd.DataFrame) -> dict | None:
+    """
+    Run assess_range over the full ticker history and return a JSON-safe dict.
+
+    Returns None (serialised as null) when the ticker has no recent consolidation
+    window (e.g., the entire history is in an active trend) or too few bars.
+    Logs a warning instead of crashing so the rest of the snapshot is unaffected.
+    """
+    try:
+        rs: RangeSetup = assess_range(df)
+        return {
+            "n_resistance_touches": rs.n_resistance_touches,
+            "n_support_touches":    rs.n_support_touches,
+            "is_sideways":          rs.is_sideways,
+            "slope_pct_per_day":    rs.slope_pct_per_day,
+            "consolidation_bars":   rs.consolidation_bars,
+            "band_width_pct":       rs.band_width_pct,
+        }
+    except ValueError as exc:
+        log.warning("assess_range failed: %s", exc)
+        return None
+
+
+def _compute_volatility_state(df: pd.DataFrame) -> dict | None:
+    """
+    Run measure_volatility_compression over the full ticker history and return a
+    JSON-safe dict.
+
+    Returns None when the ticker has insufficient history for the 252-bar percentile
+    rank or the slope window.  Logs a warning so the snapshot is unaffected.
+    """
+    try:
+        vs: VolatilityState = measure_volatility_compression(df)
+        return {
+            "band_width_pct":      vs.band_width_pct,
+            "band_width_slope":    vs.band_width_slope,
+            "band_width_pct_rank": vs.band_width_pct_rank,
+            "is_compressed":       vs.is_compressed,
+        }
+    except ValueError as exc:
+        log.warning("measure_volatility_compression failed: %s", exc)
+        return None
+
+
+def _compute_volume_profile(df: pd.DataFrame) -> dict | None:
+    """
+    Run assess_volume_profile over the full ticker history and return a JSON-safe dict.
+
+    Returns None when the ticker has no consolidation history or insufficient bars.
+    Logs a warning so the rest of the snapshot is unaffected.
+    """
+    try:
+        vp: VolumeProfile = assess_volume_profile(df)
+        return {
+            "vol_trend_now":      vp.vol_trend_now,
+            "vol_trend_mean":     vp.vol_trend_mean,
+            "vol_trend_slope":    vp.vol_trend_slope,
+            "is_quiet":           vp.is_quiet,
+            "is_declining":       vp.is_declining,
+            "breakout_confirmed": vp.breakout_confirmed,
+        }
+    except ValueError as exc:
+        log.warning("assess_volume_profile failed: %s", exc)
+        return None
+
+
 def build_snapshot(df_ticker: pd.DataFrame) -> dict:
     """
-    Return the last bar of a prepared ticker DataFrame as a JSON-safe dict.
+    Return the last bar of a prepared ticker DataFrame as a JSON-safe dict,
+    enriched with range-quality and volume-behaviour summaries.
+
+    The enrichments (range_setup, volatility_compression, volume_profile) are computed
+    over the full ticker history before the per-bar snapshot is extracted.  Each returns
+    None if the underlying primitive raises (e.g., no consolidation window found) so
+    a failed enrichment never prevents the snapshot from being built.
 
     Raises:
         ValueError: If the DataFrame is empty after filtering.
@@ -307,12 +439,25 @@ def build_snapshot(df_ticker: pd.DataFrame) -> dict:
     if df_ticker.empty:
         raise ValueError("DataFrame is empty — ticker may not exist in the parquet.")
 
+    # --- Compute enrichments over full history BEFORE slicing to last bar ---
+    range_setup           = _compute_range_setup(df_ticker)
+    volatility_compression = _compute_volatility_state(df_ticker)
+    volume_profile        = _compute_volume_profile(df_ticker)
+
+    # --- Last-bar snapshot ---
     df_prepared = select_columns(df_ticker)
     last = df_prepared.tail(1).copy()
     last["date"] = last["date"].dt.strftime("%Y-%m-%d")
 
     records = json.loads(last.to_json(orient="records", double_precision=4))
-    return records[0]
+    snapshot = records[0]
+
+    # --- Merge enrichments ---
+    snapshot["range_setup"]            = range_setup
+    snapshot["volatility_compression"] = volatility_compression
+    snapshot["volume_profile"]         = volume_profile
+
+    return snapshot
 
 
 # ---------------------------------------------------------------------------
@@ -332,28 +477,55 @@ class TimeframeAnalysis(BaseModel):
     commentary: str = Field(description="One sentence on the signal state and key level for this timeframe.")
 
 
-class MACrossover(BaseModel):
-    ema_triple: int = Field(description="rema_50100150: +1 = EMA50>EMA100>EMA150, -1 = inverted stack, 0 = mixed.")
-    sma_triple: int = Field(description="rsma_50100150: +1 = SMA50>SMA100>SMA150, -1 = inverted stack, 0 = mixed.")
-    turtle: int = Field(description="rtt_5020 signal: +1 long, -1 short, 0 flat.")
-    aligned_bullish: bool = Field(description="True if ema_triple, sma_triple, and turtle are all +1.")
-    commentary: str = Field(description="One sentence on MA stack alignment and what it implies.")
+class TurtleSignal(BaseModel):
+    signal: int = Field(description="rtt_5020: +1 = broke above 20-day high, -1 = below 20-day low, 0 = inside channel.")
+    aligned_with_rbo_20: bool = Field(description="True if rtt_5020 and rbo_20 have the same non-zero sign.")
+    commentary: str = Field(description="One sentence on turtle signal and whether it agrees with rbo_20.")
 
 
 class RiskLevels(BaseModel):
-    short_term_stop: float = Field(description="rlo_20 — short-term stop zone for a long.")
-    structural_stop: float = Field(description="rlo_150 — major structural floor.")
-    peak_resistance: float = Field(description="rh4 — absolute highest swing high.")
-    major_floor: float = Field(description="rl4 — absolute deepest swing low.")
+    long_stop:            float = Field(description="rlo_20 — short-term stop for a long: exit if price re-enters range below this.")
+    long_structural_stop: float = Field(description="rlo_150 — major structural stop for longs: breach invalidates the long thesis.")
+    short_stop:            float = Field(description="rhi_20 — short-term stop for a short: exit if price re-enters range above this.")
+    short_structural_stop: float = Field(description="rhi_150 — major structural stop for shorts: breach invalidates the short thesis.")
+    peak_resistance:       float = Field(description="rh4 — absolute highest swing high. Resistance for longs; target / cover level for shorts.")
+    major_floor:           float = Field(description="rl4 — absolute deepest swing low. Target for longs; structural floor for shorts.")
+
+
+class VolatilityCompression(BaseModel):
+    band_width_pct:       float = Field(description="(rhi_20 - rlo_20) / rclose * 100 at the last bar. Low = price in a tight cage.")
+    band_width_slope:     float = Field(description="OLS slope of band_width_pct over the last 40 bars (%/bar). Negative = range actively narrowing.")
+    band_width_pct_rank:  float = Field(description="Percentile rank of band_width_pct vs 252-bar history (0–100). Low = historically compressed for this ticker.")
+    is_compressed:        bool  = Field(description="True when band_width_slope < 0 AND band_width_pct_rank < 25. The coiled-spring signal.")
+    commentary:           str   = Field(description="One sentence on compression state: is the range coiling, stable, or dissolving?")
+
+
+class RangeQuality(BaseModel):
+    n_resistance_touches: int   = Field(description="Distinct times price tested rhi_20 without breaking through. 2-4 = clean range.")
+    n_support_touches:    int   = Field(description="Distinct times price tested rlo_20 without breaking through.")
+    is_sideways:          bool  = Field(description="True when OLS slope of rclose is below 0.15%/day.")
+    slope_pct_per_day:    float = Field(description="Signed OLS slope of rclose (%/day). ~0 = ideal consolidation.")
+    consolidation_bars:   int   = Field(description="Total consecutive bars rbo_20 has held 0. Higher = more mature range.")
+    band_width_pct:       float = Field(description="(rhi_20 - rlo_20) / rclose * 100. Low = tight range = compressed energy.")
+    commentary:           str   = Field(description="One sentence assessing setup quality: touch count, sideways confirmation, compression.")
+
+
+class VolumeQuality(BaseModel):
+    vol_trend_mean:       float       = Field(description="Mean vol_trend over the consolidation window. < 1.0 = quiet (healthy).")
+    vol_trend_slope:      float       = Field(description="OLS slope of vol_trend per bar. Negative = volume drying up (ideal).")
+    is_quiet:             bool        = Field(description="True when vol_trend_mean < 1.0 — primary gate for consolidation quality.")
+    is_declining:         bool        = Field(description="True when vol_trend_slope < 0 — volume actively contracting inside range.")
+    breakout_confirmed:   bool | None = Field(description="True = flip bar with vol_trend >= 1.2. False = flip bar, low volume. None = not a flip bar.")
+    commentary:           str         = Field(description="One sentence on volume behaviour: quiet/noisy consolidation, breakout confirmation or caution.")
 
 
 class TraderAnalysis(BaseModel):
     description: str = Field(
         description=(
             "A 3-5 sentence narrative summary of the full technical picture for this stock. "
-            "Written for a professional trader. Cover: regime, multi-timeframe signal state, "
-            "MA stack alignment, key levels to watch, and overall trend quality. "
-            "Use exact numbers from the data. No generic statements."
+            "Written for a professional trader. Cover: regime, multi-timeframe breakout "
+            "confluence (long or short — treat both directions equally), range quality, "
+            "key levels, and vol_trend. Use exact numbers. No generic statements."
         )
     )
     regime: int = Field(description="rrg: +1 bullish, 0 sideways, -1 bearish.")
@@ -363,8 +535,17 @@ class TraderAnalysis(BaseModel):
     short_term: TimeframeAnalysis = Field(description="Analysis of the 20-day window.")
     medium_term: TimeframeAnalysis = Field(description="Analysis of the 50-day window.")
     long_term: TimeframeAnalysis = Field(description="Analysis of the 150-day window.")
-    ma_crossover: MACrossover = Field(description="Moving average crossover signals and stack alignment.")
+    turtle: TurtleSignal = Field(description="Turtle price-channel breakout signal and alignment with rbo_20.")
     vol_trend: float = Field(description="Volume ratio vs 20-bar average. >1 expanding, <1 contracting.")
+    range_quality: RangeQuality | None = Field(
+        description="Range setup quality metrics. null when no consolidation window is available (ticker in trend)."
+    )
+    volatility_compression: VolatilityCompression | None = Field(
+        description="Volatility compression state. null when insufficient history for slope/rank computation."
+    )
+    volume_quality: VolumeQuality | None = Field(
+        description="Volume behaviour during consolidation. null when no consolidation history available."
+    )
     risk: RiskLevels
     verdict: str = Field(
         description="Actionable one-sentence conclusion for a professional trader. Use exact numbers."
@@ -485,12 +666,41 @@ def main() -> None:
         print(f"            res={tf.resistance}  ({tf.dist_to_resistance_pct:+.2f}%)  sup={tf.support}  ({tf.dist_to_support_pct:+.2f}%)")
         print(f"            {tf.commentary}")
     print()
-    ma = a.ma_crossover
-    print(f"  MA cross   : ema_triple={ma.ema_triple}  sma_triple={ma.sma_triple}  turtle={ma.turtle}  aligned={ma.aligned_bullish}")
-    print(f"               {ma.commentary}")
+    tt = a.turtle
+    print(f"  Turtle     : sig={tt.signal}  aligns_with_rbo_20={tt.aligned_with_rbo_20}")
+    print(f"               {tt.commentary}")
+    print()
+    if a.range_quality is not None:
+        rq = a.range_quality
+        print(f"  Range      : res_touches={rq.n_resistance_touches}  sup_touches={rq.n_support_touches}  "
+              f"sideways={rq.is_sideways}  slope={rq.slope_pct_per_day:+.4f}%/day")
+        print(f"               bars={rq.consolidation_bars}  bw={rq.band_width_pct:.2f}%")
+        print(f"               {rq.commentary}")
+    else:
+        print("  Range      : no consolidation window available (ticker in trend)")
+    print()
+    if a.volatility_compression is not None:
+        vc = a.volatility_compression
+        print(f"  Volatility : bw={vc.band_width_pct:.2f}%  slope={vc.band_width_slope:+.6f}/bar  "
+              f"rank={vc.band_width_pct_rank:.1f}%ile  compressed={vc.is_compressed}")
+        print(f"               {vc.commentary}")
+    else:
+        print("  Volatility : insufficient history for compression estimate")
+    print()
+    if a.volume_quality is not None:
+        vq = a.volume_quality
+        bc = ("n/a" if vq.breakout_confirmed is None
+              else ("CONFIRMED" if vq.breakout_confirmed else "WEAK"))
+        print(f"  Volume     : quiet={vq.is_quiet}  declining={vq.is_declining}  "
+              f"mean={vq.vol_trend_mean:.3f}  slope={vq.vol_trend_slope:+.5f}/bar  "
+              f"breakout={bc}")
+        print(f"               {vq.commentary}")
+    else:
+        print("  Volume     : no volume history available")
     print()
     r = a.risk
-    print(f"  Risk       : ST stop={r.short_term_stop}  struct stop={r.structural_stop}")
+    print(f"  Risk (long) : stop={r.long_stop}  structural={r.long_structural_stop}")
+    print(f"  Risk (short): stop={r.short_stop}  structural={r.short_structural_stop}")
     print(f"               peak res={r.peak_resistance}  major floor={r.major_floor}")
     print()
     print(f"  Verdict    : {a.verdict}")
