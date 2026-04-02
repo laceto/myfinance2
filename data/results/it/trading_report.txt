@@ -1,28 +1,17 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-03-27 to 2026-04-01 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-03-30 to 2026-04-02 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker   price      action  stop_loss  risk_pct
-2026-04-01 rtt_5020   ABT.MI  2.7200 ENTER SHORT   2.866429  5.383403
-2026-04-01 rtt_5020    IB.MI 11.8000 ENTER SHORT  12.457144  5.569011
-2026-04-01 rtt_5020   VLS.MI 10.1500   EXIT LONG   9.548571       NaN
-2026-04-01 rtt_5020   TPS.MI  7.7500 ENTER SHORT   8.021429  3.502305
-2026-04-01 rtt_5020  TNXT.MI 14.9500   EXIT LONG  14.805715       NaN
-2026-04-01 rtt_5020   SGC.MI  0.2400 ENTER SHORT   0.258143  7.559522
-2026-04-01 rtt_5020  RETI.MI  1.4600   EXIT LONG   1.424286       NaN
-2026-04-01 rtt_5020   NPI.MI  0.6220 ENTER SHORT   0.674286  8.406064
-2026-04-01 rtt_5020   IGV.MI  2.2300 ENTER SHORT   2.372857  6.406145
-2026-04-01 rtt_5020  ZEST.MI  0.1235 ENTER SHORT   0.132714  7.460960
-2026-04-01 rtt_5020  ABTG.MI  1.3900 ENTER SHORT   1.531428 10.174713
-2026-04-01 rtt_5020   FIC.MI 18.6000 ENTER SHORT  19.242857  3.456218
-2026-04-01 rtt_5020  ESAU.MI  3.0400   EXIT LONG   2.865714       NaN
-2026-04-01 rtt_5020   DGV.MI 29.0000   EXIT LONG  28.842859       NaN
-2026-04-01 rtt_5020 CLABO.MI  1.0950   EXIT LONG   1.095000       NaN
-2026-04-01 rtt_5020    BO.MI  0.7000   EXIT LONG   0.695714       NaN
-2026-04-01 rtt_5020   BFG.MI  4.3400 ENTER SHORT   4.557143  5.003291
-2026-04-01 rtt_5020  ANIM.MI  6.7050   EXIT LONG   6.322143       NaN
-2026-03-27 rtt_5020  GAMB.MI  0.2500  ENTER LONG   0.243143  2.742858
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-04-02 rtt_5020  CFV.MI  1.890000   EXIT LONG   1.818571       NaN
+2026-04-02 rtt_5020  ETH.MI  0.927000   EXIT LONG   0.861286       NaN
+2026-04-02 rtt_5020 INDB.MI 18.700001 ENTER SHORT  19.407143  3.781512
+2026-04-02 rtt_5020 MAPS.MI  2.360000 ENTER SHORT   2.508571  6.295401
+2026-04-02 rtt_5020 MASI.MI  4.080000 ENTER SHORT   4.298571  5.357145
+2026-04-02 rtt_5020 NEXI.MI  3.302000  EXIT SHORT   3.545428       NaN
+2026-04-02 rtt_5020  SSL.MI  1.190000   EXIT LONG   1.127857       NaN
+2026-04-02 rtt_5020  TSL.MI  0.077900  EXIT SHORT   0.077371       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-01)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-02)
 ===============================================================================================
