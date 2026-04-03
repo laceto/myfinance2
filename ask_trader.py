@@ -149,6 +149,11 @@ Volatility compression (volatility_compression — computed over the full ticker
 - is_compressed: True when band_width_slope < 0 AND band_width_pct_rank < 25.
   Both conditions required: the range must be both actively narrowing AND in the bottom
   quartile of its own history. This is the "coiled spring" signal.
+- history_available: actual number of bars used for the percentile rank computation.
+  Fewer bars = less reliable rank. Treat is_compressed with caution when history_available < 252.
+- is_rank_reliable: True when history_available >= 252 (full reference window).
+  When False, band_width_pct_rank is computed on partial history and may not be comparable
+  across tickers — flag this in the analysis and weight is_compressed accordingly.
 - null: measure_volatility_compression failed (e.g., insufficient history).
 
 Volume profile (volume_profile — computed over the same consolidation window):
@@ -395,6 +400,8 @@ def _compute_volatility_state(df: pd.DataFrame) -> dict | None:
             "band_width_slope":    vs.band_width_slope,
             "band_width_pct_rank": vs.band_width_pct_rank,
             "is_compressed":       vs.is_compressed,
+            "history_available":   vs.history_available,
+            "is_rank_reliable":    vs.is_rank_reliable,
         }
     except ValueError as exc:
         log.warning("measure_volatility_compression failed: %s", exc)

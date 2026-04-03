@@ -56,6 +56,16 @@
     "equal_weight": 0.05,
     "amortized_root": 2
   },
+  "range_quality": {
+    "touch_hi_threshold":       85.0,
+    "touch_lo_threshold":       15.0,
+    "retreat_threshold":        65.0,
+    "bounce_threshold":         35.0,
+    "sideways_slope_threshold": 0.15,
+    "compression_rank_threshold": 25.0,
+    "min_trend_bars":           10,
+    "max_trend_skip":           50
+  },
   "benchmark": "FTSEMIB.MI",
   "floor_ceiling": {
     "relative": true,

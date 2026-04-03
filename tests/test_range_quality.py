@@ -14,7 +14,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import logging
+
 from ta.breakout.range_quality import (
+    RangeQualityConfig,
+    VolatilityState,
     breakout_prior_consolidation_length,
     classify_trend,
     count_touches,
@@ -180,24 +184,25 @@ class TestClassifyTrend:
 
     def test_nan_values_are_dropped(self):
         """NaN values are dropped; regression runs on clean bars only."""
-        s = pd.Series([1.0, float("nan"), 1.0, float("nan"), 1.0, 1.0, 1.0])
+        # 5 NaN + 10 flat bars = 10 clean bars (meets MIN_TREND_BARS=10).
+        s = pd.Series([float("nan")] * 5 + [1.0] * 10)
         is_sw, slope = classify_trend(s)  # must not raise
         assert is_sw is True
 
     def test_minimum_bars_exact_boundary(self):
-        """Exactly 5 non-NaN bars: must not raise."""
-        s = pd.Series([1.0, 1.0, 1.0, 1.0, 1.0])
+        """Exactly 10 non-NaN bars: must not raise (MIN_TREND_BARS=10)."""
+        s = pd.Series([1.0] * 10)
         classify_trend(s)  # no exception
 
     def test_minimum_bars_below_boundary_raises(self):
-        """Fewer than 5 non-NaN bars: must raise ValueError mentioning the minimum."""
-        with pytest.raises(ValueError, match="5"):
-            classify_trend(pd.Series([1.0, 1.1, 1.0, 1.1]))
+        """Fewer than 10 non-NaN bars: must raise ValueError mentioning the minimum."""
+        with pytest.raises(ValueError, match="10"):
+            classify_trend(pd.Series([1.0] * 9))
 
     def test_nan_heavy_series_drops_below_minimum_raises(self):
-        """4 NaN + 4 real = only 4 clean bars: must raise."""
-        s = pd.Series([float("nan")] * 4 + [1.0] * 4)
-        with pytest.raises(ValueError, match="5"):
+        """6 NaN + 4 real = only 4 clean bars: must raise (MIN_TREND_BARS=10)."""
+        s = pd.Series([float("nan")] * 6 + [1.0] * 4)
+        with pytest.raises(ValueError, match="10"):
             classify_trend(s)
 
     def test_smoke_scm_mi(self):
@@ -331,10 +336,9 @@ class TestVolatilityCompression:
         assert result.is_compressed is False
 
     def test_current_bw_is_last_bar_value(self):
-        """band_width_pct reports the value at the last bar."""
-        result = measure_volatility_compression(
-            _bw_df([10.0, 8.0, 6.0, 4.0, 2.0]), window_bars=5, history_bars=5
-        )
+        """band_width_pct reports the value at the last bar (needs >= MIN_TREND_BARS=10 bars)."""
+        bw = [10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.5, 3.0, 2.0]
+        result = measure_volatility_compression(_bw_df(bw), window_bars=10, history_bars=10)
         assert result.band_width_pct == pytest.approx(2.0, abs=1e-4)
 
     def test_rank_at_minimum_is_low(self):
@@ -374,18 +378,22 @@ class TestVolatilityCompression:
 
     def test_nan_rows_in_rhi_are_dropped(self):
         """NaN values in rhi_20 / rlo_20 are excluded before any computation."""
+        # 2 NaN bars + 10 clean bars → 10 clean bars meets MIN_TREND_BARS=10.
+        # bw values (clean bars): [10, 9, 8, 7, 6, 5, 4, 3, 2.5, 2]
+        clean_hi = [1.0 + v / 200 for v in [10, 9, 8, 7, 6, 5, 4, 3, 2.5, 2]]
+        clean_lo = [1.0 - v / 200 for v in [10, 9, 8, 7, 6, 5, 4, 3, 2.5, 2]]
         df = pd.DataFrame({
-            "rhi_20": [1.05, float("nan"), 1.04, 1.03, 1.02, 1.01],
-            "rlo_20": [0.95, float("nan"), 0.96, 0.97, 0.98, 0.99],
-            "rclose": [1.0] * 6,
+            "rhi_20": [float("nan"), float("nan")] + clean_hi,
+            "rlo_20": [float("nan"), float("nan")] + clean_lo,
+            "rclose": [1.0] * 12,
         })
-        # After dropping NaN: 5 clean bars with bw [10, 8, 6, 4, 2]
-        result = measure_volatility_compression(df, window_bars=5, history_bars=5)
+        # After dropping NaN: 10 clean bars; last bar bw=2.0
+        result = measure_volatility_compression(df, window_bars=10, history_bars=10)
         assert result.band_width_pct == pytest.approx(2.0, abs=0.01)
 
     def test_too_few_bars_raises(self):
-        with pytest.raises(ValueError, match="5"):
-            measure_volatility_compression(_bw_df([5.0, 4.0, 3.0, 2.0]), window_bars=4, history_bars=4)
+        with pytest.raises(ValueError, match="10"):
+            measure_volatility_compression(_bw_df([5.0] * 9), window_bars=9, history_bars=9)
 
     def test_missing_rlo_20_raises(self):
         df = pd.DataFrame({"rhi_20": [1.05] * 5, "rclose": [1.0] * 5})
@@ -593,9 +601,9 @@ class TestAssessRange:
             assess_range(df)
 
     def test_too_few_bars_raises(self):
-        """Zero-run shorter than MIN_TREND_BARS=5 raises ValueError from classify_trend."""
-        df = _make_range_df(n_zero=4)
-        with pytest.raises(ValueError, match="5"):
+        """Zero-run shorter than MIN_TREND_BARS=10 raises ValueError from classify_trend."""
+        df = _make_range_df(n_zero=9)
+        with pytest.raises(ValueError, match="10"):
             assess_range(df)
 
     def test_smoke_scm_mi(self):
@@ -638,3 +646,180 @@ class TestAssessRange:
         assert result.consolidation_bars   == 38
         assert result.slope_pct_per_day    == pytest.approx(0.0087, abs=0.001)
         assert result.band_width_pct       == pytest.approx(3.1074, abs=0.001)
+
+
+# ===========================================================================
+# VolatilityState — new fields: history_available, is_rank_reliable
+# ===========================================================================
+
+
+class TestVolatilityStateNewFields:
+
+    def test_history_available_equals_actual_bars(self):
+        """history_available reports the number of bars passed to the rank computation."""
+        n = 30
+        bw = [5.0] * n
+        result = measure_volatility_compression(_bw_df(bw), window_bars=n, history_bars=n)
+        assert result.history_available == n
+
+    def test_is_rank_reliable_true_when_full_history(self):
+        """is_rank_reliable is True when actual history >= requested history_bars."""
+        n = 30
+        result = measure_volatility_compression(_bw_df([5.0] * n), window_bars=n, history_bars=n)
+        assert result.is_rank_reliable is True
+
+    def test_is_rank_reliable_false_when_short_history(self):
+        """is_rank_reliable is False when fewer bars available than history_bars requests."""
+        # 20 actual bars, requesting 252-bar reference window.
+        n = 20
+        result = measure_volatility_compression(_bw_df([5.0] * n), window_bars=n, history_bars=252)
+        assert result.is_rank_reliable is False
+        assert result.history_available == n
+
+    def test_is_rank_reliable_false_triggers_warning(self, caplog):
+        """Thin history must emit a WARNING about unreliable rank."""
+        n = 20
+        with caplog.at_level(logging.WARNING, logger="ta.breakout.range_quality"):
+            measure_volatility_compression(_bw_df([5.0] * n), window_bars=n, history_bars=252)
+        assert any("rank" in r.message.lower() or "history" in r.message.lower()
+                   for r in caplog.records), "expected a warning about thin history"
+
+    def test_volatility_state_is_dataclass(self):
+        """VolatilityState is a frozen dataclass with the expected fields."""
+        n = 30
+        vs = measure_volatility_compression(_bw_df([5.0] * n), window_bars=n, history_bars=n)
+        assert isinstance(vs, VolatilityState)
+        assert hasattr(vs, "history_available")
+        assert hasattr(vs, "is_rank_reliable")
+
+
+# ===========================================================================
+# breakout_prior_consolidation_length — DatetimeIndex guard
+# ===========================================================================
+
+
+class TestBreakoutPriorConsolidationLengthDatetimeIndex:
+
+    def test_datetimeindex_with_gaps_works_correctly(self):
+        """
+        A DatetimeIndex with holiday gaps must not produce NaN via shift(1).
+        reset_index(drop=True) inside the function ensures positional shift semantics.
+        """
+        # Build a DatetimeIndex with a gap (skipping one day — simulates a holiday).
+        dates = pd.to_datetime([
+            "2024-01-02", "2024-01-03", "2024-01-04",
+            # 2024-01-05 is skipped (holiday)
+            "2024-01-08", "2024-01-09", "2024-01-10",
+        ])
+        # 3 zero-run bars, then breakout on 2024-01-08 (first bar after gap).
+        rbo = pd.Series([0, 0, 0, 1, 1, 1], index=dates)
+        result = breakout_prior_consolidation_length(rbo)
+        # The breakout flip (index 3, date 2024-01-08) must report age=3, not NaN.
+        assert result.iloc[3] == 3, (
+            f"Expected flip bar at iloc[3] to report age=3, got {result.iloc[3]}"
+        )
+        # Non-flip bars must be NaN.
+        assert result.iloc[0:3].isna().all()
+        assert pd.isna(result.iloc[4])
+        assert pd.isna(result.iloc[5])
+
+
+# ===========================================================================
+# assess_range — NaN range_pct warning and max_trend_skip warning
+# ===========================================================================
+
+
+def _make_zero_range_df(n_zero: int = 20, n_zero_range: int = 0) -> pd.DataFrame:
+    """
+    Build a DataFrame where n_zero_range bars have rhi_20 == rlo_20 (zero-width range),
+    which causes range_pct to be NaN. Used to test NaN detection in assess_range.
+    """
+    n = n_zero
+    rclose_arr = np.ones(n)
+    rhi_arr    = np.where(np.arange(n) < n_zero_range, 1.0, 1.05)  # first n_zero_range are degenerate
+    rlo_arr    = np.where(np.arange(n) < n_zero_range, 1.0, 0.95)
+
+    return pd.DataFrame({
+        "rbo_20": np.zeros(n),
+        "rclose": rclose_arr,
+        "rhi_20": rhi_arr,
+        "rlo_20": rlo_arr,
+    })
+
+
+class TestAssessRangeNewBehaviours:
+
+    def test_nan_range_pct_warning_emitted(self, caplog):
+        """
+        When >10% of window bars have zero-width range (rhi==rlo → NaN range_pct),
+        assess_range must emit a WARNING.
+        """
+        # 20-bar window, 3 degenerate bars = 15% NaN → above the 10% threshold.
+        df = _make_zero_range_df(n_zero=20, n_zero_range=3)
+        with caplog.at_level(logging.WARNING, logger="ta.breakout.range_quality"):
+            assess_range(df, window_bars=20)
+        assert any("nan" in r.message.lower() or "range_pct" in r.message.lower()
+                   for r in caplog.records), "expected a warning about NaN range_pct values"
+
+    def test_nan_range_pct_below_threshold_no_warning(self, caplog):
+        """
+        When ≤10% of window bars have zero-width range, no NaN warning is emitted.
+        """
+        # 20-bar window, 2 degenerate bars = 10% — right at the threshold, should not warn.
+        df = _make_zero_range_df(n_zero=20, n_zero_range=2)
+        with caplog.at_level(logging.WARNING, logger="ta.breakout.range_quality"):
+            assess_range(df, window_bars=20)
+        nan_warnings = [
+            r for r in caplog.records
+            if ("nan" in r.message.lower() or "range_pct" in r.message.lower())
+            and r.levelno >= logging.WARNING
+        ]
+        assert len(nan_warnings) == 0
+
+    def test_max_trend_skip_warning_emitted(self, caplog):
+        """
+        When assess_range skips more non-zero bars than config.max_trend_skip,
+        it must emit a WARNING before continuing.
+
+        The backward walk starts at the LAST bar and skips trailing non-zero bars,
+        so the non-zero (trend) run must be at the END of the series.
+        """
+        # 20 consolidation bars (rbo=0) FIRST, then 60 trend bars (rbo=1) at the TAIL.
+        # The backward walk skips all 60 trailing non-zero bars to find the zero-run.
+        n_consol = 20
+        n_trend  = 60   # exceeds max_trend_skip=50
+        n        = n_consol + n_trend
+        df = pd.DataFrame({
+            "rbo_20": np.array([0.0] * n_consol + [1.0] * n_trend),
+            "rclose": np.ones(n),
+            "rhi_20": np.full(n, 1.05),
+            "rlo_20": np.full(n, 0.95),
+        })
+        cfg = RangeQualityConfig(max_trend_skip=50)
+        with caplog.at_level(logging.WARNING, logger="ta.breakout.range_quality"):
+            assess_range(df, config=cfg)
+        assert any("skipped" in r.message.lower()
+                   for r in caplog.records), "expected a warning about excessive trend skip"
+
+    def test_max_trend_skip_not_exceeded_no_warning(self, caplog):
+        """
+        When the trailing trend bars are within max_trend_skip, no skip warning is emitted.
+        """
+        # 20 consolidation bars, then 10 trend bars at the TAIL (within max_trend_skip=50).
+        n_consol = 20
+        n_trend  = 10
+        n        = n_consol + n_trend
+        df = pd.DataFrame({
+            "rbo_20": np.array([0.0] * n_consol + [1.0] * n_trend),
+            "rclose": np.ones(n),
+            "rhi_20": np.full(n, 1.05),
+            "rlo_20": np.full(n, 0.95),
+        })
+        with caplog.at_level(logging.WARNING, logger="ta.breakout.range_quality"):
+            assess_range(df)
+        skip_warnings = [
+            r for r in caplog.records
+            if "skipped" in r.message.lower()
+            and r.levelno >= logging.WARNING
+        ]
+        assert len(skip_warnings) == 0
