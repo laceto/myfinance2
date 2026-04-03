@@ -1,37 +1,48 @@
 """
 trend_quality.py — Analytical primitives for the MA crossover trader.
 
-Public API:
+Public API
+----------
+compute_rsi(rclose, period=RSI_PERIOD)
+    Wilder's RSI on a relative close price series.
+    Returns the last-bar RSI as a float in [0, 100].
 
-    compute_rsi(rclose, period=14)
-        Wilder's RSI on a relative close price series.
-        Returns the last-bar RSI as a float in [0, 100].
+compute_adx(df, period=ADX_PERIOD, *, high_col, low_col, close_col)
+    Wilder's Average Directional Index using relative OHLC columns.
+    Returns the last-bar ADX as a float in [0, 100].
+    A value > ADX_TREND_THRESHOLD (and rising) signals a trend with institutional
+    momentum.
 
-    compute_adx(df, period=14)
-        Wilder's Average Directional Index using rhigh/rlow/rclose.
-        Returns the last-bar ADX as a float in [0, 100].
-        A value > 25 (and rising) signals a trend with institutional momentum.
+compute_ma_gap_pct(fast_ma, slow_ma, rclose)
+    Percentage spread between fast and slow MA relative to rclose.
+    Acts as a MACD proxy using the MA level columns already in the parquet.
+    Positive = bullish alignment, negative = bearish.
 
-    compute_ma_gap_pct(fast_ma, slow_ma, rclose)
-        Percentage spread between fast and slow MA relative to rclose.
-        Acts as a MACD proxy using the MA level columns already in the parquet
-        (rema_short_50 vs rema_long_150) — no new formula needed.
-        Positive = bullish alignment, negative = bearish.
+compute_ma_slope_pct(ma_series, window)
+    OLS slope of an MA series over `window` bars, normalised by the mean
+    and expressed as %/day.
 
-    compute_ma_slope_pct(ma_series, window)
-        OLS slope of an MA series over `window` bars, normalised by the mean
-        and expressed as %/day.  Reuses ta.utils.ols_slope.
-
-    assess_ma_trend(df)
-        Integrates all four primitives into a single MATrendStrength snapshot.
-        Preferred MA pair: rema_short_50 (fast) vs rema_long_150 (slow).
-        is_trending = adx > ADX_TREND_THRESHOLD and adx_slope > 0.
+assess_ma_trend(df, *, close_col, high_col, low_col, fast_ma_col, slow_ma_col,
+                rsi_period, adx_period, adx_slope_window, ma_slope_window)
+    Integrates all four primitives into a single MATrendStrength snapshot.
+    ADX series is computed in a single vectorised pass and reused for both the
+    last-bar value and the slope — no redundant computation.
+    is_trending = adx > ADX_TREND_THRESHOLD AND adx_slope >= 0.
 
 All functions are:
     - Pure (no I/O, no side-effects).
     - Typed (PEP 484).
+    - Vectorised — no Python loops in any calculation path.
     - Independently testable with synthetic pd.Series / pd.DataFrame.
     - Documented with invariants and failure modes.
+
+Lookahead note
+--------------
+All functions return a snapshot of bar t using data up to and including bar t.
+If called in a rolling loop for backtesting, the caller MUST delay results
+by one bar before use in signal logic:
+    # LOOKAHEAD PROTECTED: signal delayed by 1 bar
+    signals = signals.shift(1)
 """
 
 from __future__ import annotations
@@ -41,52 +52,211 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from ta.utils import ols_slope
+from ta.utils import ols_slope_r2
 
 # ---------------------------------------------------------------------------
-# Module-level constants
+# Module-level constants (exported; tests reference by name)
 # ---------------------------------------------------------------------------
 
-ADX_TREND_THRESHOLD: float = 25.0   # ADX above this = trend has institutional strength
-ADX_SLOPE_WINDOW:    int   = 14     # bars used to compute adx_slope
-MA_SLOPE_WINDOW:     int   = 20     # bars used to compute ma_gap_slope
+RSI_PERIOD:          int   = 14    # Wilder RSI lookback window
+ADX_PERIOD:          int   = 14    # Wilder ADX/DMI lookback window
+ADX_TREND_THRESHOLD: float = 25.0  # ADX above this = trend has institutional strength
+ADX_SLOPE_WINDOW:    int   = 14    # bars used to compute adx_slope
+MA_SLOPE_WINDOW:     int   = 20    # bars used to compute ma_gap_slope
 
-_RSI_REQUIRED_COLS = frozenset({"rclose"})
-_ADX_REQUIRED_COLS = frozenset({"rclose", "rhigh", "rlow"})
-_TREND_REQUIRED_COLS = frozenset({
-    "rclose", "rhigh", "rlow",
-    "rema_short_50", "rema_medium_100", "rema_long_150",
-})
+
+# ---------------------------------------------------------------------------
+# Private vectorised smoothing helpers
+# ---------------------------------------------------------------------------
+
+
+def _wilder_running_sum(arr: np.ndarray, period: int) -> np.ndarray:
+    """
+    Wilder's running sum: S_j = (1 - 1/period) * S_{j-1} + arr[j].
+
+    Seed: S_0 = sum(arr[:period])  (a sum, not an average).
+    The new observation has coefficient **1** — used for TR, +DM, −DM smoothing.
+
+    Vectorised via the geometric-decay cumsum identity:
+        S_j = beta^j * (seed + cumsum(tail * (1/beta)^k)[j-1])
+    where beta = 1 - 1/period.  No Python loops.
+
+    Special case period=1: beta=0, so S_j = arr[j] (identity).
+
+    Args:
+        arr:    1-D float array of length n.
+        period: Smoothing period >= 1.
+
+    Returns:
+        Float array of length max(0, n - period + 1).
+
+    Example:
+        >>> _wilder_running_sum(np.array([1.,2.,3.,4.,5.]), 2)
+        array([3., 4.5, 6.25, 8.125])
+    """
+    n = len(arr)
+    if n < period:
+        return np.array([], dtype=float)
+
+    if period == 1:
+        # beta = 0 → S_j = 0 * S_{j-1} + arr[j] = arr[j]
+        return arr.astype(float)
+
+    seed  = float(arr[:period].sum())
+    tail  = arr[period:].astype(float)
+    m     = len(tail)
+
+    if m == 0:
+        return np.array([seed], dtype=float)
+
+    beta       = 1.0 - 1.0 / period
+    inv_powers = (1.0 / beta) ** np.arange(1, m + 1)   # [1/β, 1/β², ...]
+    dec_powers = beta ** np.arange(1, m + 1)            # [β, β², ...]
+
+    # S_j = β^j * (seed + Σ_{k=1}^{j} tail[k-1] / β^k)
+    smoothed = (seed + np.cumsum(tail * inv_powers)) * dec_powers
+    return np.concatenate([[seed], smoothed])
+
+
+def _wilder_ewm(arr: np.ndarray, period: int) -> np.ndarray:
+    """
+    Standard Wilder EWM: S_j = (1/period) * arr[j] + (1 - 1/period) * S_{j-1}.
+
+    Seed: S_0 = mean(arr[:period])  (an average, not a sum).
+    The new observation has coefficient **1/period** — used for RSI avg_gain/avg_loss
+    and DX → ADX smoothing.
+
+    Vectorised via pandas `.ewm(alpha=1/period, adjust=False)` after prepending
+    the seed value.  No Python loops.
+
+    Args:
+        arr:    1-D float array of length n.
+        period: Smoothing period >= 1.
+
+    Returns:
+        Float array of length max(0, n - period + 1).
+
+    Example:
+        >>> _wilder_ewm(np.full(20, 2.5), period=7)
+        array([2.5, 2.5, ..., 2.5])  # constant series stays constant
+    """
+    n = len(arr)
+    if n < period:
+        return np.array([], dtype=float)
+
+    seed   = float(arr[:period].mean())
+    series = np.concatenate([[seed], arr[period:].astype(float)])
+    return pd.Series(series).ewm(alpha=1.0 / period, adjust=False).mean().to_numpy(dtype=float)
+
+
+def _compute_adx_series(
+    high:   np.ndarray,
+    low:    np.ndarray,
+    close:  np.ndarray,
+    period: int,
+) -> np.ndarray:
+    """
+    Compute the full ADX time series in a single vectorised pass.
+
+    Algorithm (Wilder):
+        1. Vectorised TR, +DM, -DM using NumPy shifts.
+        2. Wilder running-sum smoothing (coefficient 1 on new value).
+        3. +DI = 100 * (+DM_s / TR_s), guarded against zero TR.
+        4. DX  = 100 * |+DI - -DI| / (+DI + -DI), guarded against zero sum.
+        5. Wilder EWM smoothing of DX (coefficient 1/period on new value).
+
+    Args:
+        high, low, close: Equal-length 1-D float arrays, sorted ascending by date.
+        period:           Smoothing period.
+
+    Returns:
+        ADX values clipped to [0, 100], length max(0, n - 2*period + 1).
+        Empty array if insufficient data.
+    """
+    # --- Step 1: Vectorised TR, +DM, -DM ---
+    prev_close = close[:-1]
+    curr_high  = high[1:]
+    curr_low   = low[1:]
+    prev_high  = high[:-1]
+    prev_low   = low[:-1]
+
+    tr = np.maximum(
+        curr_high - curr_low,
+        np.maximum(np.abs(curr_high - prev_close), np.abs(curr_low - prev_close)),
+    )
+
+    up_move   = curr_high - prev_high
+    down_move = prev_low  - curr_low
+
+    p_dm = np.where((up_move > down_move) & (up_move > 0),   up_move,   0.0)
+    n_dm = np.where((down_move > up_move) & (down_move > 0), down_move, 0.0)
+
+    # --- Step 2: Wilder running-sum smoothing ---
+    tr_s   = _wilder_running_sum(tr,   period)
+    p_dm_s = _wilder_running_sum(p_dm, period)
+    n_dm_s = _wilder_running_sum(n_dm, period)
+
+    if len(tr_s) == 0:
+        return np.array([], dtype=float)
+
+    # --- Step 3: +DI, -DI with zero guard (Rule 4: tolerance, not ==) ---
+    # np.errstate suppresses the divide/invalid warning that fires when np.where
+    # evaluates the false-branch expression before applying the mask.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        _zero_tr = tr_s < 1e-10
+        p_di = np.where(_zero_tr, 0.0, 100.0 * p_dm_s / tr_s)
+        n_di = np.where(_zero_tr, 0.0, 100.0 * n_dm_s / tr_s)
+
+    # --- Step 4: DX ---
+    di_sum  = p_di + n_di
+    di_diff = np.abs(p_di - n_di)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        dx = np.where(di_sum < 1e-10, 0.0, 100.0 * di_diff / di_sum)
+
+    # --- Step 5: Wilder EWM of DX → ADX ---
+    if len(dx) < period:
+        return np.array([], dtype=float)
+
+    adx = _wilder_ewm(dx, period)
+    return np.clip(adx, 0.0, 100.0)
 
 
 # ===========================================================================
-# Primitive 1 — RSI (Wilder's smoothing)
+# Primitive 1 — RSI (Wilder's smoothing, fully vectorised)
 # ===========================================================================
 
 
-def compute_rsi(rclose: pd.Series, period: int = 14) -> float:
+def compute_rsi(rclose: pd.Series, period: int = RSI_PERIOD) -> float:
     """
     Compute Wilder's RSI on the last bar of a relative close price series.
 
     Uses Wilder's exponential smoothing (alpha = 1/period) for average gain
     and average loss, seeded with the simple mean over the first `period` bars.
+    Fully vectorised via `_wilder_ewm` — no Python loops.
 
     Args:
         rclose: Relative close price series (rclose = ticker / FTSEMIB.MI).
                 Must have at least period+1 non-NaN values.
-        period: RSI lookback window. Default 14.
+        period: RSI lookback window. Must be >= 1. Default RSI_PERIOD (14).
 
     Returns:
         RSI value at the last bar, in [0.0, 100.0].
 
     Raises:
+        ValueError: if period < 1.
         ValueError: if fewer than period+1 non-NaN values are present.
 
     Invariants:
-        - Constant series → RSI = 50 (no gains, no losses → avg_gain = avg_loss = 0).
-        - All-gain series → RSI approaches 100 as the series lengthens.
-        - All-loss series → RSI approaches 0.
+        - Constant series → RSI = 50 (avg_gain = avg_loss = 0).
+        - All-gain series → RSI = 100 (avg_loss converges to 0).
+        - All-loss series → RSI = 0.
     """
+    if period < 1:
+        raise ValueError(
+            f"period must be >= 1, got {period}. "
+            "RSI requires at least one bar of history per period unit."
+        )
+
     clean = rclose.dropna()
     if len(clean) < period + 1:
         raise ValueError(
@@ -97,23 +267,17 @@ def compute_rsi(rclose: pd.Series, period: int = 14) -> float:
     closes = clean.to_numpy(dtype=float)
     deltas = np.diff(closes)
 
-    gains  = np.where(deltas > 0, deltas, 0.0)
-    losses = np.where(deltas < 0, -deltas, 0.0)
+    gains  = np.where(deltas > 0,  deltas,  0.0)
+    losses = np.where(deltas < 0, -deltas,  0.0)
 
-    # Seed with simple mean over the first `period` changes.
-    avg_gain = gains[:period].mean()
-    avg_loss = losses[:period].mean()
+    # _wilder_ewm seeds with mean(arr[:period]) = initial avg_gain / avg_loss
+    avg_gain = float(_wilder_ewm(gains,  period)[-1])
+    avg_loss = float(_wilder_ewm(losses, period)[-1])
 
-    # Wilder's smoothing over the remaining bars.
-    alpha = 1.0 / period
-    for i in range(period, len(deltas)):
-        avg_gain = alpha * gains[i]  + (1 - alpha) * avg_gain
-        avg_loss = alpha * losses[i] + (1 - alpha) * avg_loss
-
-    if avg_gain == 0.0 and avg_loss == 0.0:
+    # Guard: both near-zero → flat series → RSI = 50 (Rule 4: tolerance not ==)
+    if np.isclose(avg_gain, 0.0, atol=1e-10) and np.isclose(avg_loss, 0.0, atol=1e-10):
         return 50.0
-
-    if avg_loss == 0.0:
+    if np.isclose(avg_loss, 0.0, atol=1e-10):
         return 100.0
 
     rs  = avg_gain / avg_loss
@@ -122,119 +286,75 @@ def compute_rsi(rclose: pd.Series, period: int = 14) -> float:
 
 
 # ===========================================================================
-# Primitive 2 — ADX (Wilder's DMI)
+# Primitive 2 — ADX (Wilder's DMI, fully vectorised)
 # ===========================================================================
 
 
-def compute_adx(df: pd.DataFrame, period: int = 14) -> float:
+def compute_adx(
+    df:        pd.DataFrame,
+    period:    int = ADX_PERIOD,
+    *,
+    high_col:  str = "rhigh",
+    low_col:   str = "rlow",
+    close_col: str = "rclose",
+) -> float:
     """
     Compute Wilder's Average Directional Index (ADX) on relative OHLC data.
 
-    ADX measures the strength of a trend, not its direction:
-    - ADX > 25 (and rising) = trend is gaining institutional momentum.
-    - ADX < 20              = weak or no trend; MA crossover may be unreliable.
+    Delegates entirely to `_compute_adx_series` which runs a single vectorised
+    pass — no Python loops.
 
-    Algorithm (Wilder):
-        1. True Range (TR)   = max(rhigh-rlow, |rhigh-prev_rclose|, |rlow-prev_rclose|)
-        2. +DM = max(rhigh - prev_rhigh, 0) if > max(prev_rlow - rlow, 0), else 0
-        3. -DM = max(prev_rlow - rlow, 0) if > max(rhigh - prev_rhigh, 0), else 0
-        4. Wilder-smooth TR, +DM, -DM over `period` bars.
-        5. +DI = 100 * (+DM_smooth / TR_smooth), -DI symmetric.
-        6. DX  = 100 * |+DI - -DI| / (+DI + -DI)
-        7. ADX = Wilder-smooth DX over `period` bars.
+    ADX measures trend strength, not direction:
+    - ADX > ADX_TREND_THRESHOLD (and rising) = trend gaining institutional momentum.
+    - ADX < 20                               = weak or no trend.
 
     Args:
-        df:     Single-ticker DataFrame sorted ascending by date.
-                Must contain columns: rclose, rhigh, rlow.
-        period: Smoothing window. Default 14.
+        df:        Single-ticker DataFrame sorted ascending by date.
+                   Must contain columns named by high_col, low_col, close_col.
+        period:    Smoothing window. Must be >= 1. Default ADX_PERIOD (14).
+        high_col:  Name of the high price column. Default "rhigh".
+        low_col:   Name of the low price column. Default "rlow".
+        close_col: Name of the close price column. Default "rclose".
 
     Returns:
         ADX value at the last bar, in [0.0, 100.0].
 
     Raises:
+        ValueError: if period < 1.
         ValueError: if any required column is missing.
-        ValueError: if fewer than 2*period+1 bars are available (insufficient warm-up).
+        ValueError: if fewer than 2*period+1 bars are available.
 
     Failure modes:
-        - Flat series (rhigh == rlow all bars): TR = 0 → +DI = -DI = 0 → ADX = 0.
+        - Flat series (high == low all bars): TR = 0 → ADX = 0.
     """
-    missing = _ADX_REQUIRED_COLS - set(df.columns)
+    if period < 1:
+        raise ValueError(
+            f"period must be >= 1, got {period}. "
+            "ADX requires sufficient bars to seed the Wilder smoother."
+        )
+
+    required = {high_col, low_col, close_col}
+    missing  = required - set(df.columns)
     if missing:
         raise ValueError(
             f"compute_adx: DataFrame missing required columns: {sorted(missing)}. "
-            f"Expected: {sorted(_ADX_REQUIRED_COLS)}."
+            f"DataFrame has: {sorted(df.columns)}. "
+            "Pass correct names via high_col=, low_col=, close_col= parameters."
         )
 
-    required_bars = 2 * period + 1
-    n = len(df)
-    if n < required_bars:
+    min_bars = 2 * period + 1
+    if len(df) < min_bars:
         raise ValueError(
-            f"compute_adx requires at least 2*period+1 = {required_bars} bars; "
-            f"got {n}. Provide a longer history or reduce the period."
+            f"compute_adx requires at least 2*period+1 = {min_bars} bars; "
+            f"got {len(df)}. Provide a longer history or reduce the period."
         )
 
-    high   = df["rhigh"].to_numpy(dtype=float)
-    low    = df["rlow"].to_numpy(dtype=float)
-    close  = df["rclose"].to_numpy(dtype=float)
+    high  = df[high_col].to_numpy(dtype=float)
+    low   = df[low_col].to_numpy(dtype=float)
+    close = df[close_col].to_numpy(dtype=float)
 
-    m = n - 1  # number of change bars
-
-    # --- Step 1: True Range ---
-    tr   = np.empty(m)
-    p_dm = np.empty(m)
-    n_dm = np.empty(m)
-
-    for i in range(m):
-        h, l, pc = high[i + 1], low[i + 1], close[i]
-        ph, pl   = high[i], low[i]
-
-        tr[i] = max(h - l, abs(h - pc), abs(l - pc))
-
-        up_move   = h - ph
-        down_move = pl - l
-
-        if up_move > down_move and up_move > 0:
-            p_dm[i] = up_move
-        else:
-            p_dm[i] = 0.0
-
-        if down_move > up_move and down_move > 0:
-            n_dm[i] = down_move
-        else:
-            n_dm[i] = 0.0
-
-    # --- Step 2: Wilder smoothing of TR, +DM, -DM ---
-    def _wilder_smooth(arr: np.ndarray) -> np.ndarray:
-        """Seed with sum of first `period` bars; then Wilder's rolling sum."""
-        result = np.empty(len(arr) - period + 1)
-        result[0] = arr[:period].sum()
-        for j in range(1, len(result)):
-            result[j] = result[j - 1] - result[j - 1] / period + arr[period + j - 1]
-        return result
-
-    tr_s   = _wilder_smooth(tr)
-    p_dm_s = _wilder_smooth(p_dm)
-    n_dm_s = _wilder_smooth(n_dm)
-
-    # --- Step 3: +DI, -DI, DX ---
-    with np.errstate(divide="ignore", invalid="ignore"):
-        p_di = np.where(tr_s != 0, 100.0 * p_dm_s / tr_s, 0.0)
-        n_di = np.where(tr_s != 0, 100.0 * n_dm_s / tr_s, 0.0)
-        di_sum  = p_di + n_di
-        di_diff = np.abs(p_di - n_di)
-        dx = np.where(di_sum != 0, 100.0 * di_diff / di_sum, 0.0)
-
-    # --- Step 4: Wilder smooth DX → ADX ---
-    if len(dx) < period:
-        return 0.0
-
-    adx_seed = dx[:period].mean()
-    adx_val  = adx_seed
-    alpha    = 1.0 / period
-    for i in range(period, len(dx)):
-        adx_val = alpha * dx[i] + (1 - alpha) * adx_val
-
-    return round(float(np.clip(adx_val, 0.0, 100.0)), 4)
+    adx_series = _compute_adx_series(high, low, close, period)
+    return round(float(adx_series[-1]), 4) if len(adx_series) > 0 else 0.0
 
 
 # ===========================================================================
@@ -249,8 +369,8 @@ def compute_ma_gap_pct(fast_ma: float, slow_ma: float, rclose: float) -> float:
     Acts as a MACD-line proxy:
         gap = (fast_ma - slow_ma) / rclose * 100
 
-    Positive value = fast MA above slow MA = bullish alignment.
-    Negative value = fast MA below slow MA = bearish alignment.
+    Positive = fast MA above slow MA = bullish alignment.
+    Negative = fast MA below slow MA = bearish alignment.
     Widening gap (rising ma_gap_slope) = trend accelerating.
     Narrowing gap (falling ma_gap_slope) = trend losing steam.
 
@@ -287,26 +407,35 @@ def compute_ma_slope_pct(ma_series: pd.Series, window: int) -> float:
     slopes comparable across tickers regardless of absolute price level.
 
     Args:
-        ma_series: MA level values (e.g. rema_short_50 column), sorted ascending.
-                   Must contain at least 2 non-NaN values in the last `window` bars.
-        window:    Number of recent bars to use. Series is sliced to its tail.
+        ma_series: MA level values, sorted ascending. Must be a pd.Series.
+                   Returns 0.0 if fewer than 2 non-NaN values in the window.
+        window:    Number of recent bars to use. Must be >= 1.
 
     Returns:
         Slope as %/day; signed. Positive = MA rising, negative = falling.
-        Returns 0.0 if fewer than 2 non-NaN values after slicing (delegates to ols_slope).
+        Returns 0.0 if fewer than 2 non-NaN values after slicing.
 
     Raises:
-        No exceptions raised (ols_slope returns 0.0 for < 2 values).
+        ValueError: if window < 1.
     """
+    if window < 1:
+        raise ValueError(
+            f"window must be >= 1, got {window}. "
+            "This parameter controls the slope regression window length."
+        )
+
     tail = ma_series.iloc[-window:].dropna()
     if len(tail) < 2:
         return 0.0
+
     y      = tail.to_numpy(dtype=float)
     y_mean = y.mean()
-    if y_mean == 0.0:
+
+    if abs(y_mean) < 1e-10:    # Rule 4: tolerance not == (prevents div/zero)
         return 0.0
-    slope_pct = ols_slope(y) / y_mean * 100
-    return round(float(slope_pct), 6)
+
+    slope, _ = ols_slope_r2(y)
+    return round(float(slope / y_mean * 100), 6)
 
 
 # ===========================================================================
@@ -320,144 +449,167 @@ class MATrendStrength:
     Snapshot of MA crossover trend quality at the last bar of a ticker series.
 
     Integrates RSI, ADX, and MA gap/slope into one cohesive object.
+    R² fields accompany every OLS slope to quantify statistical reliability:
+    R² < 0.3 → slope is dominated by noise; R² ≥ 0.7 → reliable trend signal.
 
-    Attributes:
-        rsi:          Wilder's RSI (14-period) on rclose. In [0, 100].
-                      > 50 and rising = bullish momentum.
-                      < 50 and falling = bearish momentum.
-        adx:          ADX at the last bar. In [0, 100].
-                      > 25 = trend has institutional strength.
-        adx_slope:    OLS slope of ADX over the last ADX_SLOPE_WINDOW bars (%/bar).
-                      Positive = ADX rising = trend gaining strength.
-                      Negative = ADX falling = trend weakening.
-        ma_gap_pct:   (rema_short_50 - rema_long_150) / rclose * 100 at last bar.
-                      MACD-line proxy. Positive = bullish alignment.
-        ma_gap_slope: OLS slope of ma_gap_pct over MA_SLOPE_WINDOW bars (%/bar).
-                      Widening gap = trend accelerating.
-                      Narrowing gap = trend losing steam.
-        is_trending:  True when adx > ADX_TREND_THRESHOLD AND adx_slope >= 0.
-                      Conditions: the trend must be strong AND not actively declining.
-                      adx_slope > 0 = fresh/gaining trend.
-                      adx_slope == 0 = trend stable at a high level (still valid).
-                      adx_slope < 0 = trend weakening — caution, not a fresh entry.
+    Attributes
+    ----------
+    rsi : float
+        Wilder's RSI (rsi_period-period) on rclose. In [0, 100].
+        > 50 and rising = bullish momentum.
+    adx : float
+        ADX at the last bar. In [0, 100].
+        > ADX_TREND_THRESHOLD = trend has institutional strength.
+    adx_slope : float
+        OLS slope of ADX over the last adx_slope_window bars.
+        Positive = ADX rising = trend gaining strength.
+        Negative = ADX falling = trend weakening.
+    adx_slope_r2 : float
+        R² of the adx_slope OLS fit. In [0, 1].
+        R² < 0.3 on short windows → treat slope as noise.
+    ma_gap_pct : float
+        (fast_ma_col - slow_ma_col) / rclose * 100 at last bar.
+        MACD-line proxy. Positive = bullish alignment.
+    ma_gap_slope : float
+        OLS slope of ma_gap_pct series over ma_slope_window bars (%/bar).
+        Widening gap = trend accelerating; narrowing = losing steam.
+    ma_gap_slope_r2 : float
+        R² of the ma_gap_slope OLS fit. In [0, 1].
+    is_trending : bool
+        True when adx > ADX_TREND_THRESHOLD AND adx_slope >= 0.
+        Conditions: trend must be strong AND not actively declining.
+        adx_slope > 0  = fresh/gaining trend.
+        adx_slope == 0 = trend stable at a high level (still valid).
+        adx_slope < 0  = trend weakening — not a fresh entry.
     """
 
-    rsi:          float
-    adx:          float
-    adx_slope:    float
-    ma_gap_pct:   float
-    ma_gap_slope: float
-    is_trending:  bool
+    rsi:             float
+    adx:             float
+    adx_slope:       float
+    adx_slope_r2:    float
+    ma_gap_pct:      float
+    ma_gap_slope:    float
+    ma_gap_slope_r2: float
+    is_trending:     bool
 
 
-_ASSESS_REQUIRED_COLS = _TREND_REQUIRED_COLS
-
-
-def assess_ma_trend(df: pd.DataFrame) -> MATrendStrength:
+def assess_ma_trend(
+    df:               pd.DataFrame,
+    *,
+    close_col:        str = "rclose",
+    high_col:         str = "rhigh",
+    low_col:          str = "rlow",
+    fast_ma_col:      str = "rema_short_50",
+    slow_ma_col:      str = "rema_long_150",
+    rsi_period:       int = RSI_PERIOD,
+    adx_period:       int = ADX_PERIOD,
+    adx_slope_window: int = ADX_SLOPE_WINDOW,
+    ma_slope_window:  int = MA_SLOPE_WINDOW,
+) -> MATrendStrength:
     """
     Assess MA crossover trend quality for a single ticker.
 
-    Uses the full ticker history for RSI and ADX computation, then slices
-    the last ADX_SLOPE_WINDOW / MA_SLOPE_WINDOW bars for slope estimates.
+    The ADX series is computed in a single vectorised pass and reused for both
+    the last-bar ADX value and the adx_slope — no redundant computation.
 
-    Algorithm:
-        1. Validate required columns.
-        2. Compute RSI on rclose.
-        3. Compute ADX on rhigh/rlow/rclose.
-        4. Compute adx_slope: OLS of ADX values over last ADX_SLOPE_WINDOW bars.
-           ADX series is re-computed per-bar by rolling the Wilder smoother.
-           For simplicity, adx_slope is estimated from the daily ADX values
-           computed via a vectorised rolling approach.
-        5. Compute ma_gap_pct at last bar: fast=rema_short_50, slow=rema_long_150.
-        6. Compute ma_gap_slope: OLS of the ma_gap_pct series over MA_SLOPE_WINDOW bars.
-        7. is_trending = adx > ADX_TREND_THRESHOLD AND adx_slope > 0.
+    Algorithm
+    ---------
+    1. Validate all required columns.
+    2. Compute RSI on the close column.
+    3. Compute full ADX series via _compute_adx_series (single pass, vectorised).
+       - adx       = adx_series[-1]
+       - adx_slope = OLS slope of adx_series[-adx_slope_window:]
+    4. Compute ma_gap_pct at last bar: fast_ma_col - slow_ma_col.
+    5. Compute ma_gap_slope: OLS of gap_series over last ma_slope_window bars.
+       Zero close prices guarded before the gap series is built (→ NaN, not inf).
+    6. is_trending = adx > ADX_TREND_THRESHOLD AND adx_slope >= 0.
 
     Args:
-        df: Full single-ticker DataFrame sorted ascending by date.
-            Must contain: rclose, rhigh, rlow, rema_short_50, rema_medium_100,
-            rema_long_150.
+        df:               Full single-ticker DataFrame sorted ascending by date.
+        close_col:        Close price column. Default "rclose".
+        high_col:         High price column. Default "rhigh".
+        low_col:          Low price column. Default "rlow".
+        fast_ma_col:      Fast MA column. Default "rema_short_50".
+        slow_ma_col:      Slow MA column. Default "rema_long_150".
+        rsi_period:       RSI lookback. Default RSI_PERIOD (14).
+        adx_period:       ADX/DMI lookback. Default ADX_PERIOD (14).
+        adx_slope_window: Bars used for adx_slope OLS. Default ADX_SLOPE_WINDOW (14).
+        ma_slope_window:  Bars used for ma_gap_slope OLS. Default MA_SLOPE_WINDOW (20).
 
     Returns:
         MATrendStrength with all fields populated.
 
     Raises:
         ValueError: if any required column is missing.
-        ValueError: propagated from compute_rsi or compute_adx on insufficient history.
+        ValueError: propagated from compute_rsi on insufficient close history.
     """
-    missing = _ASSESS_REQUIRED_COLS - set(df.columns)
+    # --- 1. Column validation (fail fast) ---
+    required = {close_col, high_col, low_col, fast_ma_col, slow_ma_col}
+    missing  = required - set(df.columns)
     if missing:
         raise ValueError(
             f"assess_ma_trend: DataFrame missing required columns: {sorted(missing)}. "
-            f"Expected: {sorted(_ASSESS_REQUIRED_COLS)}."
+            f"DataFrame has: {sorted(df.columns)}. "
+            "Pass correct names via close_col=, high_col=, low_col=, "
+            "fast_ma_col=, slow_ma_col= parameters."
         )
 
-    # --- RSI on full rclose series ---
-    rsi = compute_rsi(df["rclose"], period=14)
+    # --- 2. RSI ---
+    rsi = compute_rsi(df[close_col], period=rsi_period)
 
-    # --- ADX at the last bar ---
-    adx = compute_adx(df, period=14)
+    # --- 3. ADX series — computed ONCE; value + slope reuse the same array ---
+    high  = df[high_col].to_numpy(dtype=float)
+    low   = df[low_col].to_numpy(dtype=float)
+    close = df[close_col].to_numpy(dtype=float)
 
-    # --- adx_slope: computed from the rolling ADX series over recent bars ---
-    # Re-use compute_adx on a rolling tail to approximate the ADX time series.
-    # We compute ADX on [df[-window-pad:]] slices to build a short slope series.
-    adx_slope = _compute_adx_slope(df, slope_window=ADX_SLOPE_WINDOW, period=14)
+    adx_series = _compute_adx_series(high, low, close, adx_period)
 
-    # --- MA gap at last bar ---
+    if len(adx_series) == 0:
+        adx, adx_slope, adx_slope_r2_val = 0.0, 0.0, 0.0
+    else:
+        adx = round(float(adx_series[-1]), 4)
+        slope_tail = adx_series[-adx_slope_window:]
+        if len(slope_tail) >= 2:
+            _slope, _r2   = ols_slope_r2(slope_tail)
+            adx_slope     = round(float(_slope), 6)
+            adx_slope_r2_val = round(float(_r2), 4)
+        else:
+            adx_slope, adx_slope_r2_val = 0.0, 0.0
+
+    # --- 4. MA gap at last bar ---
     last = df.iloc[-1]
     ma_gap_pct = compute_ma_gap_pct(
-        fast_ma=float(last["rema_short_50"]),
-        slow_ma=float(last["rema_long_150"]),
-        rclose=float(last["rclose"]),
+        fast_ma = float(last[fast_ma_col]),
+        slow_ma = float(last[slow_ma_col]),
+        rclose  = float(last[close_col]),
     )
 
-    # --- MA gap slope: OLS over last MA_SLOPE_WINDOW bars of the gap series ---
-    gap_series = (
-        (df["rema_short_50"] - df["rema_long_150"]) / df["rclose"] * 100
+    # --- 5. MA gap slope over the full series with zero-close guard (Rule 5) ---
+    rclose_safe = df[close_col].replace(0, np.nan)  # zero rclose → NaN, not inf
+    gap_series  = (
+        (df[fast_ma_col] - df[slow_ma_col]) / rclose_safe * 100
     ).dropna()
-    ma_gap_slope = compute_ma_slope_pct(gap_series, window=MA_SLOPE_WINDOW)
 
+    if len(gap_series) >= 2:
+        _gslope, _gr2   = ols_slope_r2(
+            gap_series.iloc[-ma_slope_window:].to_numpy(dtype=float)
+        )
+        _gslope_pct     = _gslope  # already in % units
+        ma_gap_slope    = round(float(_gslope_pct), 6)
+        ma_gap_slope_r2 = round(float(_gr2), 4)
+    else:
+        ma_gap_slope, ma_gap_slope_r2 = 0.0, 0.0
+
+    # --- 6. Trend gate (docstring: adx_slope >= 0) ---
     is_trending = bool(adx > ADX_TREND_THRESHOLD and adx_slope >= 0.0)
 
     return MATrendStrength(
-        rsi          = rsi,
-        adx          = adx,
-        adx_slope    = round(adx_slope, 6),
-        ma_gap_pct   = ma_gap_pct,
-        ma_gap_slope = ma_gap_slope,
-        is_trending  = is_trending,
+        rsi             = rsi,
+        adx             = adx,
+        adx_slope       = adx_slope,
+        adx_slope_r2    = adx_slope_r2_val,
+        ma_gap_pct      = ma_gap_pct,
+        ma_gap_slope    = ma_gap_slope,
+        ma_gap_slope_r2 = ma_gap_slope_r2,
+        is_trending     = is_trending,
     )
-
-
-def _compute_adx_slope(df: pd.DataFrame, slope_window: int, period: int) -> float:
-    """
-    Estimate the slope of the ADX series over the last `slope_window` bars.
-
-    Builds the ADX series by computing ADX on rolling windows of the DataFrame,
-    then fits OLS to the resulting values.  The minimum warmup required for each
-    ADX computation is 2*period+1 bars, so the overall minimum df length is
-    2*period+1+slope_window bars.
-
-    If insufficient data is available, returns 0.0 (no trend acceleration signal).
-    """
-    warmup = 2 * period + 1
-    min_len = warmup + slope_window
-
-    if len(df) < min_len:
-        return 0.0
-
-    adx_values = []
-    for i in range(slope_window, 0, -1):
-        # Use df up to (and including) the bar that is `i` bars before the last.
-        slice_end = len(df) - i + 1
-        if slice_end < warmup:
-            continue
-        adx_i = compute_adx(df.iloc[:slice_end], period=period)
-        adx_values.append(adx_i)
-
-    # Include the current last-bar ADX
-    adx_values.append(compute_adx(df, period=period))
-
-    if len(adx_values) < 2:
-        return 0.0
-
-    return ols_slope(np.array(adx_values, dtype=float))
