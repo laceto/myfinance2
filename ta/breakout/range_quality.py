@@ -81,6 +81,7 @@ MIN_TREND_BARS:             int   = 10
 COMPRESSION_RANK_THRESHOLD: float = 25.0   # band_width_pct_rank below this → historically tight
 
 DEFAULT_MAX_TREND_SKIP:     int   = 50     # warn when assess_range skips more non-zero bars
+DEFAULT_NAN_WARN_FRACTION:  float = 0.10   # warn when range_pct NaN fraction exceeds this
 
 
 # ---------------------------------------------------------------------------
@@ -106,6 +107,8 @@ class RangeQualityConfig:
         compression_rank_threshold: band_width_pct_rank below this → historically tight. Default 25.0.
         min_trend_bars:           Minimum non-NaN bars for reliable OLS estimate. Default 10.
         max_trend_skip:           Maximum non-zero bars assess_range skips before warning. Default 50.
+        nan_warn_fraction:        NaN fraction in range_pct above which assess_range logs a WARNING.
+                                  Default 0.10 (10%). Raise to suppress noisy warnings on halted tickers.
     """
 
     touch_hi_threshold:         float = TOUCH_HI_THRESHOLD
@@ -116,6 +119,7 @@ class RangeQualityConfig:
     compression_rank_threshold: float = COMPRESSION_RANK_THRESHOLD
     min_trend_bars:             int   = MIN_TREND_BARS
     max_trend_skip:             int   = DEFAULT_MAX_TREND_SKIP
+    nan_warn_fraction:          float = DEFAULT_NAN_WARN_FRACTION
 
     @classmethod
     def from_config_file(cls, path: str | Path | None = None) -> "RangeQualityConfig":
@@ -143,6 +147,7 @@ class RangeQualityConfig:
                 compression_rank_threshold = float(rq.get("compression_rank_threshold", COMPRESSION_RANK_THRESHOLD)),
                 min_trend_bars             = int(  rq.get("min_trend_bars",             MIN_TREND_BARS)),
                 max_trend_skip             = int(  rq.get("max_trend_skip",             DEFAULT_MAX_TREND_SKIP)),
+                nan_warn_fraction          = float(rq.get("nan_warn_fraction",          DEFAULT_NAN_WARN_FRACTION)),
             )
         except (OSError, json.JSONDecodeError, KeyError) as exc:
             log.warning(
@@ -212,6 +217,12 @@ def count_touches(
             "The gray zone (lo_thresh, bounce] would not exist."
         )
 
+    # Rule 1 — Sequential state machine: intentional Python loop.
+    # Each bar's touch state depends on the prior bar's state (with hysteresis gray
+    # zones), creating a true sequential dependency that cannot be eliminated with
+    # standard pandas/NumPy vectorisation.  The loop is O(N) and runs over at most
+    # window_bars bars (default 40), so runtime impact is negligible.
+    # For very large N (> 50 000 bars), compile with @numba.njit as a drop-in replacement.
     n_res        = 0
     n_sup        = 0
     in_res_touch = False
@@ -287,6 +298,18 @@ def classify_trend(
         - Constant series (all values equal): slope = 0, is_sideways = True. Correct.
         - Very short windows (< min_bars): raises ValueError to prevent noisy estimates.
     """
+    # Rule 9: validate all lookback / threshold parameters at entry.
+    if min_bars < 2:
+        raise ValueError(
+            f"classify_trend: min_bars must be >= 2 for OLS to be defined; "
+            f"got {min_bars}. Example: min_bars=10."
+        )
+    if threshold <= 0:
+        raise ValueError(
+            f"classify_trend: threshold must be > 0 (%/day); "
+            f"got {threshold}. Example: threshold=0.15."
+        )
+
     clean = rclose.dropna()
     if len(clean) < min_bars:
         raise ValueError(
@@ -295,10 +318,18 @@ def classify_trend(
             "Provide a longer window or check for excessive NaN values."
         )
 
-    y = clean.to_numpy(dtype=float)
+    y      = clean.to_numpy(dtype=float)
     y_mean = y.mean()
 
-    slope_pct_per_day = ols_slope(y) / y_mean * 100  # Fix 7: no alias
+    # Rule 5: guard against zero-mean rclose (degenerate / de-listed ticker data).
+    if np.isclose(y_mean, 0.0, atol=1e-8):
+        raise ValueError(
+            "classify_trend: mean(rclose) is effectively zero — cannot normalise slope. "
+            f"Computed y_mean={y_mean:.2e} over {len(y)} bars. "
+            "Check for zero-filled or de-listed ticker data."
+        )
+
+    slope_pct_per_day = ols_slope(y) / y_mean * 100
     is_sideways = bool(abs(slope_pct_per_day) < threshold)
 
     return is_sideways, round(float(slope_pct_per_day), 4)
@@ -348,7 +379,15 @@ def breakout_prior_consolidation_length(rbo: pd.Series) -> pd.Series:
         rbo    = [0, 0, 0, 0, 0, 1, 1]
         result = [NaN, NaN, NaN, NaN, NaN, 5, NaN]
     """
-    # Fix 4: reset_index so .shift() always shifts by row, never by DatetimeIndex period.
+    # Rule 4: rbo must be integer dtype (+1/0/-1) before any == comparison.
+    # Parquet round-trips can silently widen to float64; reject early.
+    if not pd.api.types.is_integer_dtype(rbo):
+        raise ValueError(
+            f"breakout_prior_consolidation_length: rbo must have integer dtype (+1/0/-1); "
+            f"received dtype={rbo.dtype}. "
+            "Cast with rbo.astype(np.int8) before calling."
+        )
+    # reset_index so .shift() always shifts by row position, never by DatetimeIndex period.
     rbo = rbo.reset_index(drop=True)
 
     groups = (rbo != rbo.shift()).cumsum()
@@ -399,14 +438,15 @@ class VolatilityState:
     is_rank_reliable:     bool
 
 
-_REQUIRED_COLS = frozenset({"rhi_20", "rlo_20", "rclose"})
-
-
 def measure_volatility_compression(
-    df:            pd.DataFrame,
-    window_bars:   int   = 40,
-    history_bars:  int   = 252,
+    df:             pd.DataFrame,
+    window_bars:    int   = 40,
+    history_bars:   int   = 252,
     rank_threshold: float = COMPRESSION_RANK_THRESHOLD,
+    # Rule 7: column names as parameters — callers can use rhi_40/rlo_40 without forking.
+    rhi_col:        str   = "rhi_20",
+    rlo_col:        str   = "rlo_20",
+    rclose_col:     str   = "rclose",
 ) -> VolatilityState:
     """
     Measure whether the 20-day relative range envelope is actively compressing.
@@ -450,22 +490,39 @@ def measure_volatility_compression(
         ValueError: if any required column is missing.
         ValueError: if fewer than MIN_TREND_BARS non-NaN rows remain after dropping NaN.
     """
-    missing = _REQUIRED_COLS - set(df.columns)
+    # Rule 9: validate lookback parameters before any slice operation.
+    # window_bars=0 would silently cause iloc[-0:] to return the full DataFrame.
+    if window_bars < 1:
+        raise ValueError(
+            f"measure_volatility_compression: window_bars must be >= 1; "
+            f"got {window_bars}. Example: window_bars=40."
+        )
+    if history_bars < 1:
+        raise ValueError(
+            f"measure_volatility_compression: history_bars must be >= 1; "
+            f"got {history_bars}. Example: history_bars=252."
+        )
+
+    # Rule 7: build required-col set from parameters, not hardcoded literals.
+    required_cols = {rhi_col, rlo_col, rclose_col}
+    missing       = required_cols - set(df.columns)
     if missing:
         raise ValueError(
             f"DataFrame is missing required columns: {sorted(missing)}. "
-            f"Expected: {sorted(_REQUIRED_COLS)}."
+            f"Expected: {sorted(required_cols)}."
         )
 
+    # Rule 5: replace zero rclose with NaN before dividing so inf cannot enter bw.
+    rclose_safe: pd.Series = df[rclose_col].where(df[rclose_col].abs() > 1e-8)
     bw: pd.Series = (
-        (df["rhi_20"] - df["rlo_20"]) / df["rclose"] * 100
+        (df[rhi_col] - df[rlo_col]) / rclose_safe * 100
     ).dropna()
 
     if len(bw) < MIN_TREND_BARS:
         raise ValueError(
             f"measure_volatility_compression requires at least {MIN_TREND_BARS} "
             f"non-NaN rows after computing band_width_pct; got {len(bw)}. "
-            "Check for insufficient history or excessive NaN in rhi_20/rlo_20/rclose."
+            f"Check for insufficient history or excessive NaN in {rhi_col}/{rlo_col}/{rclose_col}."
         )
 
     current_bw = float(bw.iloc[-1])
@@ -534,16 +591,15 @@ class RangeSetup:
     band_width_pct:       float
 
 
-_ASSESS_REQUIRED_COLS = frozenset({"rbo_20", "rclose", "rhi_20", "rlo_20"})
-
-# NaN fraction above this in range_pct triggers a warning (likely data quality issue).
-_NAN_WARN_FRACTION: float = 0.10
-
-
 def assess_range(
     df:          pd.DataFrame,
     window_bars: int = 40,
     config:      RangeQualityConfig | None = None,
+    # Rule 7: column names as parameters for schema flexibility.
+    rbo_col:     str = "rbo_20",
+    rhi_col:     str = "rhi_20",
+    rlo_col:     str = "rlo_20",
+    rclose_col:  str = "rclose",
 ) -> RangeSetup:
     """
     Assess consolidation quality for a single ticker.
@@ -560,7 +616,7 @@ def assess_range(
         4. consolidation_bars = full run length (never capped — always the real age).
         5. Cap the slice to the last window_bars rows of the zero-run.
         6. Compute range_position_pct over the capped window.
-           Warn if NaN fraction > _NAN_WARN_FRACTION (likely trading halts / data gaps).
+           Warn if NaN fraction > config.nan_warn_fraction (likely trading halts / data gaps).
         7. count_touches(range_position_pct, thresholds from config).
         8. classify_trend(rclose over capped window, threshold from config).
         9. band_width_pct = (rhi_20 - rlo_20) / rclose * 100 at the last zero-run bar.
@@ -591,23 +647,40 @@ def assess_range(
     if config is None:
         config = RangeQualityConfig()
 
-    missing = _ASSESS_REQUIRED_COLS - set(df.columns)
-    if missing:
+    # Rule 9: window_bars=0 makes iloc[-0:] silently return the full DataFrame.
+    if window_bars < 1:
         raise ValueError(
-            f"DataFrame is missing required columns: {sorted(missing)}. "
-            f"Expected: {sorted(_ASSESS_REQUIRED_COLS)}."
+            f"assess_range: window_bars must be >= 1; "
+            f"got {window_bars}. Example: window_bars=40."
         )
 
-    rbo = df["rbo_20"].to_numpy(dtype=float)
-    n   = len(rbo)
+    # Rule 7: build required-col set from parameters, not hardcoded literals.
+    required_cols = {rbo_col, rhi_col, rlo_col, rclose_col}
+    missing       = required_cols - set(df.columns)
+    if missing:
+        raise ValueError(
+            f"assess_range: DataFrame is missing required columns: {sorted(missing)}. "
+            f"Expected: {sorted(required_cols)}."
+        )
 
-    # --- Find the most recent zero-run ---
-    # Fix 2: count skipped non-zero bars and warn if limit exceeded.
-    end = n - 1
-    while end >= 0 and rbo[end] != 0:
-        end -= 1
+    # Rule 4: keep rbo as integer so == comparisons are safe (no float == 0 risk).
+    rbo_arr = df[rbo_col].to_numpy(dtype=np.int8)
+    n       = len(rbo_arr)
 
-    trend_bars_skipped = (n - 1) - end
+    # --- Vectorised zero-run finder (Rule 1: no Python while-loops) ---
+    zero_mask      = rbo_arr == 0                        # integer == integer: safe
+    zero_positions = np.flatnonzero(zero_mask)
+
+    if zero_positions.size == 0:
+        raise ValueError(
+            "No consolidation window (rbo_20 == 0) found in the provided history. "
+            "The entire series is in a trend or breakout state. "
+            "Provide a longer history that includes at least one consolidation period."
+        )
+
+    end                = int(zero_positions[-1])
+    trend_bars_skipped = n - 1 - end
+
     if trend_bars_skipped > config.max_trend_skip:
         log.warning(
             "assess_range: skipped %d trailing non-zero bars to find the last "
@@ -616,16 +689,10 @@ def assess_range(
             trend_bars_skipped, config.max_trend_skip,
         )
 
-    if end < 0:
-        raise ValueError(
-            "No consolidation window (rbo_20 == 0) found in the provided history. "
-            "The entire series is in a trend or breakout state. "
-            "Provide a longer history that includes at least one consolidation period."
-        )
-
-    start = end
-    while start > 0 and rbo[start - 1] == 0:
-        start -= 1
+    # Find start of the zero-run that contains 'end':
+    # last nonzero bar strictly before 'end', then start = that index + 1.
+    nonzero_before_end = np.flatnonzero(~zero_mask[:end])
+    start              = int(nonzero_before_end[-1]) + 1 if nonzero_before_end.size > 0 else 0
 
     consolidation_bars = end - start + 1
 
@@ -633,15 +700,15 @@ def assess_range(
     window_df    = df.iloc[capped_start : end + 1]
 
     # --- range_position_pct for touch counting ---
-    rng       = window_df["rhi_20"] - window_df["rlo_20"]
+    rng       = window_df[rhi_col] - window_df[rlo_col]
     range_pct = (
-        (window_df["rclose"] - window_df["rlo_20"]) / rng.where(rng != 0) * 100
+        (window_df[rclose_col] - window_df[rlo_col]) / rng.where(rng != 0) * 100
     ).reset_index(drop=True)
 
-    # Fix 5: warn on high NaN fraction — likely trading halts or data quality issues.
+    # Rule 12: use config.nan_warn_fraction (no hidden module-level constant).
     n_window = len(range_pct)
     n_nan    = int(range_pct.isna().sum())
-    if n_window > 0 and n_nan / n_window > _NAN_WARN_FRACTION:
+    if n_window > 0 and n_nan / n_window > config.nan_warn_fraction:
         log.warning(
             "assess_range: %d of %d range_pct bars are NaN (%.0f%%). "
             "Likely caused by rhi_20 == rlo_20 (trading halt or stale data). "
@@ -660,14 +727,22 @@ def assess_range(
 
     # Pass thresholds from config to classify_trend.
     is_sideways, slope_pct_per_day = classify_trend(
-        window_df["rclose"].reset_index(drop=True),
+        window_df[rclose_col].reset_index(drop=True),
         threshold=config.sideways_slope_threshold,
         min_bars=config.min_trend_bars,
     )
 
-    last_rhi       = float(df["rhi_20"].iloc[end])
-    last_rlo       = float(df["rlo_20"].iloc[end])
-    last_rclose    = float(df["rclose"].iloc[end])
+    last_rhi    = float(df[rhi_col].iloc[end])
+    last_rlo    = float(df[rlo_col].iloc[end])
+    last_rclose = float(df[rclose_col].iloc[end])
+
+    # Rule 5: guard against zero rclose before scalar division.
+    if np.isclose(last_rclose, 0.0, atol=1e-8):
+        raise ValueError(
+            f"assess_range: rclose is zero at consolidation bar index {end}. "
+            "Cannot compute band_width_pct. "
+            "Check for corrupt or zero-filled rclose data at that bar."
+        )
     band_width_pct = (last_rhi - last_rlo) / last_rclose * 100
 
     return RangeSetup(
