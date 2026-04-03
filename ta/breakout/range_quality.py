@@ -44,7 +44,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from breakout.utils import ols_slope as _ols_slope  # shared; avoids duplicated math
+from ta.utils import ols_slope as _ols_slope  # shared; avoids duplicated math
 
 # ---------------------------------------------------------------------------
 # Module-level constants (exposed so callers can reference thresholds by name)

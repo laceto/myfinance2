@@ -60,7 +60,7 @@ class TestVolumeProfile:
 
     def test_quiet_consolidation_is_quiet_true(self):
         """vol_trend_mean < 1.0 when consolidation volume is below warmup volume."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Warmup vol=100, consolidation vol=50 → vol_trend << 1.0
         df = _make_df(
             rbo_20=[0.0] * 15,
@@ -73,7 +73,7 @@ class TestVolumeProfile:
 
     def test_noisy_consolidation_is_quiet_false(self):
         """vol_trend_mean >= 1.0 when consolidation volume exceeds warmup volume."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Warmup vol=50, consolidation vol=150 → vol_trend >> 1.0
         df = _make_df(
             rbo_20=[0.0] * 15,
@@ -86,7 +86,7 @@ class TestVolumeProfile:
 
     def test_declining_volume_slope_is_declining_true(self):
         """Decreasing volume during consolidation → vol_trend_slope < 0 → is_declining=True."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Volume decreases from 100 to 10 during consolidation (after warmup=100)
         # vol_trend starts near 1.0 and falls → negative slope
         declining_vols = [100 - i * 8 for i in range(10)]  # [100, 92, 84, ..., 28]
@@ -108,7 +108,7 @@ class TestVolumeProfile:
         vol were higher than starting consolidation vol the rolling mean would suppress
         the early bars and produce a misleading negative slope.
         """
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Warmup vol=30; consolidation volumes rise 30 → 210 (step=20)
         # vol_trend starts at 1.0 and climbs as volumes outpace the lagging rolling mean
         rising_vols = [30 + i * 20 for i in range(10)]  # [30, 50, 70, ..., 210]
@@ -124,7 +124,7 @@ class TestVolumeProfile:
 
     def test_breakout_flip_high_volume_confirmed_true(self):
         """Breakout flip bar with vol >> warmup → breakout_confirmed=True."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Consolidation: 10 bars of rbo_20=0, vol=80
         # Breakout bar: rbo_20=1, vol=300 → vol_trend_now >> 1.2
         rbo = [0.0] * 10 + [1.0]
@@ -136,7 +136,7 @@ class TestVolumeProfile:
 
     def test_breakout_flip_low_volume_confirmed_false(self):
         """Breakout flip bar with vol << warmup → breakout_confirmed=False."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         rbo = [0.0] * 10 + [1.0]
         vol = [80.0] * 10 + [60.0]   # 60 / ~100 = 0.6 < 1.2
         df = _make_df(rbo_20=rbo, vol_consolidation=vol, warmup_vol=100.0)
@@ -146,14 +146,14 @@ class TestVolumeProfile:
 
     def test_in_consolidation_no_flip_breakout_confirmed_none(self):
         """Last bar in consolidation (rbo_20=0) → breakout_confirmed=None."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         df = _make_df(rbo_20=[0.0] * 10, vol_consolidation=[80.0] * 10)
         result = assess_volume_profile(df)
         assert result.breakout_confirmed is None
 
     def test_mid_trend_non_flip_bar_breakout_confirmed_none(self):
         """Two consecutive non-zero bars → not a flip → breakout_confirmed=None."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Last two bars: rbo_20=1, 1 → not a flip bar
         rbo = [0.0] * 10 + [1.0, 1.0]
         vol = [80.0] * 12
@@ -163,7 +163,7 @@ class TestVolumeProfile:
 
     def test_bearish_flip_low_volume_confirmed_false(self):
         """Bearish breakout flip (rbo_20=0 → -1) with low volume → breakout_confirmed=False."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         rbo = [0.0] * 10 + [-1.0]
         vol = [80.0] * 10 + [60.0]
         df = _make_df(rbo_20=rbo, vol_consolidation=vol, warmup_vol=100.0)
@@ -172,7 +172,7 @@ class TestVolumeProfile:
 
     def test_bearish_flip_high_volume_confirmed_true(self):
         """Bearish breakout flip (rbo_20=0 → -1) with high volume → breakout_confirmed=True."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         rbo = [0.0] * 10 + [-1.0]
         vol = [80.0] * 10 + [300.0]
         df = _make_df(rbo_20=rbo, vol_consolidation=vol, warmup_vol=100.0)
@@ -181,21 +181,21 @@ class TestVolumeProfile:
 
     def test_missing_volume_column_raises_value_error(self):
         """DataFrame without 'volume' column → ValueError with descriptive message."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         df = pd.DataFrame({"rbo_20": [0.0] * 10})
         with pytest.raises(ValueError, match="volume"):
             assess_volume_profile(df)
 
     def test_missing_rbo_20_column_raises_value_error(self):
         """DataFrame without 'rbo_20' column → ValueError with descriptive message."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         df = pd.DataFrame({"volume": [100.0] * 10})
         with pytest.raises(ValueError, match="rbo_20"):
             assess_volume_profile(df)
 
     def test_too_few_bars_in_zero_run_raises_value_error(self):
         """Zero-run shorter than MIN_TREND_BARS → ValueError."""
-        from breakout.volume import assess_volume_profile, MIN_VOL_BARS
+        from ta.breakout.volume import assess_volume_profile, MIN_VOL_BARS
         # Only 2 bars in zero-run (below MIN_VOL_BARS=5)
         df = _make_df(rbo_20=[0.0] * 2, vol_consolidation=[80.0] * 2, warmup_bars=0)
         with pytest.raises(ValueError, match="non-NaN"):
@@ -203,7 +203,7 @@ class TestVolumeProfile:
 
     def test_no_zero_run_ever_raises_value_error(self):
         """History with no rbo_20==0 bar at all → ValueError."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         df = pd.DataFrame({
             "rbo_20": [1.0] * 30,
             "volume": [100.0] * 30,
@@ -213,7 +213,7 @@ class TestVolumeProfile:
 
     def test_custom_quiet_threshold(self):
         """quiet_threshold parameter is respected."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # vol_trend_mean ≈ 0.8 (see quiet test); with threshold=0.7 it should NOT be quiet
         df = _make_df(
             rbo_20=[0.0] * 15,
@@ -227,7 +227,7 @@ class TestVolumeProfile:
 
     def test_custom_breakout_vol_threshold(self):
         """breakout_vol_threshold parameter is respected."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         rbo = [0.0] * 10 + [1.0]
         vol = [80.0] * 10 + [130.0]   # vol_trend_now ≈ 1.3
         df = _make_df(rbo_20=rbo, vol_consolidation=vol, warmup_vol=100.0)
@@ -240,7 +240,7 @@ class TestVolumeProfile:
 
     def test_window_bars_limits_zero_run_used(self):
         """window_bars caps how many zero-run bars are used for mean/slope."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         # Long zero-run: 40 bars of low vol, then 10 bars of high vol
         # If window_bars=10, only the last 10 low-vol bars are used
         rbo = [0.0] * 50
@@ -254,7 +254,7 @@ class TestVolumeProfile:
 
     def test_vol_trend_now_reflects_last_bar(self):
         """vol_trend_now is the vol_trend of the very last row."""
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         rbo = [0.0] * 10 + [1.0]
         # Set last bar volume to exactly 500 (wildly different from warmup=100)
         vol = [100.0] * 10 + [500.0]
@@ -288,7 +288,7 @@ class TestVolumeProfileSmoke:
             vol_trend_slope    ≈ 0.00146 (> 0 → is_declining=False)
             breakout_confirmed = None
         """
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         a2a = (
             parquet_df[parquet_df["symbol"] == "A2A.MI"]
             .sort_values("date")
@@ -314,7 +314,7 @@ class TestVolumeProfileSmoke:
             vol_trend_slope    ≈ 0.01244 (> 0 → is_declining=False)
             breakout_confirmed = True
         """
-        from breakout.volume import assess_volume_profile
+        from ta.breakout.volume import assess_volume_profile
         por = (
             parquet_df[parquet_df["symbol"] == "POR.MI"]
             .sort_values("date")

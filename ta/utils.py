@@ -1,8 +1,8 @@
 """
-utils.py — Shared mathematical utilities for the breakout package.
+utils.py — Shared mathematical utilities for the ta package.
 
 Functions here are low-level helpers with no domain knowledge.
-They are imported by other breakout modules to avoid duplication.
+They are imported by ta.breakout and ta.ma modules to avoid duplication.
 """
 
 from __future__ import annotations

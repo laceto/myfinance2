@@ -53,8 +53,8 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import Literal
 
-from breakout.range_quality import assess_range, RangeSetup, measure_volatility_compression, VolatilityState
-from breakout.volume import assess_volume_profile, VolumeProfile
+from ta.breakout.range_quality import assess_range, RangeSetup, measure_volatility_compression, VolatilityState
+from ta.breakout.volume import assess_volume_profile, VolumeProfile
 
 load_dotenv()  # reads .env from the project root into os.environ
 

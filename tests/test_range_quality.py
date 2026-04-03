@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from breakout.range_quality import (
+from ta.breakout.range_quality import (
     breakout_prior_consolidation_length,
     classify_trend,
     count_touches,

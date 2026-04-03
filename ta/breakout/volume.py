@@ -36,7 +36,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from breakout.utils import ols_slope
+from ta.utils import ols_slope
 
 # ---------------------------------------------------------------------------
 # Module-level constants (exported so tests can reference them by name)
