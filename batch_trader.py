@@ -36,6 +36,7 @@ Recovery after interruption:
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import logging
 import sys
@@ -92,20 +93,67 @@ BATCH_ENDPOINT = "/v1/chat/completions"
 # ---------------------------------------------------------------------------
 
 
+def _make_strict_schema(node: dict) -> dict:
+    """
+    Recursively transform a Pydantic model_json_schema() into an OpenAI
+    strict-mode compatible schema.
+
+    OpenAI strict mode requirements:
+      1. Every object node has "additionalProperties": false.
+      2. Every property of an object is listed in "required" (Optional fields
+         keep their anyOf: [{type: X}, {type: "null"}] but must still appear
+         in required — OpenAI allows null as a valid value).
+
+    Pydantic already emits anyOf for Union[X, None] fields, so we only need
+    to add the two object-level keys and recurse into nested schemas.
+    """
+    node = copy.deepcopy(node)
+    _strict_in_place(node)
+    return node
+
+
+def _strict_in_place(node: dict) -> None:
+    """Apply strict mode requirements in-place, recursively."""
+    if not isinstance(node, dict):
+        return
+
+    if node.get("type") == "object" or "properties" in node:
+        node["additionalProperties"] = False
+        if "properties" in node:
+            # All properties must appear in required (null-typed fields included).
+            node["required"] = list(node["properties"].keys())
+            for child in node["properties"].values():
+                _strict_in_place(child)
+
+    # Recurse into $defs — Pydantic hoists nested models here.
+    for sub in node.get("$defs", {}).values():
+        _strict_in_place(sub)
+
+    # Recurse into anyOf / allOf / oneOf (used for Union types).
+    for key in ("anyOf", "allOf", "oneOf"):
+        for sub in node.get(key, []):
+            _strict_in_place(sub)
+
+    # Recurse into array items.
+    if "items" in node:
+        _strict_in_place(node["items"])
+
+
 def _response_format(model_class) -> dict:
     """
-    Build an OpenAI json_schema response_format dict from a Pydantic model.
+    Build an OpenAI strict json_schema response_format dict from a Pydantic model.
 
-    Uses strict=False to accommodate Optional fields in the Pydantic schema
-    (strict=True requires every object to have additionalProperties=false and
-    all properties in required, which conflicts with Union[X, None] fields).
+    strict=True forces the model to emit every declared field, preventing the
+    Pydantic validation failures caused by omitted required fields.
+    The schema is transformed by _make_strict_schema to satisfy OpenAI's
+    strict-mode requirements (additionalProperties: false, all props in required).
     """
     return {
         "type": "json_schema",
         "json_schema": {
             "name":   model_class.__name__,
-            "schema": model_class.model_json_schema(),
-            "strict": False,
+            "schema": _make_strict_schema(model_class.model_json_schema()),
+            "strict": True,
         },
     }
 
@@ -253,8 +301,14 @@ def _parse_results(raw: list[dict], schema_class, mode_label: str) -> list[dict]
             analysis = schema_class.model_validate_json(content)
             out.append({"ticker": ticker, "analysis": analysis.model_dump(), "error": None})
         except Exception as exc:
-            log.warning("%s: parse failed for %s: %s", mode_label, ticker, exc)
-            out.append({"ticker": ticker, "analysis": None, "error": str(exc)})
+            # Strict mode should prevent this, but if validation still fails,
+            # preserve the raw JSON so the model's output is not silently lost.
+            log.warning("%s: validation failed for %s: %s — storing raw response.", mode_label, ticker, exc)
+            try:
+                raw_json = json.loads(content)
+                out.append({"ticker": ticker, "analysis": raw_json, "error": str(exc)})
+            except Exception:
+                out.append({"ticker": ticker, "analysis": None, "error": str(exc)})
 
     success = sum(1 for r in out if r["error"] is None)
     log.info("%s: parsed %d / %d items successfully.", mode_label, success, len(out))
