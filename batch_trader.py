@@ -117,6 +117,14 @@ def _strict_in_place(node: dict) -> None:
     if not isinstance(node, dict):
         return
 
+    # OpenAI strict mode: $ref must be the only key in its node.
+    # Pydantic emits {"$ref": "...", "description": "..."} — strip the siblings.
+    if "$ref" in node:
+        for k in list(node.keys()):
+            if k != "$ref":
+                del node[k]
+        return  # $ref nodes have no children to recurse into
+
     if node.get("type") == "object" or "properties" in node:
         node["additionalProperties"] = False
         if "properties" in node:
