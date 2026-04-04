@@ -101,22 +101,39 @@ def _render_bo(analysis, ticker: str) -> None:
     # --- Timeframes ---
     st.markdown("**Signal Timeframes**")
     tf_items = [
-        ("Short (20d)", a.short_term),
-        ("Medium (50d)", a.medium_term),
-        ("Long (150d)", a.long_term),
+        ("20d", "rhi_20 / rlo_20", a.short_term),
+        ("50d", "rhi_50 / rlo_50", a.medium_term),
+        ("150d", "rhi_150 / rlo_150", a.long_term),
     ]
     cols = st.columns(3)
-    for (label, tf), col in zip(tf_items, cols):
+    for (window, level_label, tf), col in zip(tf_items, cols):
         with col:
             flip_tag = "  [FLIP]" if tf.fresh_flip else ""
-            st.metric(label, f"{_signal_label(tf.signal)}{flip_tag}", delta=f"Age: {tf.signal_age}d")
-            st.caption(
-                f"Res: {tf.resistance:.4f} ({tf.dist_to_resistance_pct:+.2f}%)  "
-                f"Sup: {tf.support:.4f} ({tf.dist_to_support_pct:+.2f}%)"
+            sig_info = f"{_signal_label(tf.signal)}{flip_tag}  age={tf.signal_age}d"
+            st.markdown(f"**{window}** — {sig_info}")
+            c_res, c_sup = col.columns(2)
+            c_res.metric(
+                f"Resistance ({window.replace('d', '')})",
+                f"{tf.resistance:.4f}",
+                delta=f"{tf.dist_to_resistance_pct:+.2f}% from close",
+                delta_color="inverse",
+            )
+            c_sup.metric(
+                f"Support ({window.replace('d', '')})",
+                f"{tf.support:.4f}",
+                delta=f"{tf.dist_to_support_pct:+.2f}% from close",
+                delta_color="inverse",
             )
             if tf.momentum_pct is not None:
-                st.caption(f"Momentum: {tf.momentum_pct:+.2f}%")
-            st.caption(tf.commentary)
+                col.caption(f"Momentum: {tf.momentum_pct:+.2f}%")
+            col.caption(tf.commentary)
+
+    # rh4 / rl4 — structural swing anchors relevant to all timeframes
+    r = a.risk
+    st.markdown("Structural levels:")
+    c1, c2 = st.columns(2)
+    c1.metric("rh4 — peak resistance", f"{r.peak_resistance:.4f}")
+    c2.metric("rl4 — major floor", f"{r.major_floor:.4f}")
 
     st.divider()
 
@@ -180,8 +197,8 @@ def _render_bo(analysis, ticker: str) -> None:
     st.divider()
 
     # --- Risk ---
+    # rh4 / rl4 already shown in the Signal Timeframes structural levels row above.
     st.markdown("**Risk Levels**")
-    r = a.risk
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("**Long**")
@@ -191,9 +208,6 @@ def _render_bo(analysis, ticker: str) -> None:
         st.markdown("**Short**")
         st.metric("Stop (rhi_20)", r.short_stop)
         st.metric("Structural stop (rhi_150)", r.short_structural_stop)
-    c1, c2 = st.columns(2)
-    c1.metric("Peak resistance (rh4)", r.peak_resistance)
-    c2.metric("Major floor (rl4)", r.major_floor)
 
     st.divider()
 
