@@ -16,8 +16,8 @@ Usage:
     python batch_trader.py --mode both --poll-interval 60
 
 Output:
-    data/results/it/batch_bo_results.json  — per-ticker BO breakout analyses
-    data/results/it/batch_ma_results.json  — per-ticker MA crossover analyses
+    data/results/it/batches/batch_bo_results.json  — per-ticker BO breakout analyses
+    data/results/it/batches/batch_ma_results.json  — per-ticker MA crossover analyses
 
 Each output file is a JSON array of objects:
     {"ticker": "A2A.MI", "analysis": {...TraderAnalysis fields...}, "error": null}
@@ -80,7 +80,7 @@ log = logging.getLogger(__name__)
 # Paths
 # ---------------------------------------------------------------------------
 
-OUTPUT_DIR = Path("data/results/it")
+OUTPUT_DIR = Path("data/results/it/batches")
 BO_OUTPUT  = OUTPUT_DIR / "batch_bo_results.json"
 MA_OUTPUT  = OUTPUT_DIR / "batch_ma_results.json"
 
