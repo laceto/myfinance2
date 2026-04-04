@@ -4,9 +4,9 @@ batch_trader.py — Batch AI analysis for all Italian equity tickers.
 Reads all symbols from analysis_results.parquet, builds per-ticker snapshots,
 and submits them to the OpenAI Batch API via kitai (50% cost vs synchronous).
 
-Batch jobs complete asynchronously within 24 h. Job IDs are printed immediately
-after submission — save them in case the process is interrupted. Use
-check_batch_job / poll_until_complete with the saved IDs to resume.
+Batch jobs complete asynchronously within 24 h. Job IDs are printed and written
+to data/results/it/batches/batch_jobs_YYYYMMDD_HHMMSS.json immediately after
+submission. Use that file to recover if the process is interrupted.
 
 Usage:
     python batch_trader.py --mode bo
@@ -39,6 +39,7 @@ import argparse
 import json
 import logging
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import openai
@@ -273,6 +274,30 @@ def _save(results: list[dict], path: Path) -> None:
     log.info("Saved %d records → %s", len(results), path)
 
 
+def _save_job_ids(job_ids: dict[str, str]) -> Path:
+    """
+    Persist batch job IDs to a timestamped JSON file in OUTPUT_DIR.
+
+    File name: batch_jobs_YYYYMMDD_HHMMSS.json
+    Content:   {"submitted_at": "<iso>", "jobs": {"bo": "batch_...", "ma": "batch_..."}}
+
+    This file is the recovery artefact — paste the IDs into poll_until_complete
+    if the main process is interrupted before results are downloaded.
+
+    Returns:
+        Path to the written file.
+    """
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    ts       = datetime.now(timezone.utc)
+    filename = f"batch_jobs_{ts.strftime('%Y%m%d_%H%M%S')}.json"
+    path     = OUTPUT_DIR / filename
+    payload  = {"submitted_at": ts.isoformat(), "jobs": job_ids}
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, indent=2)
+    log.info("Job IDs saved → %s", path)
+    return path
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
@@ -372,12 +397,14 @@ def main() -> None:
         log.error("No batch jobs submitted — check warnings above.")
         sys.exit(1)
 
-    # Print job IDs before blocking on poll — save these to recover if interrupted.
+    # Persist job IDs to disk before blocking on poll so they survive a crash.
+    ids_file = _save_job_ids(job_ids)
     print()
     print("=" * 50)
-    print("  Batch job IDs — save these to recover if interrupted:")
+    print("  Batch job IDs (also saved to disk):")
     for mode, jid in job_ids.items():
         print(f"  {mode.upper()}: {jid}")
+    print(f"  File: {ids_file}")
     print("=" * 50)
     print()
 
