@@ -399,7 +399,7 @@ def main() -> None:
             info = check_batch_job(client, job_id)
             log.error(
                 "%s batch %s did not complete. Status: %s  Counts: %s",
-                mode.upper(), job_id, info["status"], info["request_counts"],
+                mode.upper(), job_id, info["status"], info.get("request_counts"),
             )
             if info.get("error_file_id"):
                 log.error(
