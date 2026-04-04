@@ -1,9 +1,9 @@
 """
-ask_trader.py — Range breakout trader AI assistant.
+ask_bo_trader.py — Range breakout trader AI assistant.
 
 Usage:
-    python ask_trader.py --ticker A2A.MI
-    python ask_trader.py --ticker A2A.MI --question "Should I add to this position?"
+    python ask_bo_trader.py --ticker A2A.MI
+    python ask_bo_trader.py --ticker A2A.MI --question "Should I add to this position?"
 
 Scope: range breakout analysis only.
     Moving average crossover signals (rema_*, rsma_*) are intentionally excluded —
@@ -566,7 +566,7 @@ class TraderAnalysis(BaseModel):
 MODEL = "gpt-4.1-nano"
 
 
-def ask_trader(snapshot: dict, ticker: str, question: str | None) -> TraderAnalysis:
+def ask_bo_trader(snapshot: dict, ticker: str, question: str | None) -> TraderAnalysis:
     """
     Send the ticker snapshot to an OpenAI model and return a structured analysis.
 
@@ -655,7 +655,7 @@ def main() -> None:
     print(json.dumps(snapshot, indent=2))
     print("=" * 60 + "\n")
 
-    analysis: TraderAnalysis = ask_trader(snapshot, ticker=args.ticker, question=args.question)
+    analysis: TraderAnalysis = ask_bo_trader(snapshot, ticker=args.ticker, question=args.question)
 
     a = analysis
     sep = "=" * 60

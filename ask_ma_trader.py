@@ -7,7 +7,7 @@ Usage:
 
 Scope: MA crossover analysis only.
     Range breakout signals (rbo_*, rhi_*, rlo_*, rtt_5020) are intentionally excluded —
-    they belong to ask_trader.py.
+    they belong to ask_bo_trader.py.
 
 What it does:
     1. Loads analysis_results.parquet
@@ -40,7 +40,7 @@ Columns included (last bar only):
     - Enrichments:     trend_strength (MATrendStrength), volume_profile (MAVolumeProfile)
 
 Excluded on purpose:
-    - rbo_*, rhi_*, rlo_*, rtt_5020 → range breakout assistant (ask_trader.py)
+    - rbo_*, rhi_*, rlo_*, rtt_5020 → range breakout assistant (ask_bo_trader.py)
     - ropen, rhigh, rlow — intraday OHLC; enrichments computed from full history but
       only EOD rclose in the snapshot
     - *_cumul, *_returns, *_chg* (intermediate analytics), *_PL_cum
@@ -238,7 +238,7 @@ def _compute_signal_age_and_flip(
     Flip: 1 if the signal changed on that bar vs the previous bar, else 0.
 
     These columns are not present in analysis_results.parquet — they are derived here
-    using the same algorithm as the rbo_*_age / rbo_*_flip derivation in ask_trader.py.
+    using the same algorithm as the rbo_*_age / rbo_*_flip derivation in ask_bo_trader.py.
 
     Args:
         df:          Single-ticker DataFrame with signal columns present.
