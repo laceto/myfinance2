@@ -140,6 +140,8 @@ def _make_task(
 
     return {
         "custom_id": ticker,
+        "method":    "POST",
+        "url":       BATCH_ENDPOINT,
         "body": {
             "model":           model,
             "max_tokens":      1024,
