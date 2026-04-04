@@ -491,6 +491,22 @@ def main() -> None:
                 )
             continue
 
+        # Verify output_file_id exists before downloading — a job can reach
+        # "completed" status with output_file_id=None when every single request
+        # in the batch failed (all errors, no successful outputs).
+        info = check_batch_job(client, job_id)
+        if not info.get("output_file_id"):
+            log.error(
+                "%s batch %s completed but output_file_id is None — all requests failed.",
+                mode.upper(), job_id,
+            )
+            if info.get("error_file_id"):
+                log.error(
+                    "Error file:\n%s",
+                    client.files.content(info["error_file_id"]).text,
+                )
+            continue
+
         log.info("Downloading %s results (%s)…", mode.upper(), job_id)
         raw = download_batch_results(client, job_id)
 
