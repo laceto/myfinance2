@@ -13,7 +13,20 @@
       "Bash(venv/Scripts/python -m pytest tests/test_trend_scorer.py -v)",
       "Bash(venv/Scripts/python trending_dashboard.py)",
       "Bash(venv/Scripts/python -m pytest tests/test_trend_scorer.py::TestComputeScoreHistory -v)",
-      "Bash(venv/Scripts/python -c \"import matplotlib; print\\(matplotlib.__version__\\)\")"
+      "Bash(venv/Scripts/python -c \"import matplotlib; print\\(matplotlib.__version__\\)\")",
+      "Bash(venv/Scripts/python.exe ask_trader.py --ticker ENI.MI 2>&1)",
+      "Bash(gh api:*)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/breakout/tests/test_volume.py -v)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_trend_quality.py -x -q)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_trend_quality.py -v)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_trend_quality.py ta/breakout/tests/test_volume.py -q)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_ma_volume.py -x -q)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_ma_volume.py -v)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ma/tests/test_ma_volume.py -q)",
+      "Bash(venv/Scripts/python.exe -m pytest ta/ -q)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git commit:*)"
     ]
   },
   "outputStyle": "Cognitive Debt–Aware Engineering"

@@ -4,3 +4,6 @@ __pycache__/
 # Analysis results parquet is regenerated each run and too large for GitHub (>100 MB)
 data/results/**/*.parquet
 .Rproj.user
+.Rhistory
+get_insigths.R
+myfinance2.Rproj
