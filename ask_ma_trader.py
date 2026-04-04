@@ -173,10 +173,14 @@ TREND STRENGTH ENRICHMENT (computed over full ticker history)
 - trend_strength.adx_slope: Is the ADX rising (trend gaining momentum) or falling (weakening)?
   Positive = ADX rising = trend strengthening.
   Negative = ADX falling = trend may be reversing.
+- trend_strength.adx_slope_r2: R² of the ADX slope OLS fit (0–1).
+  High (> 0.7) = clean, directional ADX move. Low (< 0.3) = noisy — slope is unreliable.
 - trend_strength.ma_gap_pct: (rema_short_50 - rema_long_150) / rclose * 100.
   MACD-line proxy. Positive = bullish MA stack. Negative = bearish.
   Widening gap = trend accelerating. Narrowing gap = trend losing steam.
 - trend_strength.ma_gap_slope: OLS slope of ma_gap_pct over 20 bars (%/bar).
+- trend_strength.ma_gap_slope_r2: R² of the MA gap slope OLS fit (0–1).
+  High = gap moving cleanly in one direction. Low = erratic / mean-reverting.
 - trend_strength.is_trending: True when ADX > 25 AND ADX not declining.
   null: assess_ma_trend failed (insufficient history).
 
@@ -206,9 +210,13 @@ Apply symmetric logic for longs (+1) and shorts (-1) throughout.
    State is_trending. Call out any divergence (price rising but RSI / ma_gap falling).
 5. Volume quality: vol_trend at last bar. vol_on_crossover, is_confirmed, is_sustained.
    Distinguish between fresh crossover and continuation bar.
-6. Risk: stop-loss from rema_50100150_stop_loss (primary).
-   Swing levels: rh4 = peak resistance (long target / short reference);
-   rl4 = major floor (long protection / short target).
+6. Risk — always state both sides.
+   Long stop  = rema_50100150_stop_loss (long invalidated if rclose drops below this).
+   Long structural = rl4 (deepest swing low — structural floor for longs).
+   Short stop = rema_50100150_stop_loss (short invalidated if rclose rises above this).
+   Short structural = rh4 (peak resistance — structural ceiling for shorts).
+   State long_stop, long_structural_stop, short_stop, short_structural_stop explicitly,
+   even when only one direction is currently active.
 7. Verdict: one actionable sentence — direction (long/short/flat), exact entry trigger
    (which signal flip + which confirmation), and the relevant stop level.
 
@@ -361,12 +369,14 @@ def _compute_trend_strength(df: pd.DataFrame) -> dict | None:
     try:
         ts: MATrendStrength = assess_ma_trend(df)
         return {
-            "rsi":          ts.rsi,
-            "adx":          ts.adx,
-            "adx_slope":    ts.adx_slope,
-            "ma_gap_pct":   ts.ma_gap_pct,
-            "ma_gap_slope": ts.ma_gap_slope,
-            "is_trending":  ts.is_trending,
+            "rsi":             ts.rsi,
+            "adx":             ts.adx,
+            "adx_slope":       ts.adx_slope,
+            "adx_slope_r2":    ts.adx_slope_r2,
+            "ma_gap_pct":      ts.ma_gap_pct,
+            "ma_gap_slope":    ts.ma_gap_slope,
+            "ma_gap_slope_r2": ts.ma_gap_slope_r2,
+            "is_trending":     ts.is_trending,
         }
     except (ValueError, KeyError) as exc:
         log.warning("assess_ma_trend failed: %s", exc)
@@ -452,13 +462,15 @@ class MATripleConfluence(BaseModel):
 
 
 class MATrendStrengthOutput(BaseModel):
-    rsi:          float = Field(description="RSI (14-period) on rclose. 0–100.")
-    adx:          float = Field(description="ADX at last bar. > 25 = institutional trend strength.")
-    adx_slope:    float = Field(description="ADX slope (%/bar). Positive = strengthening. Negative = weakening.")
-    ma_gap_pct:   float = Field(description="(EMA50 - EMA150) / rclose * 100. MACD proxy. Positive = bullish stack.")
-    ma_gap_slope: float = Field(description="OLS slope of ma_gap_pct over 20 bars. Widening = accelerating trend.")
-    is_trending:  bool  = Field(description="True when ADX > 25 and ADX not declining.")
-    commentary:   str   = Field(description="One sentence on trend quality: RSI position, ADX state, gap direction.")
+    rsi:             float = Field(description="RSI (14-period) on rclose. 0–100.")
+    adx:             float = Field(description="ADX at last bar. > 25 = institutional trend strength.")
+    adx_slope:       float = Field(description="ADX slope (%/bar). Positive = strengthening. Negative = weakening.")
+    adx_slope_r2:    float = Field(description="R² of the ADX slope OLS fit (0–1). High = clean trend signal. Low = noisy.")
+    ma_gap_pct:      float = Field(description="(EMA50 - EMA150) / rclose * 100. MACD proxy. Positive = bullish stack.")
+    ma_gap_slope:    float = Field(description="OLS slope of ma_gap_pct over 20 bars. Widening = accelerating trend.")
+    ma_gap_slope_r2: float = Field(description="R² of the MA gap slope OLS fit (0–1). High = gap changing cleanly. Low = erratic.")
+    is_trending:     bool  = Field(description="True when ADX > 25 and ADX not declining.")
+    commentary:      str   = Field(description="One sentence on trend quality: RSI position, ADX state, gap direction.")
 
 
 class MAVolumeQuality(BaseModel):
@@ -470,10 +482,12 @@ class MAVolumeQuality(BaseModel):
 
 
 class MARiskLevels(BaseModel):
-    primary_stop:    float = Field(description="rema_50100150_stop_loss — ATR stop for the triple confluence signal.")
-    medium_stop:     float = Field(description="rema_100150_stop_loss — ATR stop for the 100/150 signal.")
-    swing_target:    float = Field(description="rh4 — peak resistance (long target / short reference).")
-    major_floor:     float = Field(description="rl4 — deepest swing low (long protection / short target).")
+    long_stop:             float = Field(description="rema_50100150_stop_loss — ATR stop for a long; long invalidated if rclose drops below this.")
+    long_structural_stop:  float = Field(description="rl4 — deepest swing low; structural floor for longs.")
+    short_stop:            float = Field(description="rema_50100150_stop_loss — ATR stop for a short; short invalidated if rclose rises above this.")
+    short_structural_stop: float = Field(description="rh4 — peak resistance; structural ceiling for shorts.")
+    peak_resistance:       float = Field(description="rh4 — absolute highest swing high.")
+    major_floor:           float = Field(description="rl4 — absolute deepest swing low.")
 
 
 class MATraderAnalysis(BaseModel):
@@ -630,9 +644,11 @@ def main() -> None:
     print()
     if a.trend_strength is not None:
         ts = a.trend_strength
-        print(f"  Trend      : RSI={ts.rsi:.1f}  ADX={ts.adx:.1f}  adx_slope={ts.adx_slope:+.4f}/bar  "
+        print(f"  Trend      : RSI={ts.rsi:.1f}  ADX={ts.adx:.1f}  "
+              f"adx_slope={ts.adx_slope:+.4f}/bar (r²={ts.adx_slope_r2:.2f})  "
               f"trending={ts.is_trending}")
-        print(f"               gap={ts.ma_gap_pct:+.2f}%  gap_slope={ts.ma_gap_slope:+.4f}/bar")
+        print(f"               gap={ts.ma_gap_pct:+.2f}%  "
+              f"gap_slope={ts.ma_gap_slope:+.4f}/bar (r²={ts.ma_gap_slope_r2:.2f})")
         print(f"               {ts.commentary}")
     else:
         print("  Trend      : insufficient history for ADX/RSI computation")
@@ -646,8 +662,9 @@ def main() -> None:
     print(f"               {vq.commentary}")
     print()
     r = a.risk
-    print(f"  Risk       : primary_stop={r.primary_stop}  medium_stop={r.medium_stop}")
-    print(f"               target={r.swing_target}  floor={r.major_floor}")
+    print(f"  Risk (long) : stop={r.long_stop}  structural={r.long_structural_stop}")
+    print(f"  Risk (short): stop={r.short_stop}  structural={r.short_structural_stop}")
+    print(f"               resistance={r.peak_resistance}  floor={r.major_floor}")
     print()
     print(f"  Verdict    : {a.verdict}")
     print(f"{sep}\n")
