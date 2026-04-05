@@ -147,6 +147,62 @@ class TestWilderRunningSum:
         result = _wilder_running_sum(arr, period=1)
         assert np.allclose(result, arr)
 
+    # ------------------------------------------------------------------
+    # Overflow safety for long time series
+    # ------------------------------------------------------------------
+
+    def test_period2_long_series_no_overflow(self):
+        """
+        With period=2, beta=0.5, (1/beta)^k = 2^k.
+        2^1024 overflows float64 (~1.8e308), so the geometric-decay identity
+        produces NaN/Inf at ~1024 bars when computed naïvely.
+
+        For all-ones with period=2 the recurrence S[k] = 0.5*S[k-1] + 1
+        reaches a steady state of exactly 2.0 (seed=2, stays there).
+        All 2000 output values must be finite and equal 2.0.
+        """
+        arr    = np.ones(2000, dtype=float)
+        result = _wilder_running_sum(arr, period=2)
+        assert np.all(np.isfinite(result)), "Overflow detected: result contains NaN or Inf"
+        assert np.allclose(result, 2.0, rtol=1e-6), (
+            f"Steady-state value should be 2.0; got range [{result.min():.4f}, {result.max():.4f}]"
+        )
+
+    def test_period3_long_series_no_overflow(self):
+        """
+        period=3: beta=2/3, 1/beta=1.5. 1.5^1750 ≈ 10^307 (near float64 max);
+        1.5^2000 overflows.  The batched approach must remain finite.
+
+        For all-ones with period=3:
+          seed = 3, steady state S* = 0.667*S* + 1 → S* = 3.0.
+        """
+        arr    = np.ones(2000, dtype=float)
+        result = _wilder_running_sum(arr, period=3)
+        assert np.all(np.isfinite(result)), "Overflow detected for period=3"
+        assert np.allclose(result, 3.0, rtol=1e-6)
+
+    def test_long_series_matches_recursive_ground_truth(self):
+        """
+        Verify the batched output against a simple Python-loop ground truth
+        on a 3000-bar random series with period=2, so overflow would corrupt
+        results in the current implementation.
+        """
+        rng    = np.random.default_rng(42)
+        arr    = rng.uniform(0.0, 0.1, 3000)
+        period = 2
+        beta   = 1.0 - 1.0 / period
+
+        # Ground truth via plain Python loop (slow but unambiguously correct)
+        gt = [float(arr[:period].sum())]
+        for v in arr[period:]:
+            gt.append(beta * gt[-1] + float(v))
+        gt = np.array(gt)
+
+        result = _wilder_running_sum(arr, period=period)
+        assert np.allclose(result, gt, rtol=1e-6), (
+            "Batched result diverges from ground truth"
+        )
+
 
 # ---------------------------------------------------------------------------
 # _wilder_ewm

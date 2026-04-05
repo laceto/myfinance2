@@ -176,6 +176,69 @@ class TestAssessVolumeProfileValidation:
         with pytest.raises(ValueError, match="at least"):
             assess_volume_profile(df)
 
+    # ------------------------------------------------------------------
+    # signal_col dtype / value validation (int8 cast safety)
+    # ------------------------------------------------------------------
+
+    def test_non_integer_float_signal_raises(self):
+        """
+        A signal value of 0.5 is not a valid breakout code — it would silently
+        truncate to 0 under a bare .astype(np.int8) cast, hiding the upstream bug.
+        Validation must raise immediately with a message identifying the bad values.
+        """
+        rbo = [0.0] * 8 + [0.5, 0.0]          # 0.5 is not integral
+        df = _make_df([100.0] * 10, rbo)
+        with pytest.raises(ValueError, match="non-integer"):
+            assess_volume_profile(df)
+
+    def test_signal_out_of_range_raises(self):
+        """
+        A signal value of 2 rounds to an integer but is outside {-1, 0, 1}.
+        Could be an error sentinel (e.g. 99) or a different signal convention.
+        Must raise clearly rather than wrap via int8 overflow.
+        """
+        rbo = [0] * 9 + [2]                    # 2 is integral but not in {-1, 0, 1}
+        df = _make_df([100.0] * 10, rbo)
+        with pytest.raises(ValueError, match="outside"):
+            assess_volume_profile(df)
+
+    def test_signal_overflow_value_raises(self):
+        """
+        128 overflows int8 to -128, silently turning an error sentinel into a
+        bearish breakout signal.  Must be caught before the cast.
+        """
+        rbo = [0] * 9 + [128]
+        df = _make_df([100.0] * 10, rbo)
+        with pytest.raises(ValueError, match="outside"):
+            assess_volume_profile(df)
+
+    def test_nan_in_signal_column_raises(self):
+        """
+        NaN in the signal column cannot be cast to int8 deterministically.
+        Must raise with a clear message.
+        """
+        rbo = [0.0] * 9 + [float("nan")]
+        df = _make_df([100.0] * 10, rbo)
+        with pytest.raises(ValueError, match="NaN"):
+            assess_volume_profile(df)
+
+    def test_integral_float_signal_accepted(self):
+        """
+        1.0 / 0.0 / -1.0 are the valid signal values expressed as float64
+        (common after parquet round-trips).  Must not raise.
+        """
+        rbo = [0.0] * 9 + [1.0]               # last bar is a breakout flip as float
+        df = _make_df([100.0] * 10, rbo)
+        result = assess_volume_profile(df)     # must not raise
+        assert isinstance(result, VolumeProfile)
+
+    def test_int64_signal_accepted(self):
+        """int64 dtype (default pandas integer) must be accepted without error."""
+        rbo = pd.array([0] * 9 + [1], dtype="int64")
+        df = _make_df([100.0] * 10, rbo)
+        result = assess_volume_profile(df)
+        assert isinstance(result, VolumeProfile)
+
 
 # ---------------------------------------------------------------------------
 # assess_volume_profile — happy path

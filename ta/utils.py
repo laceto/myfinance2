@@ -59,6 +59,13 @@ def ols_slope_r2(values: np.ndarray) -> tuple[float, float]:
     if n < 2:
         return 0.0, 0.0
 
+    # NaN guard: any NaN propagates through np.sum/mean, producing NaN output.
+    # Callers relying on the result for boolean decisions (e.g. `adx_slope >= 0`)
+    # would then silently get False without a warning.  Return the safe zero pair
+    # so the caller's downstream logic degrades gracefully.
+    if np.any(np.isnan(values)):
+        return 0.0, 0.0
+
     x = np.arange(n, dtype=float)
     x_mean = x.mean()
     y_mean = values.mean()

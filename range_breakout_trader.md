@@ -264,20 +264,29 @@ TOUCH_HI_THRESHOLD = 85   # range_pct >= 85% → near resistance
 TOUCH_LO_THRESHOLD = 15   # range_pct <= 15% → near support
 RETREAT_THRESHOLD  = 65   # range_pct must drop below 65% to end a resistance touch event
 BOUNCE_THRESHOLD   = 35   # range_pct must rise above 35% to end a support touch event
+DEFAULT_MAX_GAP_BARS = 5  # consecutive NaN bars that reset the touch state machine
 
 def count_touches(
-    range_pct: pd.Series,  # range_position_pct for the consolidation window
+    range_pct:    pd.Series,  # range_position_pct for the consolidation window
+    hi_thresh:    float = TOUCH_HI_THRESHOLD,
+    lo_thresh:    float = TOUCH_LO_THRESHOLD,
+    retreat:      float = RETREAT_THRESHOLD,
+    bounce:       float = BOUNCE_THRESHOLD,
+    max_gap_bars: int   = DEFAULT_MAX_GAP_BARS,
 ) -> tuple[int, int]:
     """
     Returns (n_resistance_touches, n_support_touches).
 
     Algorithm:
-    1. Mark bars where range_pct >= TOUCH_HI_THRESHOLD as "at resistance".
+    1. Mark bars where range_pct >= hi_thresh as "at resistance".
     2. Group consecutive True bars into a single touch event.
     3. Between two resistance touch events, price must have dipped below
-       RETREAT_THRESHOLD — otherwise merge the two clusters into one.
+       retreat — otherwise merge the two clusters into one.
     4. Count distinct clusters = n_resistance_touches.
-    5. Repeat symmetrically for support using TOUCH_LO_THRESHOLD / BOUNCE_THRESHOLD.
+    5. Repeat symmetrically for support using lo_thresh / bounce.
+    6. State machine resets (both in_res_touch and in_sup_touch → False)
+       when max_gap_bars consecutive NaN bars are seen — trading halts or
+       data gaps make the pre-gap touch state unreliable.
     """
 ```
 
@@ -317,7 +326,10 @@ def classify_trend(
 ```
 
 **Invariants**:
-- Window must have at least 5 bars to produce a meaningful slope.
+- Window must have at least `MIN_TREND_BARS` (10) non-NaN bars to produce a
+  reliable OLS estimate. Raised from the original 5-bar minimum: OLS on 5
+  noisy financial bars has a confidence interval that dwarfs the 0.15%/day
+  sideways threshold at typical Borsa Italiana volatility.
 - `slope_pct_per_day` is signed: positive = uptrend, negative = downtrend.
 
 **Tests**:
@@ -394,18 +406,22 @@ A5  Expose range quality in ask_trader.py snapshot
   A5.5  Smoke-test: run ask_trader.py --ticker SCM.MI, verify range quality fields appear
 ```
 
-**Status**: A1–A5 complete — 114/114 tests green.
+**Status**: A1–A5 complete — 340/340 tests green (full suite including `ta/ma/`).
 **Dependency order**: A1 → A2 → A3 → A4 → A5 ✓
 
 **Files created / modified**:
 ```
-breakout/__init__.py
-breakout/range_quality.py   ← count_touches, classify_trend, consolidation_age,
-                               measure_volatility_compression, RangeSetup, assess_range
-breakout/volume.py          ← VolumeProfile, assess_volume_profile
-tests/test_range_quality.py ← 62 unit tests, all passing
-tests/test_volume.py        ← 20 unit tests (18 synthetic + 2 smoke), all passing
-ask_trader.py               ← enriched with range_setup + volume_profile in snapshot
+ta/breakout/__init__.py
+ta/breakout/range_quality.py  ← count_touches (+ max_gap_bars), classify_trend,
+                                 breakout_prior_consolidation_length,
+                                 measure_volatility_compression, RangeSetup, assess_range,
+                                 RangeQualityConfig (loadable from config.json)
+ta/breakout/volume.py         ← VolumeProfile, assess_volume_profile
+                                 (signal validation: NaN / non-integer / out-of-range guards)
+ta/utils.py                   ← ols_slope, ols_slope_r2 (NaN guard added)
+tests/test_range_quality.py   ← 79 unit tests, all passing
+ta/breakout/tests/test_volume.py  ← 42 unit tests, all passing
+ask_trader.py                 ← enriched with range_setup + volume_profile in snapshot
 ```
 
 ---
@@ -466,6 +482,10 @@ B1  Implement measure_volatility_compression -> breakout/range_quality.py (same 
             band_width_pct_rank: float,  percentile rank vs 252-bar history (0-100)
                                          low rank = historically compressed
             is_compressed:       bool,   band_width_slope < 0 AND rank < 25
+            history_available:   int,    actual non-NaN bars used for rank computation
+                                         may be < history_bars for new listings
+            is_rank_reliable:    bool,   True when history_available >= history_bars
+                                         False = rank based on thin history, treat cautiously
           }
 
   B1.2  Implement measure_volatility_compression(
@@ -588,6 +608,7 @@ C1  Implement assess_volume_profile -> breakout/volume.py  (new file, same modul
             vol_trend_now:       float,        vol_trend at the last bar
             vol_trend_mean:      float,        mean vol_trend over consolidation window
             vol_trend_slope:     float,        OLS slope of vol_trend over window (/bar)
+            vol_trend_slope_r2:  float,        R² of OLS fit (0-1); < 0.3 = noisy slope
             is_quiet:            bool,         vol_trend_mean < quiet_threshold (default 1.0)
             is_declining:        bool,         vol_trend_slope < 0  (informational)
             breakout_confirmed:  bool | None,  see Question 2 definition above

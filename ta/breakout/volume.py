@@ -219,8 +219,9 @@ def assess_volume_profile(
         signal_col:
             Name of the range-breakout signal column (values: -1, 0, 1).
             Default "rbo_20". 0 = in consolidation; ±1 = active breakout/breakdown.
-            Note: cast to np.int8 internally — upstream values must be integral
-            (1.0, 0.0, -1.0 are fine; non-integer floats like 0.9 would be truncated).
+            Values are validated before the int8 cast: NaN, non-integral floats
+            (e.g. 0.5), and integers outside {-1, 0, 1} all raise ValueError.
+            Integral floats (1.0, 0.0, -1.0) from parquet round-trips are accepted.
         vol_ma_window:
             Rolling window (bars) for the vol_trend denominator. Default 20.
         window_bars:
@@ -240,9 +241,16 @@ def assess_volume_profile(
     Raises:
         ValueError: if any parameter is out of range.
         ValueError: if volume_col or signal_col is not present in df.
+        ValueError: if signal_col contains NaN, non-integral floats, or values
+                    outside {-1, 0, 1} (catches error sentinels and wrong conventions).
         ValueError: if no signal_col == 0 bar exists in df.
         ValueError: if the capped zero-run contains fewer than min_vol_bars
                     non-NaN vol_trend bars.
+
+    OLS zero-variance note:
+        ols_slope_r2 (ta.utils) already guards ss_tot == 0 → returns (0.0, 0.0).
+        Perfectly flat vol_trend (e.g. halted stock with constant volume) will
+        produce vol_trend_slope=0.0, vol_trend_slope_r2=0.0 without raising.
 
     Failure modes:
         - Halted stock (all-zero volume): rolling_mean = 0 → vol_trend = NaN.
@@ -287,7 +295,12 @@ def assess_volume_profile(
         )
 
     # --- 2. vol_trend series (zero-denominator guarded) ---
-    # rolling_mean <= 0 (halted stock / bad data) → NaN, never inf.
+    # The rolling mean is computed over the FULL DataFrame, not just the last
+    # window_bars rows.  This is intentional: the rolling mean at bar i requires
+    # up to vol_ma_window prior bars as warmup.  Slicing to window_bars before
+    # computing the rolling mean would force min_periods=1 to kick in for the
+    # first vol_ma_window-1 bars of the slice, producing artificially low means
+    # and inflating vol_trend at the start of the consolidation window.
     rolling_mean: pd.Series = (
         df[volume_col].rolling(vol_ma_window, min_periods=1).mean()
     )
@@ -300,8 +313,42 @@ def assess_volume_profile(
     ).reset_index(drop=True)                     # positional alignment with rbo array
 
     # --- 3. Find the most recent zero-run (vectorised, no Python loops) ---
-    # Cast to int8: signal is categorical {-1, 0, 1}; avoids float != 0 comparisons.
-    rbo = df[signal_col].to_numpy(dtype=np.int8)
+    # Validate and cast signal column to int8.
+    # A bare .to_numpy(dtype=np.int8) silently corrupts values outside {-1, 0, 1}:
+    #   0.5 truncates to 0  (non-integer float → under-counts touches)
+    #   128 wraps to -128   (int8 overflow → false bearish signal)
+    # We validate explicitly so upstream data bugs surface immediately.
+    _sig_raw = df[signal_col].to_numpy(dtype=float)
+
+    if np.any(np.isnan(_sig_raw)):
+        raise ValueError(
+            f"signal_col '{signal_col}' contains NaN values. "
+            "Expected only -1 (bearish breakout), 0 (consolidation), 1 (bullish breakout). "
+            "Check for missing bars or a mismatched signal column."
+        )
+
+    _sig_rounded = np.round(_sig_raw)
+    if not np.allclose(_sig_raw, _sig_rounded, atol=1e-9):
+        _bad = sorted(set(_sig_raw[~np.isclose(_sig_raw, _sig_rounded, atol=1e-9)].tolist()))
+        raise ValueError(
+            f"signal_col '{signal_col}' contains non-integer float values: {_bad}. "
+            "Expected only integral values -1, 0, 1. "
+            "Check for a 'weak signal' convention (e.g. 0.5) or a continuous score "
+            "being passed where a discrete breakout signal is required."
+        )
+
+    _valid_signal_values = {-1, 0, 1}
+    _unique_vals = set(int(v) for v in _sig_rounded)
+    _invalid_vals = _unique_vals - _valid_signal_values
+    if _invalid_vals:
+        raise ValueError(
+            f"signal_col '{signal_col}' contains values outside {{-1, 0, 1}}: "
+            f"{sorted(_invalid_vals)}. "
+            "Could be an error sentinel (e.g. 99) or a different signal convention. "
+            "Cast or remap to {{-1, 0, 1}} before calling assess_volume_profile."
+        )
+
+    rbo = _sig_rounded.astype(np.int8)
     zero_start, zero_end = _find_zero_run(rbo)
 
     # --- 4. Cap to window_bars (take the tail of the zero-run) ---

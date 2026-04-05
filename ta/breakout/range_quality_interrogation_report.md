@@ -82,6 +82,8 @@ This file presents itself as a "foundational analytical primitive" — the kind 
 
 *Verdict:* Raise to minimum 10. Document the statistical justification.
 
+**Resolution (2026-04-05):** Fixed — `MIN_TREND_BARS` raised from 5 to 10. OLS slope on fewer than 10 bars at typical Borsa Italiana daily volatility (0.5–1.5%) produces a 95% CI on slope that swamps the 0.15%/day `SIDEWAYS_SLOPE_THRESHOLD`, making the classification statistically meaningless. Comment added in source. See action plan item 6.
+
 ---
 
 **Constant #5: `COMPRESSION_RANK_THRESHOLD = 25.0`**

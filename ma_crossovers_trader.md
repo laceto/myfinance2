@@ -154,8 +154,11 @@ A successful trend-following MA crossover trader looks at these indicators befor
 - Reuses `ta.utils.ols_slope` — no new math
 
 **A3.2.5**  Implement `MATrendStrength` dataclass + `assess_ma_trend(df) → MATrendStrength`
-- Fields: `rsi`, `adx`, `adx_slope`, `ma_gap_pct`, `ma_gap_slope`, `is_trending`
-- `is_trending = adx > 25 and adx_slope > 0` (ADX above threshold AND rising)
+- Fields: `rsi`, `adx`, `adx_slope`, `adx_slope_r2`, `ma_gap_pct`, `ma_gap_slope`, `ma_gap_slope_r2`, `is_trending`
+  - `adx_slope_r2`: R² of OLS fit on ADX window (< 0.3 = noisy slope, treat with caution)
+  - `ma_gap_slope_r2`: R² of OLS fit on MA gap window (< 0.3 = noisy slope)
+  - Units: `adx_slope` is ADX points/bar; `ma_gap_slope` is %-points/bar (gap series already in %)
+- `is_trending = adx > 25 and adx_slope >= 0` (ADX above threshold AND flat-or-rising)
 - Preferred MA type: EMA (`rema_*`) as primary; SMA as secondary/confirmation
 - MA gap uses: `rema_short_50` vs `rema_long_150` (widest spread = strongest trend read)
 
@@ -191,11 +194,16 @@ A successful trend-following MA crossover trader looks at these indicators befor
 
 **A4.2.2**  Implement `assess_ma_volume(df, signal_col) → MAVolumeProfile`
 - `signal_col`: which MA signal to watch (e.g. `"rema_50100"`)
-- Detects flip bar (signal changed from 0 to non-zero on last bar)
+- Signal validation (fail fast): NaN check → integrality check → range `{-1, 0, 1}` check → `np.int8` cast.
+  Raises `ValueError` for NaN values, non-integer floats (e.g. 0.5), or out-of-range values (e.g. 99, 200).
+- Detects flip bar (signal[-1] != signal[-2], any direction)
 - `vol_on_crossover`: vol_trend value on the flip bar
-- `vol_trend_mean_post`: mean vol_trend over post-flip bars (up to last 5)
-- `is_confirmed`: True if vol_on_crossover ≥ DEFAULT_BREAKOUT_VOL_THR (1.2) — reuse threshold
-- `is_sustained`: True if vol_trend_mean_post ≥ 1.0
+- `vol_trend_mean_post`: mean vol_trend over post-flip bars (exactly `min_post_bars` bars)
+- `is_confirmed`: True if vol_on_crossover ≥ CONFIRMED_VOL_THRESHOLD (1.2) — only set on the flip bar
+- `is_sustained`: True if vol_trend_mean_post ≥ DEFAULT_SUSTAINED_VOL_THR (1.0); None if any post-flip
+  bar has NaN vol_trend (zero/halted volume — data quality failure, not below-threshold)
+- Temporal exclusivity: `is_confirmed` and `is_sustained` are **never simultaneously True** on the same
+  bar (is_confirmed is only True on the flip bar; is_sustained requires min_post_bars after the flip)
 
 #### A4.3  Run A4 tests — all green
 

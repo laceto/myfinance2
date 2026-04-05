@@ -168,6 +168,52 @@ class TestAssessMaVolumeValidation:
         with pytest.raises(ValueError, match="vol_ma_window must be >= 1"):
             assess_ma_volume(df, signal_col="sig", vol_ma_window=0)
 
+    # ------------------------------------------------------------------
+    # signal_col dtype / value validation (int8 overflow safety)
+    # ------------------------------------------------------------------
+
+    def test_non_integer_float_signal_raises(self):
+        """
+        0.5 would silently truncate to 0 under a bare np.int8 cast — an
+        upstream bug hidden from the caller.  Validation must raise early.
+        """
+        df = _make_df([100.0] * 10, [0.0] * 8 + [0.5, 0.0])
+        with pytest.raises(ValueError, match="non-integer"):
+            assess_ma_volume(df, signal_col="sig")
+
+    def test_signal_out_of_range_raises(self):
+        """
+        2 is not a valid MA crossover code.  Could be a regime score or
+        sentinel that would survive an int8 cast but corrupt comparisons.
+        """
+        df = _make_df([100.0] * 10, [0] * 9 + [2])
+        with pytest.raises(ValueError, match="outside"):
+            assess_ma_volume(df, signal_col="sig")
+
+    def test_signal_int8_overflow_raises(self):
+        """128 wraps to -128 under int8 — must be caught before the cast."""
+        df = _make_df([100.0] * 10, [0] * 9 + [128])
+        with pytest.raises(ValueError, match="outside"):
+            assess_ma_volume(df, signal_col="sig")
+
+    def test_nan_in_signal_raises(self):
+        """NaN in the signal column has no meaningful interpretation as a flip code."""
+        df = _make_df([100.0] * 10, [0.0] * 9 + [float("nan")])
+        with pytest.raises(ValueError, match="NaN"):
+            assess_ma_volume(df, signal_col="sig")
+
+    def test_integral_float_signal_accepted(self):
+        """1.0 / 0.0 / -1.0 from parquet round-trips must be accepted without error."""
+        df = _make_df([100.0] * 10, [0.0] * 9 + [1.0])
+        result = assess_ma_volume(df, signal_col="sig")
+        assert isinstance(result, MAVolumeProfile)
+
+    def test_int64_signal_accepted(self):
+        """int64 (default pandas integer dtype) must be accepted without error."""
+        df = _make_df([100.0] * 10, pd.array([0] * 9 + [1], dtype="int64"))
+        result = assess_ma_volume(df, signal_col="sig")
+        assert isinstance(result, MAVolumeProfile)
+
 
 # ---------------------------------------------------------------------------
 # assess_ma_volume — happy path
@@ -267,6 +313,50 @@ class TestAssessMaVolumeHappyPath:
         assert CONFIRMED_VOL_THRESHOLD > 0
         assert DEFAULT_SUSTAINED_VOL_THR > 0
         assert DEFAULT_VOL_MA_WINDOW >= 1
+
+    # ------------------------------------------------------------------
+    # NaN in post-flip window
+    # ------------------------------------------------------------------
+
+    def test_all_post_flip_bars_nan_returns_is_sustained_none(self):
+        """
+        vol_trend is NaN when rolling_mean ≤ 0 (zero or halted volume).
+        With vol_ma_window=1 the rolling mean is just the current bar's volume,
+        so a zero-volume bar directly produces NaN vol_trend.
+
+        If all min_post_bars post-flip bars are NaN, computing any mean is
+        meaningless.  is_sustained must be None (no clean evidence), not False.
+
+        False would imply "volume was below threshold"; None means "unknown
+        because the stock may have been halted during the follow-through window".
+        """
+        n     = 30 + 1 + MIN_POST_BARS
+        vol   = [100.0] * 30 + [150.0] + [0.0] * MIN_POST_BARS
+        sig   = [0] * 30 + [1] * (1 + MIN_POST_BARS)
+        df    = _make_df(vol, sig)
+        # vol_ma_window=1 so rolling_mean = current bar volume
+        # → zero-volume post-flip bars have rolling_mean=0 → _safe_mean=NaN → NaN vol_trend
+        result = assess_ma_volume(df, signal_col="sig", vol_ma_window=1)
+        assert result.is_sustained is None, (
+            "is_sustained must be None when all post-flip bars have NaN vol_trend"
+        )
+        assert result.vol_trend_mean_post is None
+
+    def test_partial_nan_post_flip_bars_returns_is_sustained_none(self):
+        """
+        1 of 3 post-flip bars has zero volume (vol_ma_window=1 → NaN vol_trend).
+        With the old skipna=True behaviour the mean would be computed from only 2
+        bars — fewer than min_post_bars (3) — insufficient evidence.
+        is_sustained must be None when ANY post-flip bar has missing volume data.
+        """
+        n   = 30 + 1 + MIN_POST_BARS
+        vol = [100.0] * 30 + [150.0] + [0.0] + [100.0] * (MIN_POST_BARS - 1)
+        sig = [0] * 30 + [1] * (1 + MIN_POST_BARS)
+        df  = _make_df(vol, sig)
+        result = assess_ma_volume(df, signal_col="sig", vol_ma_window=1)
+        assert result.is_sustained is None, (
+            "is_sustained must be None when any post-flip bar has NaN vol_trend"
+        )
 
 
 # ---------------------------------------------------------------------------

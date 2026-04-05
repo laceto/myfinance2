@@ -47,12 +47,15 @@ by one bar before use in signal logic:
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 
 from ta.utils import ols_slope_r2
+
+log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Module-level constants (exported; tests reference by name)
@@ -102,20 +105,43 @@ def _wilder_running_sum(arr: np.ndarray, period: int) -> np.ndarray:
         # beta = 0 → S_j = 0 * S_{j-1} + arr[j] = arr[j]
         return arr.astype(float)
 
-    seed  = float(arr[:period].sum())
-    tail  = arr[period:].astype(float)
-    m     = len(tail)
+    seed = float(arr[:period].sum())
+    tail = arr[period:].astype(float)
 
-    if m == 0:
+    if len(tail) == 0:
         return np.array([seed], dtype=float)
 
-    beta       = 1.0 - 1.0 / period
-    inv_powers = (1.0 / beta) ** np.arange(1, m + 1)   # [1/β, 1/β², ...]
-    dec_powers = beta ** np.arange(1, m + 1)            # [β, β², ...]
+    beta = 1.0 - 1.0 / period
 
-    # S_j = β^j * (seed + Σ_{k=1}^{j} tail[k-1] / β^k)
-    smoothed = (seed + np.cumsum(tail * inv_powers)) * dec_powers
-    return np.concatenate([[seed], smoothed])
+    # --- Overflow-safe batched implementation ---
+    #
+    # The naive vectorised identity S_j = β^j * (seed + Σ tail[k]*(1/β)^k)
+    # is mathematically exact but creates intermediate values of order
+    # (1/β)^m which overflow float64 (max ~1.8e308) when m is large:
+    #   period=2  (β=0.5):  2^1024 overflows — hits the limit at ~1024 bars.
+    #   period=3  (β=0.667): 1.5^1751 overflows — hits the limit at ~1751 bars.
+    #   period=14 (β=0.929): overflow at ~9568 bars — safe for most histories.
+    #
+    # Fix: split tail into chunks no larger than max_batch, where max_batch is
+    # the largest k such that (1/β)^k < float64_max ≈ e^709.
+    # Each chunk uses the geometric identity within the safe range, then carries
+    # the last computed value as the seed for the next chunk.
+    # The Python loop runs over at most ceil(N/max_batch) chunks; for period=14
+    # and N=2500 this is one iteration — no performance regression for typical data.
+    max_batch = max(1, int(708.0 / np.log(1.0 / beta)))
+
+    chunks: list[np.ndarray] = [np.array([seed])]
+    s = seed
+    for i in range(0, len(tail), max_batch):
+        batch      = tail[i : i + max_batch]
+        m          = len(batch)
+        inv_powers = (1.0 / beta) ** np.arange(1, m + 1)   # safe: m ≤ max_batch
+        dec_powers = beta          ** np.arange(1, m + 1)
+        chunk      = (s + np.cumsum(batch * inv_powers)) * dec_powers
+        chunks.append(chunk)
+        s = float(chunk[-1])
+
+    return np.concatenate(chunks)
 
 
 def _wilder_ewm(arr: np.ndarray, period: int) -> np.ndarray:
@@ -250,6 +276,14 @@ def compute_rsi(rclose: pd.Series, period: int = RSI_PERIOD) -> float:
         - Constant series → RSI = 50 (avg_gain = avg_loss = 0).
         - All-gain series → RSI = 100 (avg_loss converges to 0).
         - All-loss series → RSI = 0.
+
+    Convergence note:
+        Wilder's EWM seeds from the simple mean of the first `period` bars.
+        The smoothing needs ~3×period bars to forget the seed and reflect
+        the current market regime.  With fewer than 2×period bars the result
+        is dominated by the seed value and may be misleading.
+        assess_ma_trend logs a WARNING in this case; callers can silence it by
+        providing a longer lead-in history.
     """
     if period < 1:
         raise ValueError(
@@ -262,6 +296,14 @@ def compute_rsi(rclose: pd.Series, period: int = RSI_PERIOD) -> float:
         raise ValueError(
             f"compute_rsi requires at least period+1 = {period + 1} non-NaN values; "
             f"got {len(clean)}. Provide a longer series or reduce the period."
+        )
+
+    if len(clean) < 2 * period:
+        log.warning(
+            "compute_rsi: only %d non-NaN bars available (period=%d). "
+            "Wilder's EWM requires ~3×period (%d) bars to converge; "
+            "this RSI estimate is seed-dominated and less accurate.",
+            len(clean), period, 3 * period,
         )
 
     closes = clean.to_numpy(dtype=float)
@@ -462,6 +504,7 @@ class MATrendStrength:
         > ADX_TREND_THRESHOLD = trend has institutional strength.
     adx_slope : float
         OLS slope of ADX over the last adx_slope_window bars.
+        Units: ADX points/bar (raw, not normalised by mean ADX).
         Positive = ADX rising = trend gaining strength.
         Negative = ADX falling = trend weakening.
     adx_slope_r2 : float
@@ -469,10 +512,18 @@ class MATrendStrength:
         R² < 0.3 on short windows → treat slope as noise.
     ma_gap_pct : float
         (fast_ma_col - slow_ma_col) / rclose * 100 at last bar.
+        Units: % (already rclose-normalised, comparable across tickers).
         MACD-line proxy. Positive = bullish alignment.
     ma_gap_slope : float
-        OLS slope of ma_gap_pct series over ma_slope_window bars (%/bar).
-        Widening gap = trend accelerating; narrowing = losing steam.
+        OLS slope of the ma_gap_pct time series over ma_slope_window bars.
+        Units: %-points/bar (absolute change in gap percentage per bar).
+        NOT normalised by mean gap — the gap series is already in % terms,
+        so a further mean-normalisation would produce an unintuitive
+        "% of gap change per bar as a fraction of mean gap".
+        Compare with compute_ma_slope_pct(), which DOES normalise by mean
+        and returns a dimensionless %/day — a different quantity.
+        Widening positive gap (positive slope) = trend accelerating bullishly.
+        Narrowing gap (negative slope) = trend losing steam.
     ma_gap_slope_r2 : float
         R² of the ma_gap_slope OLS fit. In [0, 1].
     is_trending : bool
@@ -594,8 +645,11 @@ def assess_ma_trend(
         _gslope, _gr2   = ols_slope_r2(
             gap_series.iloc[-ma_slope_window:].to_numpy(dtype=float)
         )
-        _gslope_pct     = _gslope  # already in % units
-        ma_gap_slope    = round(float(_gslope_pct), 6)
+        # _gslope is in %-points/bar: the gap series is already rclose-normalised
+        # to %, so the raw OLS slope is directly interpretable without further
+        # mean-normalisation.  Do NOT substitute compute_ma_slope_pct() here —
+        # that function normalises by mean, producing a different quantity (%/day).
+        ma_gap_slope    = round(float(_gslope), 6)
         ma_gap_slope_r2 = round(float(_gr2), 4)
     else:
         ma_gap_slope, ma_gap_slope_r2 = 0.0, 0.0

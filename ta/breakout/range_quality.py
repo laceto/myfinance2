@@ -83,6 +83,9 @@ COMPRESSION_RANK_THRESHOLD: float = 25.0   # band_width_pct_rank below this → 
 DEFAULT_MAX_TREND_SKIP:     int   = 50     # warn when assess_range skips more non-zero bars
 DEFAULT_NAN_WARN_FRACTION:  float = 0.10   # warn when range_pct NaN fraction exceeds this
 
+DEFAULT_MAX_GAP_BARS:       int   = 5      # consecutive NaN bars that reset the touch state machine
+                                           # 5 = one trading week; covers typical Italian halt lengths
+
 
 # ---------------------------------------------------------------------------
 # Fix 1: RangeQualityConfig — all thresholds in one place, loadable from config.json
@@ -109,6 +112,12 @@ class RangeQualityConfig:
         max_trend_skip:           Maximum non-zero bars assess_range skips before warning. Default 50.
         nan_warn_fraction:        NaN fraction in range_pct above which assess_range logs a WARNING.
                                   Default 0.10 (10%). Raise to suppress noisy warnings on halted tickers.
+        max_gap_bars:             Consecutive NaN bars in range_pct that trigger a touch-state reset.
+                                  When price data is absent for this many consecutive bars, the touch
+                                  state machine resets (in_res_touch and in_sup_touch → False) because
+                                  we cannot know whether the retreat/bounce threshold was crossed during
+                                  the gap.  Default 5 (one trading week).  Set higher to tolerate
+                                  longer halts without splitting touch counts.
     """
 
     touch_hi_threshold:         float = TOUCH_HI_THRESHOLD
@@ -120,6 +129,7 @@ class RangeQualityConfig:
     min_trend_bars:             int   = MIN_TREND_BARS
     max_trend_skip:             int   = DEFAULT_MAX_TREND_SKIP
     nan_warn_fraction:          float = DEFAULT_NAN_WARN_FRACTION
+    max_gap_bars:               int   = DEFAULT_MAX_GAP_BARS
 
     @classmethod
     def from_config_file(cls, path: str | Path | None = None) -> "RangeQualityConfig":
@@ -148,6 +158,7 @@ class RangeQualityConfig:
                 min_trend_bars             = int(  rq.get("min_trend_bars",             MIN_TREND_BARS)),
                 max_trend_skip             = int(  rq.get("max_trend_skip",             DEFAULT_MAX_TREND_SKIP)),
                 nan_warn_fraction          = float(rq.get("nan_warn_fraction",          DEFAULT_NAN_WARN_FRACTION)),
+                max_gap_bars               = int(  rq.get("max_gap_bars",               DEFAULT_MAX_GAP_BARS)),
             )
         except (OSError, json.JSONDecodeError, KeyError) as exc:
             log.warning(
@@ -164,11 +175,12 @@ class RangeQualityConfig:
 
 
 def count_touches(
-    range_pct: pd.Series,
-    hi_thresh: float = TOUCH_HI_THRESHOLD,
-    lo_thresh: float = TOUCH_LO_THRESHOLD,
-    retreat:   float = RETREAT_THRESHOLD,
-    bounce:    float = BOUNCE_THRESHOLD,
+    range_pct:    pd.Series,
+    hi_thresh:    float = TOUCH_HI_THRESHOLD,
+    lo_thresh:    float = TOUCH_LO_THRESHOLD,
+    retreat:      float = RETREAT_THRESHOLD,
+    bounce:       float = BOUNCE_THRESHOLD,
+    max_gap_bars: int   = DEFAULT_MAX_GAP_BARS,
 ) -> tuple[int, int]:
     """
     Count distinct resistance and support touch events within a consolidation window.
@@ -189,17 +201,23 @@ def count_touches(
                    100% = rclose is at rhi_N (resistance).
                    >100% or <0% = price outside the range (active breakout).
                    NaN values are skipped; state machine continues across gaps.
-        hi_thresh: Entry threshold for a resistance touch event. Default 85.0.
-        lo_thresh: Entry threshold for a support touch event. Default 15.0.
-        retreat:   Exit threshold for a resistance touch (must drop below). Default 65.0.
-        bounce:    Exit threshold for a support touch (must rise above). Default 35.0.
+        hi_thresh:    Entry threshold for a resistance touch event. Default 85.0.
+        lo_thresh:    Entry threshold for a support touch event. Default 15.0.
+        retreat:      Exit threshold for a resistance touch (must drop below). Default 65.0.
+        bounce:       Exit threshold for a support touch (must rise above). Default 35.0.
+        max_gap_bars: Number of consecutive NaN bars after which both state machines reset.
+                      When price data is absent for this many bars in a row (e.g. trading halt,
+                      corporate action suspension), we cannot know whether price crossed the
+                      retreat or bounce threshold.  Carrying the old state across would silently
+                      under-count touches.  Default 5 (one trading week).
 
     Returns:
         (n_resistance_touches, n_support_touches)
 
     Raises:
         ValueError: if retreat >= hi_thresh (no gray zone for resistance), or
-                    bounce <= lo_thresh (no gray zone for support).
+                    bounce <= lo_thresh (no gray zone for support), or
+                    max_gap_bars < 1 (0 would reset on every NaN, destroying touch history).
 
     Invariants:
         - Two consecutive bars at 90% count as ONE touch event.
@@ -216,6 +234,12 @@ def count_touches(
             f"bounce ({bounce}) must be strictly greater than lo_thresh ({lo_thresh}). "
             "The gray zone (lo_thresh, bounce] would not exist."
         )
+    if max_gap_bars < 1:
+        raise ValueError(
+            f"max_gap_bars must be >= 1; got {max_gap_bars}. "
+            "Setting it to 0 would reset the state machine on every NaN, destroying touch history. "
+            "Use max_gap_bars=1 to reset on a single NaN, or a larger value for longer halts."
+        )
 
     # Rule 1 — Sequential state machine: intentional Python loop.
     # Each bar's touch state depends on the prior bar's state (with hysteresis gray
@@ -223,14 +247,24 @@ def count_touches(
     # standard pandas/NumPy vectorisation.  The loop is O(N) and runs over at most
     # window_bars bars (default 40), so runtime impact is negligible.
     # For very large N (> 50 000 bars), compile with @numba.njit as a drop-in replacement.
-    n_res        = 0
-    n_sup        = 0
-    in_res_touch = False
-    in_sup_touch = False
+    n_res            = 0
+    n_sup            = 0
+    in_res_touch     = False
+    in_sup_touch     = False
+    consecutive_nan  = 0   # consecutive NaN bar counter; resets to 0 on every clean bar
 
     for val in range_pct:
         if pd.isna(val):
+            consecutive_nan += 1
+            # A gap >= max_gap_bars means we cannot know whether retreat/bounce was
+            # crossed during the missing bars.  Reset both state machines so the next
+            # approach is counted as a fresh touch event.
+            if consecutive_nan >= max_gap_bars:
+                in_res_touch = False
+                in_sup_touch = False
             continue
+
+        consecutive_nan = 0   # clean bar: gap counter clears
 
         # --- Resistance state machine ---
         if not in_res_touch:
@@ -723,6 +757,7 @@ def assess_range(
         lo_thresh=config.touch_lo_threshold,
         retreat=config.retreat_threshold,
         bounce=config.bounce_threshold,
+        max_gap_bars=config.max_gap_bars,
     )
 
     # Pass thresholds from config to classify_trend.

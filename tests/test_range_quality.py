@@ -136,6 +136,104 @@ class TestCountTouches:
         assert n_res == 2, f"expected 2 resistance touches, got {n_res}"
         assert n_sup == 2, f"expected 2 support touches, got {n_sup}"
 
+    # ------------------------------------------------------------------
+    # max_gap_bars — state machine reset on consecutive NaN gaps
+    # ------------------------------------------------------------------
+
+    def test_gap_at_limit_splits_resistance_touch(self):
+        """
+        5 consecutive NaN bars (= max_gap_bars=5) reset the state machine.
+        The touch active before the gap is closed; the approach after counts
+        as a fresh touch event.
+
+        Timeline: [90, NaN×5, 90, 50]
+          bar 0:  90 >= 85 → in_res=True,  n_res=1
+          bars 1-5: 5 NaN  → gap triggers reset → in_res=False
+          bar 6:  90 >= 85 → in_res=True,  n_res=2
+          bar 7:  50 < 65  → in_res=False
+        """
+        nan = float("nan")
+        s = pd.Series([90, nan, nan, nan, nan, nan, 90, 50])
+        assert count_touches(s, max_gap_bars=5) == (2, 0)
+
+    def test_gap_below_limit_preserves_touch_state(self):
+        """
+        4 consecutive NaN bars with max_gap_bars=5 does NOT reset; the touch
+        continues across the gap and the second approach is not a new event.
+
+        Timeline: [90, NaN×4, 90, 50]
+          bar 0:  90 → in_res=True,  n_res=1
+          bars 1-4: 4 NaN → consecutive_nan=4 < 5 → no reset
+          bar 5:  90 → already in_res, no new count
+          bar 6:  50 < 65 → in_res=False
+        """
+        nan = float("nan")
+        s = pd.Series([90, nan, nan, nan, nan, 90, 50])
+        assert count_touches(s, max_gap_bars=5) == (1, 0)
+
+    def test_gap_resets_support_touch_symmetrically(self):
+        """
+        Gap reset works identically for the support state machine.
+
+        Timeline: [10, NaN×5, 10, 50]
+          bar 0:  10 <= 15 → in_sup=True,  n_sup=1
+          bars 1-5: 5 NaN  → reset → in_sup=False
+          bar 6:  10 → in_sup=True, n_sup=2
+          bar 7:  50 > 35  → in_sup=False
+        """
+        nan = float("nan")
+        s = pd.Series([10, nan, nan, nan, nan, nan, 10, 50])
+        assert count_touches(s, max_gap_bars=5) == (0, 2)
+
+    def test_scattered_nans_never_trigger_reset(self):
+        """
+        NaN values that are separated by clean bars reset the consecutive
+        counter to 0; they must never accumulate to trigger a state reset.
+
+        Timeline: [90, NaN, 70, NaN, 70, NaN, 90, 50]
+          single NaN between clean bars → consecutive_nan never exceeds 1
+          → no reset (max_gap_bars=5)
+          The gray zone (70 > retreat=65) keeps the touch alive throughout.
+        """
+        nan = float("nan")
+        s = pd.Series([90, nan, 70, nan, 70, nan, 90, 50])
+        assert count_touches(s, max_gap_bars=5) == (1, 0)
+
+    def test_gap_resets_counter_after_clean_bar(self):
+        """
+        After a gap resets, the consecutive counter clears on the next
+        clean bar. A second gap in the same series is tracked independently.
+
+        Timeline: [90, NaN×5, 90, NaN×5, 90, 50]
+          first gap:  reset → in_res=False, n_res becomes 2 on bar 6
+          clean bar 6 (90): n_res=2, in_res=True, consecutive_nan=0
+          second gap: reset → in_res=False
+          bar 12 (90): n_res=3
+        """
+        nan = float("nan")
+        s = pd.Series([90, nan, nan, nan, nan, nan,
+                       90, nan, nan, nan, nan, nan,
+                       90, 50])
+        assert count_touches(s, max_gap_bars=5) == (3, 0)
+
+    def test_invalid_max_gap_bars_raises(self):
+        """max_gap_bars < 1 is nonsensical: 0 would reset on every NaN."""
+        with pytest.raises(ValueError, match="max_gap_bars"):
+            count_touches(pd.Series([50.0] * 5), max_gap_bars=0)
+
+    def test_max_gap_bars_one_resets_on_single_nan(self):
+        """
+        max_gap_bars=1 means even a single NaN resets both state machines.
+
+        Timeline: [90, NaN, 90, 50]
+          bar 0:  90 → in_res=True, n_res=1
+          bar 1:  NaN → consecutive_nan=1 >= 1 → reset → in_res=False
+          bar 2:  90 → in_res=True, n_res=2
+        """
+        nan = float("nan")
+        s = pd.Series([90, nan, 90, 50])
+        assert count_touches(s, max_gap_bars=1) == (2, 0)
+
 
 # ===========================================================================
 # classify_trend
