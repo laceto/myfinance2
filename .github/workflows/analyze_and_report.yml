@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install yfinance pandas openpyxl pyarrow joblib tqdm
+          pip install yfinance pandas openpyxl pyarrow joblib tqdm numpy statsmodels
           pip install algoshort-0.1.1-py3-none-any.whl
 
       - name: Run signal analysis
@@ -40,6 +40,9 @@ jobs:
       - name: Generate trading report
         # tee writes to file AND streams to the workflow log simultaneously.
         run: python trading_report.py | tee data/results/it/trading_report.txt
+
+      - name: Generate daily insights brief
+        run: python get_insights.py | tee data/results/it/daily_brief.txt
 
       # analysis_results.parquet is ~500 MB — too large for a git commit.
       # Upload it as a workflow artifact (retained for 30 days) instead.
@@ -55,6 +58,8 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add data/results/it/trading_dashboard.xlsx \
-                  data/results/it/trading_report.txt
-          git commit -m "chore: update trading dashboard and report [skip ci]" || echo "No changes to commit"
+                  data/results/it/trading_report.txt \
+                  data/results/it/daily_brief.xlsx \
+                  data/results/it/daily_brief.txt
+          git commit -m "chore: update trading dashboard, report and daily insights brief [skip ci]" || echo "No changes to commit"
           git push

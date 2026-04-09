@@ -98,11 +98,9 @@ CHANGE_COLS: List[str] = SIGNAL_COLS + ["rrg"]
 LM_WINDOWS: List[int] = [7, 15, 30, 45]
 
 PARQUET_PATH  = Path("data/results/it/analysis_results.parquet")
-EXCEL_PATH    = Path("signals/daily_brief.xlsx")
-BRIEF_PATH    = Path("signals/daily_brief.txt")
-SIGNALS_DIR   = Path("signals")
-
-SIGNALS_DIR.mkdir(exist_ok=True)
+RESULTS_DIR   = Path("data/results/it")
+EXCEL_PATH    = RESULTS_DIR / "daily_brief.xlsx"
+BRIEF_PATH    = RESULTS_DIR / "daily_brief.txt"
 
 # ---------------------------------------------------------------------------
 # Pure helpers
@@ -134,6 +132,58 @@ def detect_change(df: pd.DataFrame, regime: str) -> pd.DataFrame:
     result = df[cols].copy()
     result["change"] = (result[regime] != result[regime].shift(1)).astype(int)
     return result[result["change"] == 1].tail(1)
+
+
+def compute_last_bar_changes(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    For every method in SIGNAL_COLS, detect tickers whose signal value changed
+    between the second-to-last bar and the last bar (i.e. flipped today).
+
+    Returns a tidy DataFrame with columns:
+        method, symbol, name, sector, marginabile, date,
+        from_signal, to_signal, direction ∈ {"bull_flip", "bear_flip"}
+    """
+    signal_cols_present = [c for c in SIGNAL_COLS if c in df.columns]
+    id_cols = [c for c in ["symbol", "name", "sector", "marginabile"] if c in df.columns]
+
+    last_two = (
+        df.sort_values(["symbol", "date"])
+        .groupby("symbol", group_keys=False)
+        .tail(2)
+    )
+
+    rows: List[dict] = []
+    for sym, group in last_two.groupby("symbol"):
+        group = group.reset_index(drop=True)
+        if len(group) < 2:
+            continue
+        prev_bar = group.iloc[-2]
+        last_bar = group.iloc[-1]
+        meta = {col: last_bar[col] for col in id_cols if col in last_bar.index}
+        meta["date"] = last_bar["date"]
+        for col in signal_cols_present:
+            prev_val = prev_bar[col]
+            curr_val = last_bar[col]
+            if pd.isna(prev_val) or pd.isna(curr_val):
+                continue
+            if prev_val != curr_val:
+                direction = "bull_flip" if curr_val > prev_val else "bear_flip"
+                rows.append({
+                    **meta,
+                    "method": col,
+                    "from_signal": int(prev_val),
+                    "to_signal": int(curr_val),
+                    "direction": direction,
+                })
+
+    if not rows:
+        return pd.DataFrame()
+
+    return (
+        pd.DataFrame(rows)
+        .sort_values(["method", "direction", "symbol"])
+        .reset_index(drop=True)
+    )
 
 
 def compute_changes(df: pd.DataFrame, symbol_keys: pd.DataFrame) -> pd.DataFrame:
@@ -355,6 +405,7 @@ def save_excel(sheets: dict[str, pd.DataFrame], path: Path) -> None:
         "volume_movers":    NEUTRAL_FILL,
         "bull_ts_score":    BULL_FILL,
         "bear_ts_score":    BEAR_FILL,
+        "signal_flips":     NEUTRAL_FILL,
     }
     for ws in wb.worksheets:
         _style_sheet(ws, fills.get(ws.title, NEUTRAL_FILL))
@@ -459,6 +510,15 @@ bear_score_ts = compute_score_ts(output_signal, bear)
 
 bull_swing = get_last_swing(semi_join(output_signal, bull, on="symbol"), "rl3")
 bear_swing = get_last_swing(semi_join(output_signal, bear, on="symbol"), "rh3")
+
+log.info("Computing last-bar signal flips...")
+signal_flips = compute_last_bar_changes(output_signal)
+log.info(
+    "Signal flips on last bar: %d total  (%d bull, %d bear)",
+    len(signal_flips),
+    (signal_flips["direction"] == "bull_flip").sum() if not signal_flips.empty else 0,
+    (signal_flips["direction"] == "bear_flip").sum() if not signal_flips.empty else 0,
+)
 
 # Most-recent change per symbol (for days_since_change)
 def _last_change(changes_df: pd.DataFrame) -> pd.DataFrame:
@@ -665,6 +725,7 @@ sheets = {
     "volume_movers":   last_day_volume,
     "bull_ts_score":   bull_score_ts,
     "bear_ts_score":   bear_score_ts,
+    "signal_flips":    signal_flips,
 }
 
 save_excel(sheets, EXCEL_PATH)
@@ -724,6 +785,24 @@ lines = [
     last_day_volume.head(15)[["symbol", "name", "sector", "volume"]].to_string(index=False)
     if not last_day_volume.empty else "  (none)",
     "",
+    f"  SIGNAL FLIPS — last bar  ({len(signal_flips)} flips across {signal_flips['method'].nunique() if not signal_flips.empty else 0} methods)",
+    SEP_NARROW,
+    *(
+        [
+            line
+            for method, grp in signal_flips.groupby("method")
+            for line in [
+                f"  [{method}]",
+                _safe_select(
+                    grp.assign(change=grp["from_signal"].astype(str) + " → " + grp["to_signal"].astype(str)),
+                    ["direction", "symbol", "name", "sector", "marginabile", "change"],
+                ).to_string(index=False),
+                "",
+            ]
+        ]
+        if not signal_flips.empty
+        else ["  (none)"]
+    ),
     SEP_WIDE,
     f"  Full detail -> {EXCEL_PATH}",
     SEP_WIDE,
