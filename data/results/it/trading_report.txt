@@ -1,21 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-04-08 to 2026-04-13 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-04-09 to 2026-04-14 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-04-13 rtt_5020 CLABO.MI  1.100000 ENTER SHORT   1.100714  0.064935
-2026-04-13 rtt_5020  CULT.MI 18.450001 ENTER SHORT  18.621429  0.929153
-2026-04-13 rtt_5020   DHH.MI 22.500000 ENTER SHORT  24.300000  8.000001
-2026-04-13 rtt_5020   DLG.MI 34.279999  EXIT SHORT  36.034284       NaN
-2026-04-13 rtt_5020  ENAV.MI  5.295000   EXIT LONG   5.178714       NaN
-2026-04-13 rtt_5020   FNM.MI  0.533000  ENTER LONG   0.499143  6.352183
-2026-04-13 rtt_5020     G.MI 36.110001   EXIT LONG  34.450000       NaN
-2026-04-13 rtt_5020   ILP.MI  5.850000   EXIT LONG   5.585714       NaN
-2026-04-13 rtt_5020    PQ.MI  2.560000 ENTER SHORT   2.674286  4.464286
-2026-04-13 rtt_5020   PRT.MI  5.555000  EXIT SHORT   5.817571       NaN
-2026-04-13 rtt_5020  RWAY.MI  6.100000   EXIT LONG   5.921428       NaN
-2026-04-13 rtt_5020  SEIF.MI  0.250000 ENTER SHORT   0.272857  9.142855
+ last_date   signal ticker     price      action  stop_loss  risk_pct
+2026-04-14 rtt_5020 ASC.MI  3.470000 ENTER SHORT   3.651429  5.228489
+2026-04-14 rtt_5020 BST.MI  1.708000   EXIT LONG   1.634571       NaN
+2026-04-14 rtt_5020 DOX.MI  3.960000 ENTER SHORT   4.201429  6.096679
+2026-04-14 rtt_5020 GPI.MI 16.040001 ENTER SHORT  16.925716  5.521916
+2026-04-14 rtt_5020  IG.MI 10.485000 ENTER SHORT  10.947143  4.407658
+2026-04-14 rtt_5020 MFT.MI  1.850000 ENTER SHORT   1.991429  7.644787
+2026-04-14 rtt_5020 SSL.MI  1.420000  ENTER LONG   1.317857  7.193167
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-13)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-14)
 ===============================================================================================
