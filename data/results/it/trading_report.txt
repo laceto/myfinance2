@@ -1,18 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-04-17 to 2026-04-22 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-04-20 to 2026-04-23 (Last 4 Days)
 ===============================================================================================
  last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-04-22 rtt_5020 BAMI.MI 12.235000   EXIT LONG  11.716429       NaN
-2026-04-22 rtt_5020 CALT.MI  9.670000  EXIT SHORT   9.678571       NaN
-2026-04-22 rtt_5020  CLE.MI  0.141000 ENTER SHORT   0.151143  7.193514
-2026-04-22 rtt_5020  CPR.MI  6.330000   EXIT LONG   6.047714       NaN
-2026-04-22 rtt_5020  CY4.MI  8.060000  EXIT SHORT   8.515714       NaN
-2026-04-22 rtt_5020   EM.MI  0.956000  EXIT SHORT   0.957429       NaN
-2026-04-22 rtt_5020  LDO.MI 54.869999 ENTER SHORT  59.495713  8.430315
-2026-04-22 rtt_5020  MFT.MI  2.220000  EXIT SHORT   2.280000       NaN
-2026-04-22 rtt_5020   OS.MI 27.000000  ENTER LONG  25.342858  6.137563
+2026-04-23 rtt_5020 ABTG.MI  1.660000  EXIT SHORT   1.673571       NaN
+2026-04-23 rtt_5020  BFF.MI  2.112000  EXIT SHORT   2.421714       NaN
+2026-04-23 rtt_5020 BMED.MI 18.315001 ENTER SHORT  19.213930  4.908157
+2026-04-23 rtt_5020  EUK.MI  0.640000  EXIT SHORT   0.707429       NaN
+2026-04-23 rtt_5020   GE.MI 11.350000  EXIT SHORT  11.578571       NaN
+2026-04-23 rtt_5020  ITW.MI  1.125000 ENTER SHORT   1.233571  9.650789
+2026-04-23 rtt_5020  LON.MI  0.990000  ENTER LONG   0.931429  5.916306
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-22)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-23)
 ===============================================================================================
