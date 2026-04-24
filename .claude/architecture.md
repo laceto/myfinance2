@@ -81,9 +81,11 @@ Workflow runs **Monday–Friday at 21:00 UTC** (after Borsa Italiana close):
 
 Parquet files are committed directly to the repo as the persistence layer (no external DB).
 
-## TA Breakout Package (`ta/breakout/`)
+## TA Packages (`ta/breakout/`, `ta/ma/`)
 
 Pure analytical primitives — no AI, no CLI, no side effects.
+
+### `ta/breakout/`
 
 | Module | Exports |
 |--------|---------|
@@ -91,18 +93,31 @@ Pure analytical primitives — no AI, no CLI, no side effects.
 | `volume.py` | `assess_volume_profile` → `VolumeProfile` |
 | `bo_snapshot.py` | `select_columns(df)`, `build_snapshot(df_ticker)`, `build_snapshot_from_parquet(ticker, path)` |
 
-**`bo_snapshot` entry-point contract**:
-- `build_snapshot(df_ticker)` — caller already holds a filtered DataFrame (e.g. `app.py`, `batch_trader.py`)
-- `build_snapshot_from_parquet(ticker, data_path)` — caller has a ticker string; loads parquet internally (e.g. CLI, one-off scripts)
+Enrichments in snapshot: `range_setup`, `volatility_compression`, `volume_profile`.
 
-Both return the same JSON-safe dict shape with last-bar fields + `range_setup`, `volatility_compression`, `volume_profile` enrichments.
+### `ta/ma/`
+
+| Module | Exports |
+|--------|---------|
+| `trend_quality.py` | `assess_ma_trend` → `MATrendStrength` (RSI, ADX, MA gap) |
+| `volume.py` | `assess_ma_volume` → `MAVolumeProfile` (crossover volume confirmation) |
+| `ma_snapshot.py` | `select_columns(df)`, `build_snapshot(df_ticker)`, `build_snapshot_from_parquet(ticker, path)` |
+
+Enrichments in snapshot: `trend_strength`, `volume_profile`.
+
+### Shared entry-point contract (both snapshot modules)
+
+- `build_snapshot(df_ticker)` — caller already holds a filtered DataFrame (`app.py`, `batch_trader.py`)
+- `build_snapshot_from_parquet(ticker, data_path)` — caller has a ticker string; loads parquet internally (CLI, notebooks, one-off scripts)
+
+Both raise `FileNotFoundError` (missing parquet) or `ValueError` (ticker not found).
 
 ## AI Trader Assistants
 
 | Script | Scope | Snapshot source |
 |--------|-------|----------------|
 | `ask_bo_trader.py` | Range breakout (rbo/rhi/rlo signals, turtle) | `ta.breakout.bo_snapshot.build_snapshot_from_parquet` |
-| `ask_ma_trader.py` | MA crossover signals (rema/rsma) | `ask_ma_trader.build_snapshot` (internal) |
+| `ask_ma_trader.py` | MA crossover signals (rema/rsma) | `ta.ma.ma_snapshot.build_snapshot_from_parquet` |
 | `batch_trader.py` | Bulk run across all tickers, both strategies | loads parquet once; calls `build_snapshot(df)` directly |
 
 ## Entry Point Scripts

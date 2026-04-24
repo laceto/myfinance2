@@ -1,9 +1,16 @@
 """
 ask_ma_trader.py — Moving average crossover trader AI assistant.
 
-Usage:
+Usage (CLI):
     python ask_ma_trader.py --ticker A2A.MI
     python ask_ma_trader.py --ticker A2A.MI --question "Is the trend strengthening?"
+
+Usage (notebook / script):
+    from ask_ma_trader import ask_ma_trader
+    from ta.ma.ma_snapshot import build_snapshot_from_parquet
+    snapshot = {"ticker": "A2A.MI", **build_snapshot_from_parquet("A2A.MI")}
+    analysis = ask_ma_trader(snapshot, ticker="A2A.MI")
+    analysis = ask_ma_trader(snapshot, ticker="A2A.MI", question="Is the trend strengthening?")
 
 Scope: MA crossover analysis only.
     Range breakout signals (rbo_*, rhi_*, rlo_*, rtt_5020) are intentionally excluded —
@@ -50,52 +57,29 @@ Excluded on purpose:
 import argparse
 import json
 import logging
-import re
 import sys
 from pathlib import Path
 from typing import Literal
 
 import openai
-import pandas as pd
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
-from ta.ma.trend_quality import MATrendStrength, assess_ma_trend
-from ta.ma.volume import MAVolumeProfile, assess_ma_volume
+from ta.ma.ma_snapshot import RESULTS_PATH, build_snapshot_from_parquet
 
 load_dotenv()
 
-sys.stdout.reconfigure(encoding="utf-8")
-sys.stderr.reconfigure(encoding="utf-8")
+# Windows CLI only — Jupyter's OutStream has no reconfigure().
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 log = logging.getLogger(__name__)
-
-# ---------------------------------------------------------------------------
-# Paths
-# ---------------------------------------------------------------------------
-
-RESULTS_PATH = Path("data/results/it/analysis_results.parquet")
-
-# ---------------------------------------------------------------------------
-# MA signal column sets (derived from confirmed parquet schema)
-# ---------------------------------------------------------------------------
-
-EMA_SIGNAL_COLS = ["rema_50100", "rema_100150", "rema_50100150"]
-SMA_SIGNAL_COLS = ["rsma_50100", "rsma_100150", "rsma_50100150"]
-ALL_SIGNAL_COLS = EMA_SIGNAL_COLS + SMA_SIGNAL_COLS
-
-EMA_LEVEL_COLS = ["rema_short_50", "rema_medium_100", "rema_long_150"]
-SMA_LEVEL_COLS = ["rsma_short_50", "rsma_medium_100", "rsma_long_150"]
-
-EMA_STOP_COLS = [
-    "rema_50100_stop_loss",
-    "rema_100150_stop_loss",
-    "rema_50100150_stop_loss",
-]
 
 # ---------------------------------------------------------------------------
 # System prompt
@@ -224,219 +208,6 @@ Be concise. No padding. Use numbers from the data, not generic statements.\
 """
 
 # ---------------------------------------------------------------------------
-# Column selection and derivation
-# ---------------------------------------------------------------------------
-
-
-def _compute_signal_age_and_flip(
-    df: pd.DataFrame, signal_cols: list[str]
-) -> pd.DataFrame:
-    """
-    Compute age and flip flags for each MA signal column.
-
-    Age: consecutive bars the signal has held its current value (resets to 1 on change).
-    Flip: 1 if the signal changed on that bar vs the previous bar, else 0.
-
-    These columns are not present in analysis_results.parquet — they are derived here
-    using the same algorithm as the rbo_*_age / rbo_*_flip derivation in ask_bo_trader.py.
-
-    Args:
-        df:          Single-ticker DataFrame with signal columns present.
-        signal_cols: List of signal column names to process.
-
-    Returns:
-        df with {col}_age and {col}_flip columns added (in-place copy).
-    """
-    df = df.copy()
-    for sig in signal_cols:
-        if sig not in df.columns:
-            continue
-        # --- flip flag ---
-        df[f"{sig}_flip"] = (df[sig] != df[sig].shift(1)).astype(int)
-        # --- age: consecutive bars at the same signal value ---
-        groups = (df[sig] != df[sig].shift()).cumsum()
-        df[f"{sig}_age"] = df.groupby(groups).cumcount() + 1
-    return df
-
-
-def select_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Select and compute the MA crossover column set for a single-ticker DataFrame.
-
-    Columns kept:
-      - Identity:        date, rrg
-      - Relative close:  rclose
-      - EMA signals:     rema_50100, rema_100150, rema_50100150
-      - SMA signals:     rsma_50100, rsma_100150, rsma_50100150
-      - EMA level vals:  rema_short_50, rema_medium_100, rema_long_150
-      - SMA level vals:  rsma_short_50, rsma_medium_100, rsma_long_150
-      - Stop-loss:       rema_50100_stop_loss, rema_100150_stop_loss, rema_50100150_stop_loss
-      - Swing levels:    rh3, rh4, rl3, rl4
-      - Computed:        {signal}_age, {signal}_flip, dist_to_rema_{n}_pct,
-                         dist_to_rsma_{n}_pct, rclose_chg_50d, rclose_chg_150d, vol_trend
-
-    Columns excluded:
-      - rbo_*, rhi_*, rlo_*, rtt_5020 → range breakout assistant
-      - ropen, rhigh, rlow — intraday OHLC, not needed for EOD MA logic
-      - rh1, rh2, rl1, rl2 — minor pivots, too noisy
-      - *_cumul, *_returns, *_chg*, *_PL_cum — intermediate analytics
-      - rsma_*_stop_loss — EMA stops are sufficient
-    """
-    cols = df.columns.tolist()
-
-    # --- Compute age and flip before column selection (needs full signal history) ---
-    df = _compute_signal_age_and_flip(df, ALL_SIGNAL_COLS)
-
-    # --- Base column selection ---
-    selected = ["symbol", "date", "rrg", "rclose"]
-
-    for col in (
-        EMA_SIGNAL_COLS + SMA_SIGNAL_COLS
-        + EMA_LEVEL_COLS + SMA_LEVEL_COLS
-        + EMA_STOP_COLS
-    ):
-        if col in df.columns:
-            selected.append(col)
-
-    # Significant swing levels (rh3/rh4/rl3/rl4 — skip minor pivots)
-    for sw in ["rh3", "rh4", "rl3", "rl4"]:
-        if sw in df.columns:
-            selected.append(sw)
-
-    # Age and flip columns (computed above)
-    age_cols  = [c for c in df.columns if c.endswith("_age")  and any(s in c for s in ALL_SIGNAL_COLS)]
-    flip_cols = [c for c in df.columns if c.endswith("_flip") and any(s in c for s in ALL_SIGNAL_COLS)]
-    selected += sorted(age_cols) + sorted(flip_cols)
-
-    df = df[selected].copy()
-
-    # Forward-fill swing levels
-    swing_cols = [c for c in ["rh3", "rh4", "rl3", "rl4"] if c in df.columns]
-    if swing_cols:
-        df[swing_cols] = df[swing_cols].ffill().bfill()
-
-    # --- Derived: distance from rclose to each MA level (% of rclose) ---
-    # Negative = rclose already above the MA (bullish).
-    # Positive = rclose below the MA.
-    level_map = {
-        "rema_short_50":   "dist_to_rema_50_pct",
-        "rema_medium_100": "dist_to_rema_100_pct",
-        "rema_long_150":   "dist_to_rema_150_pct",
-        "rsma_short_50":   "dist_to_rsma_50_pct",
-        "rsma_medium_100": "dist_to_rsma_100_pct",
-        "rsma_long_150":   "dist_to_rsma_150_pct",
-    }
-    for ma_col, dist_col in level_map.items():
-        if ma_col in df.columns:
-            df[dist_col] = (
-                (df[ma_col] - df["rclose"]) / df["rclose"] * 100
-            ).round(2)
-
-    # --- Derived: momentum (% change in rclose over 50 / 150 bars) ---
-    for lookback in [50, 150]:
-        df[f"rclose_chg_{lookback}d"] = (
-            df["rclose"].pct_change(periods=lookback) * 100
-        ).round(2)
-
-    # --- Derived: vol_trend ---
-    if "volume" in df.columns:
-        vol_avg = df["volume"].rolling(20, min_periods=1).mean()
-        df["vol_trend"] = (df["volume"] / vol_avg.where(vol_avg != 0)).round(2)
-
-    # Drop volume (raw) and symbol (redundant — injected as ticker in snapshot)
-    df = df.drop(columns=["volume", "symbol"], errors="ignore")
-
-    return df
-
-
-# ---------------------------------------------------------------------------
-# Snapshot builder
-# ---------------------------------------------------------------------------
-
-
-def _dataclass_to_dict(obj) -> dict:
-    """Convert a frozen dataclass to a plain JSON-safe dict."""
-    return {k: getattr(obj, k) for k in obj.__dataclass_fields__}
-
-
-def _compute_trend_strength(df: pd.DataFrame) -> dict | None:
-    """
-    Run assess_ma_trend over the full ticker history and return a JSON-safe dict.
-
-    Returns None when insufficient history or missing columns.
-    Logs a warning instead of crashing.
-    """
-    try:
-        ts: MATrendStrength = assess_ma_trend(df)
-        return {
-            "rsi":             ts.rsi,
-            "adx":             ts.adx,
-            "adx_slope":       ts.adx_slope,
-            "adx_slope_r2":    ts.adx_slope_r2,
-            "ma_gap_pct":      ts.ma_gap_pct,
-            "ma_gap_slope":    ts.ma_gap_slope,
-            "ma_gap_slope_r2": ts.ma_gap_slope_r2,
-            "is_trending":     ts.is_trending,
-        }
-    except (ValueError, KeyError) as exc:
-        log.warning("assess_ma_trend failed: %s", exc)
-        return None
-
-
-def _compute_volume_profile(df: pd.DataFrame) -> dict | None:
-    """
-    Run assess_ma_volume over the full ticker history and return a JSON-safe dict.
-
-    Uses rema_50100 as the primary signal col for flip detection.
-    Returns None on failure. Logs a warning.
-    """
-    try:
-        vp: MAVolumeProfile = assess_ma_volume(df, signal_col="rema_50100")
-        return {
-            "vol_on_crossover":    vp.vol_on_crossover,
-            "vol_trend_mean_post": vp.vol_trend_mean_post,
-            "is_confirmed":        vp.is_confirmed,
-            "is_sustained":        vp.is_sustained,
-        }
-    except (ValueError, KeyError) as exc:
-        log.warning("assess_ma_volume failed: %s", exc)
-        return None
-
-
-def build_snapshot(df_ticker: pd.DataFrame) -> dict:
-    """
-    Return the last bar of a prepared ticker DataFrame as a JSON-safe dict,
-    enriched with trend-strength and volume-behaviour summaries.
-
-    The enrichments are computed over the full ticker history before slicing to
-    last bar. Each returns None on failure so a failed enrichment never prevents
-    the snapshot from being built.
-
-    Raises:
-        ValueError: If the DataFrame is empty after filtering.
-    """
-    if df_ticker.empty:
-        raise ValueError("DataFrame is empty — ticker may not exist in the parquet.")
-
-    # --- Enrichments over full history BEFORE column selection ---
-    trend_strength  = _compute_trend_strength(df_ticker)
-    volume_profile  = _compute_volume_profile(df_ticker)
-
-    # --- Last-bar snapshot ---
-    df_prepared = select_columns(df_ticker)
-    last = df_prepared.tail(1).copy()
-    last["date"] = last["date"].dt.strftime("%Y-%m-%d")
-
-    records  = json.loads(last.to_json(orient="records", double_precision=4))
-    snapshot = records[0]
-
-    snapshot["trend_strength"]  = trend_strength
-    snapshot["volume_profile"]  = volume_profile
-
-    return snapshot
-
-
-# ---------------------------------------------------------------------------
 # Structured output schema
 # ---------------------------------------------------------------------------
 
@@ -525,7 +296,7 @@ MODEL = "gpt-4.1-nano"
 
 
 def ask_ma_trader(
-    snapshot: dict, ticker: str, question: str | None
+    snapshot: dict, ticker: str, question: str | None = None
 ) -> MATraderAnalysis:
     """
     Send the ticker snapshot to an OpenAI model and return a structured MA analysis.
@@ -533,7 +304,7 @@ def ask_ma_trader(
     Args:
         snapshot: Dict from build_snapshot — the last-bar MA data payload.
         ticker:   Ticker symbol string.
-        question: Optional follow-up question from the CLI caller.
+        question: Optional follow-up question. Defaults to None (no extra question sent).
 
     Returns:
         MATraderAnalysis Pydantic model parsed from the model response.
@@ -591,23 +362,12 @@ def main() -> None:
     args      = parse_args()
     data_path = Path(args.data)
 
-    if not data_path.exists():
-        log.error("Parquet not found: %s", data_path)
+    try:
+        snapshot = {"ticker": args.ticker, **build_snapshot_from_parquet(args.ticker, data_path)}
+    except (FileNotFoundError, ValueError) as exc:
+        log.error("%s", exc)
         sys.exit(1)
 
-    log.info("Loading %s", data_path)
-    df = pd.read_parquet(data_path)
-
-    df_ticker = df[df["symbol"] == args.ticker].copy()
-    if df_ticker.empty:
-        log.error(
-            "Ticker '%s' not found in parquet. Available sample: %s",
-            args.ticker,
-            df["symbol"].unique()[:10].tolist(),
-        )
-        sys.exit(1)
-
-    snapshot = {"ticker": args.ticker, **build_snapshot(df_ticker)}
     log.info("Snapshot built: %d fields, date=%s", len(snapshot), snapshot.get("date"))
 
     print("\n" + "=" * 60)
