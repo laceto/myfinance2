@@ -138,8 +138,8 @@ subagent means one line in `_subagents.py`, no wiring changes.
 1. Parse state: analysis_date, symbols_filter, top_n
 2. Call prepare_tools.load_analysis_data(RESULTS_PATH, analysis_date, symbols_filter)
 3. For each symbol:
-   a. ask_bo_trader.select_columns(df_symbol) → df_bo
-   b. ask_bo_trader.build_snapshot(df_bo)     → bo_snapshot
+   a. bo_snapshot.select_columns(df_symbol)   → df_bo       # ta.breakout.bo_snapshot
+   b. bo_snapshot.build_snapshot(df_bo)       → bo_snapshot_dict
    c. ask_ma_trader.select_columns(df_symbol) → df_ma
    d. ask_ma_trader.build_snapshot(df_ma)     → ma_snapshot
 4. Serialize to payload_json
@@ -205,7 +205,7 @@ def load_analysis_data(
 ```
 
 **Reuses directly** (no copying):
-- `ask_bo_trader.select_columns`, `ask_bo_trader.build_snapshot`
+- `ta.breakout.bo_snapshot.select_columns`, `ta.breakout.bo_snapshot.build_snapshot`
 - `ask_ma_trader.select_columns`, `ask_ma_trader.build_snapshot`
 
 ---
@@ -311,7 +311,7 @@ Integration tests reading the real parquet are marked `@pytest.mark.integration`
 
 | File | What to reuse |
 |------|--------------|
-| `ask_bo_trader.py` | `select_columns()`, `build_snapshot()` |
+| `ta/breakout/bo_snapshot.py` | `select_columns()`, `build_snapshot()` |
 | `ask_ma_trader.py` | `select_columns()`, `build_snapshot()` |
 | `ta/breakout/range_quality.py` | `RangeSetup`, `VolatilityState` (snapshot field types) |
 | `ta/ma/trend_quality.py` | `MATrendStrength` (snapshot field types) |

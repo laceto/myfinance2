@@ -418,10 +418,12 @@ ta/breakout/range_quality.py  ← count_touches (+ max_gap_bars), classify_trend
                                  RangeQualityConfig (loadable from config.json)
 ta/breakout/volume.py         ← VolumeProfile, assess_volume_profile
                                  (signal validation: NaN / non-integer / out-of-range guards)
+ta/breakout/bo_snapshot.py    ← select_columns(), build_snapshot(df), build_snapshot_from_parquet(ticker)
+                                 (pure data layer; no AI/CLI concerns)
 ta/utils.py                   ← ols_slope, ols_slope_r2 (NaN guard added)
 tests/test_range_quality.py   ← 79 unit tests, all passing
 ta/breakout/tests/test_volume.py  ← 42 unit tests, all passing
-ask_trader.py                 ← enriched with range_setup + volume_profile in snapshot
+ask_bo_trader.py              ← AI schema, OpenAI call, CLI; delegates snapshot building to bo_snapshot
 ```
 
 ---

@@ -81,6 +81,30 @@ Workflow runs **Monday–Friday at 21:00 UTC** (after Borsa Italiana close):
 
 Parquet files are committed directly to the repo as the persistence layer (no external DB).
 
+## TA Breakout Package (`ta/breakout/`)
+
+Pure analytical primitives — no AI, no CLI, no side effects.
+
+| Module | Exports |
+|--------|---------|
+| `range_quality.py` | `count_touches`, `classify_trend`, `assess_range` → `RangeSetup`, `measure_volatility_compression` → `VolatilityState` |
+| `volume.py` | `assess_volume_profile` → `VolumeProfile` |
+| `bo_snapshot.py` | `select_columns(df)`, `build_snapshot(df_ticker)`, `build_snapshot_from_parquet(ticker, path)` |
+
+**`bo_snapshot` entry-point contract**:
+- `build_snapshot(df_ticker)` — caller already holds a filtered DataFrame (e.g. `app.py`, `batch_trader.py`)
+- `build_snapshot_from_parquet(ticker, data_path)` — caller has a ticker string; loads parquet internally (e.g. CLI, one-off scripts)
+
+Both return the same JSON-safe dict shape with last-bar fields + `range_setup`, `volatility_compression`, `volume_profile` enrichments.
+
+## AI Trader Assistants
+
+| Script | Scope | Snapshot source |
+|--------|-------|----------------|
+| `ask_bo_trader.py` | Range breakout (rbo/rhi/rlo signals, turtle) | `ta.breakout.bo_snapshot.build_snapshot_from_parquet` |
+| `ask_ma_trader.py` | MA crossover signals (rema/rsma) | `ask_ma_trader.build_snapshot` (internal) |
+| `batch_trader.py` | Bulk run across all tickers, both strategies | loads parquet once; calls `build_snapshot(df)` directly |
+
 ## Entry Point Scripts
 
 | Script | Purpose |
@@ -88,3 +112,6 @@ Parquet files are committed directly to the repo as the persistence layer (no ex
 | `get_daily_ohlc_data.py` | Download today's OHLC bar for all tickers |
 | `get_historical_ohlc_data.py` | Download full history (2016 → present) |
 | `analyze_stock.py` | Run signal analysis pipeline |
+| `ask_bo_trader.py` | CLI: breakout AI analysis for a single ticker |
+| `ask_ma_trader.py` | CLI: MA crossover AI analysis for a single ticker |
+| `batch_trader.py` | CLI: bulk AI analysis across the full universe |

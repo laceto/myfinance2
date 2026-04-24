@@ -332,7 +332,8 @@ def _render_ma(analysis, ticker: str) -> None:
 
 def _run_bo(df_ticker: pd.DataFrame, ticker: str, question: str | None) -> tuple[dict, object]:
     """Build the BO snapshot and call the AI. Returns (snapshot, TraderAnalysis)."""
-    from ask_bo_trader import build_snapshot, ask_bo_trader
+    from ta.breakout.bo_snapshot import build_snapshot
+    from ask_bo_trader import ask_bo_trader
 
     snapshot = {"ticker": ticker, **build_snapshot(df_ticker)}
     analysis = ask_bo_trader(snapshot, ticker=ticker, question=question)

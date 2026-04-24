@@ -163,23 +163,5 @@ bear_flip  MFT.MI MATICA FINTEC Electronic Technology         NaN 0 → -1
 bull_flip  SSL.MI    S.S. LAZIO     Consumer Services         NaN  0 → 1
 
 ====================================================================================================
-  Full detail -> data/results/it/daily_brief.xlsx
+  Full detail -> data\results\it\daily_brief.xlsx
 ====================================================================================================
-PMT.MI         PROMOTICA    Commercial Services         NaN -1 → 1
-
-  [rtt_5020]
-direction  symbol          name                sector marginabile change
-bear_flip  ASC.MI     ASCOPIAVE             Utilities         NaN 0 → -1
-bear_flip  BST.MI BANCA SISTEMA               Finance         NaN  1 → 0
-bear_flip  DOX.MI         DOXEE   Technology Services         NaN 0 → -1
-bear_flip GAMB.MI GAMBERO ROSSO     Consumer Services         NaN 1 → -1
-bear_flip  GPI.MI           GPI   Commercial Services         NaN 0 → -1
-bear_flip   IG.MI       ITALGAS             Utilities          si 0 → -1
-bear_flip  MFT.MI MATICA FINTEC Electronic Technology         NaN 0 → -1
-bull_flip  SSL.MI    S.S. LAZIO     Consumer Services         NaN  0 → 1
-
-====================================================================================================
-  Full detail -> data/results/it/daily_brief.xlsx
-====================================================================================================
-
-2026-04-14 21:54:04,101 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
