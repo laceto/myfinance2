@@ -38,7 +38,7 @@ algoshort.YFinanceDataHandler       ← bulk download with caching and chunking
 | `ReturnsCalculator` | Computes returns for each signal |
 | `StopLossCalculator` | Computes ATR-based stop-loss levels |
 
-`algoshort` is a **private local wheel** (`algoshort-0.1.0-py3-none-any.whl`). Not on PyPI.
+`algoshort` is a **private local wheel** (`algoshort-0.1.1-py3-none-any.whl`). Not on PyPI.
 
 ## Configuration (`config.json`)
 
@@ -130,3 +130,98 @@ Both raise `FileNotFoundError` (missing parquet) or `ValueError` (ticker not fou
 | `ask_bo_trader.py` | CLI: breakout AI analysis for a single ticker |
 | `ask_ma_trader.py` | CLI: MA crossover AI analysis for a single ticker |
 | `batch_trader.py` | CLI: bulk AI analysis across the full universe |
+| `run_ta_agents.py` | CLI: LangGraph multi-agent TA system (breakout + MA, parallel) |
+
+## LangGraph Multi-Agent System (`agents/`)
+
+Runs breakout and MA AI analysis concurrently for a **single ticker** via a LangGraph manager +
+parallel subgraph topology. Each worker calls `ask_bo_trader` / `ask_ma_trader` (OpenAI) directly;
+`synthesise_node` formats both AI reports side by side into `final_output`.
+
+### Package layout
+
+```
+agents/
+├── __init__.py          # re-exports create_manager
+├── agent.py             # create_manager() — graph factory
+├── graph_state.py       # TechnicalAnalysisState TypedDict + _last reducer
+├── graph_nodes.py       # prepare_node, create_subgraph(), synthesise_node
+├── _subagents.py        # WORKER_NAMES + build_subgraphs()
+└── _tools/
+    └── prepare_tools.py # load_analysis_data() + load_live_data()
+```
+
+### Graph topology
+
+```
+START → prepare_node → [breakout_worker, ma_worker] → synthesise_node → END
+```
+
+- `prepare_node → workers`: fan-out (concurrent)
+- `workers → synthesise_node`: fan-in
+- All state fields use `_last` reducer — required for parallel merge
+
+### `create_manager()` — public API
+
+```python
+from agents import create_manager
+
+graph = create_manager(
+    symbol         = "A2A.MI",       # required — single ticker to analyse
+    analysis_date  = None,           # ISO date; None → latest bar in parquet
+    data_source    = "parquet",      # "parquet" | "live"
+    benchmark      = "FTSEMIB.MI",   # Mode A: excluded from results; Mode B: relative-price base
+    fx             = None,           # FX ticker for currency conversion; None = same currency
+)
+result = graph.invoke({...})        # returns TechnicalAnalysisState dict
+brief  = result["final_output"]     # both AI reports formatted side by side
+```
+
+### Two data modes
+
+| Mode | `data_source` | Description |
+|------|--------------|-------------|
+| A (default) | `"parquet"` | Reads `data/results/it/analysis_results.parquet`; loads history for the requested `symbol` |
+| B (live) | `"live"` | Downloads via `YFinanceDataHandler`; `benchmark` used for `calculate_relative_prices`; `fx` triggers currency conversion when set |
+
+### `TechnicalAnalysisState` key fields
+
+| Field | Set by | Notes |
+|-------|--------|-------|
+| `symbol` | caller | required — single ticker to analyse (e.g. `"A2A.MI"`) |
+| `benchmark` | caller | default `"FTSEMIB.MI"` |
+| `fx` | caller | `None` = no FX conversion |
+| `data_source` | caller | `"parquet"` or `"live"` |
+| `payload_json` | `prepare_node` | sole data channel to workers; shape: `{"date", "symbol", "breakout_snapshot", "ma_snapshot"}` |
+| `breakout_result` | `breakout_worker` | `TraderAnalysis.model_dump()` or `{"error": ...}` — never raises |
+| `ma_result` | `ma_worker` | `MATraderAnalysis.model_dump()` or `{"error": ...}` — never raises |
+| `final_output` | `synthesise_node` | both AI reports formatted side by side |
+
+**Invariant**: `payload_json` is the sole data channel from `prepare_node` to workers.
+After `prepare_node` completes, no worker reads from disk or network.
+
+### Dependencies added
+
+```
+langgraph>=0.2      (installed: 1.1.9)
+langchain-core>=0.2 (installed: 1.3.1)
+```
+
+### CLI usage
+
+```bash
+# Mode A — latest bar from parquet
+python run_ta_agents.py --symbol A2A.MI
+
+# Mode A — specific date
+python run_ta_agents.py --symbol ENI.MI --date 2026-04-14
+
+# Mode B — live download, same currency (no FX step)
+python run_ta_agents.py --live --symbol UCG.MI --benchmark FTSEMIB.MI
+
+# Mode B — live download, EUR benchmark + USD stock with FX conversion
+python run_ta_agents.py --live --symbol TCEHY --benchmark H4ZX.DE --fx EURUSD=X
+
+# Save to file
+python run_ta_agents.py --symbol A2A.MI --out data/results/it/daily_brief.txt
+```

@@ -10,9 +10,138 @@ This plan wraps them in a LangGraph **manager + parallel subgraph** topology so 
 run concurrently, share data through typed state, and their results flow into a synthesised
 output — replacing the separate CLI invocations with a single composable graph.
 
-**Constraint**: For now, the manager reads from
+The manager can:
+1- reads from
 `RESULTS_PATH = Path("data/results/it/analysis_results.parquet")` and distributes data to
 subagents via `payload_json` in the graph state (no disk reads in the subgraph hot path).
+
+2a- download data in real time with the following
+
+``` python
+from algoshort.yfinance_handler import YFinanceDataHandler
+from algoshort.ohlcprocessor import OHLCProcessor
+from algoshort.wrappers import generate_signals, calculate_return
+from algoshort.stop_loss import StopLossCalculator
+
+from ta.breakout.bo_snapshot import build_snapshot
+from ask_bo_trader import ask_bo_trader
+from pipeline import (
+    REGIME_COL,
+    load_config,
+    build_search_spaces,
+    # load_data,
+    # build_symbol_dfs,
+    # compute_relative_prices,
+    # generate_all_signals,
+    # run_grid_search,
+    # calculate_returns,
+    # calculate_stop_losses,
+    # calculate_position_sizing,
+    # extract_cumul_snapshot,
+    # save_results,
+)
+
+import rich
+
+import logging
+from pathlib import Path
+from datetime import date 
+import pandas as pd
+
+logging.basicConfig(
+    level=logging.WARNING,              # or DEBUG / WARNING / ERROR
+    format="%(asctime)s [%(levelname)7s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+stock = 'TCEHY'
+benchmark = 'H4ZX.DE' # HSBC Hang Seng Tech UCITS ETF (H4ZX.DE)
+fx = 'EURUSD=X' # EUR/USD exchange rate in us dollars
+
+ticker_list = [stock, benchmark, fx]
+
+
+massive_handler = YFinanceDataHandler(
+    cache_dir="../data/ohlc/it",  # Cache directory
+    enable_logging=True,
+    chunk_size=20,                       # Smaller chunks for stability
+    log_level=logging.INFO
+)
+
+today = date.today()
+
+data = massive_handler.download_data(
+    symbols=ticker_list,  # Example ticker
+    start='2016-01-01',  # Start date for historical data
+    # end='2026-02-20',    # End date for historical data
+    end = today,
+    # period='5y',           # 5 years of historical data
+    interval='1d',         # Daily data
+    use_cache=False,        # Use cache to avoid re-downloading
+    threads=True           # Enable multi-threading
+)
+```
+
+2b - data must be enriched using the following code:
+
+``` python
+CONFIG_PATH = Path("config.json")
+cfg = load_config(CONFIG_PATH)
+tt_search_space, bo_search_space, ma_search_space = build_search_spaces(cfg)
+
+dfs = massive_handler.get_ohlc_data(benchmark)
+bmk = massive_handler.get_ohlc_data(stock)
+fx = massive_handler.get_ohlc_data(fx)
+fx = fx.reset_index()
+fx = fx.rename(columns={'close': 'fx_close'})
+fx = fx[['date', 'fx_close']]
+
+dfs = pd.merge(
+    dfs, 
+    fx, 
+    how='left', 
+    on='date'
+)
+
+dfs['close'] = dfs['close'] / dfs['fx_close']
+dfs = dfs.drop(columns=['fx_close'])
+
+processor = OHLCProcessor()
+dfs = processor.calculate_relative_prices(dfs, bmk)
+
+dfs, signal_columns = generate_signals(
+    df=dfs,
+    config_path='./config.json',
+    tt_search_space=tt_search_space,
+    bo_search_space=bo_search_space,
+    ma_search_space=ma_search_space
+)
+
+
+dfs = calculate_return(dfs, signal_columns)
+
+stop_loss_cfg: dict = cfg["stop_loss"]
+calc = StopLossCalculator(dfs)
+
+for signal in signal_columns:
+    calc.data = calc.atr_stop_loss(
+        signal=signal,
+        window=stop_loss_cfg["atr_window"],
+        multiplier=stop_loss_cfg["atr_multiplier"],
+    )
+
+dfs = calc.data
+dfs["symbol"] = stock
+```
+
+2c- now data are ready to be snapshotted and sent to be trader
+
+``` python
+snapshot = build_snapshot(dfs)
+bo_analysis =ask_bo_trader(snapshot, ticker=stock)
+rich.print(bo_analysis)
+```
+
 
 ---
 
@@ -79,6 +208,9 @@ class TechnicalAnalysisState(TypedDict, total=False):
     analysis_date:   Annotated[Optional[str],  _last]  # ISO date; None → latest
     symbols_filter:  Annotated[Optional[list], _last]  # None → all symbols
     top_n:           Annotated[int,            _last]  # symbols to rank (default 10)
+    data_source:     Annotated[str,            _last]  # "parquet" (default) | "live"
+    # Mode A (parquet): reads data/results/it/analysis_results.parquet
+    # Mode B (live):    downloads via YFinanceDataHandler for symbols_filter tickers
 
     # ── Set by set_config ──────────────────────────────────────────────
     resolved_date:   Annotated[str,  _last]  # actual date resolved from data
@@ -89,8 +221,8 @@ class TechnicalAnalysisState(TypedDict, total=False):
     # {
     #   "date": "YYYY-MM-DD",
     #   "n_symbols": int,
-    #   "breakout_snapshots": {symbol: dict},   ← from ask_bo_trader.build_snapshot()
-    #   "ma_snapshots":       {symbol: dict},   ← from ask_ma_trader.build_snapshot()
+    #   "breakout_snapshots": {symbol: dict},   ← from ta.breakout.bo_snapshot.build_snapshot()
+    #   "ma_snapshots":       {symbol: dict},   ← from ta.ma.ma_snapshot.build_snapshot()
     # }
 
     # ── Set by subgraph workers ────────────────────────────────────────
@@ -119,6 +251,7 @@ def create_manager(
     analysis_date: str | None = None,
     symbols_filter: list[str] | None = None,
     top_n: int = 10,
+    data_source: str = "parquet",  # "parquet" | "live"
     checkpointer=None,
 ) -> CompiledStateGraph:
 ```
@@ -134,17 +267,37 @@ subagent means one line in `_subagents.py`, no wiring changes.
 
 **Raises** `ValueError` on failure (no valid state = subgraphs cannot run).
 
+Two data modes selected by `state["data_source"]` (default `"parquet"`):
+
+**Mode A — parquet (default, IT universe):**
 ```
 1. Parse state: analysis_date, symbols_filter, top_n
 2. Call prepare_tools.load_analysis_data(RESULTS_PATH, analysis_date, symbols_filter)
+   → (resolved_date, {symbol: df})
 3. For each symbol:
-   a. bo_snapshot.select_columns(df_symbol)   → df_bo       # ta.breakout.bo_snapshot
-   b. bo_snapshot.build_snapshot(df_bo)       → bo_snapshot_dict
-   c. ask_ma_trader.select_columns(df_symbol) → df_ma
-   d. ask_ma_trader.build_snapshot(df_ma)     → ma_snapshot
+   a. bo_snapshot.build_snapshot(df_symbol)   → bo_snapshot_dict   # ta.breakout.bo_snapshot
+   b. ma_snapshot.build_snapshot(df_symbol)   → ma_snapshot_dict   # ta.ma.ma_snapshot
 4. Serialize to payload_json
 5. Return {"payload_json": ..., "resolved_date": ...}
 ```
+
+**Mode B — live download (single ticker, real-time):**
+```
+1. Parse state: symbols_filter (must be non-empty list), top_n
+   Requires: benchmark ticker ("H4ZX.DE") and fx ticker ("EURUSD=X") added automatically
+2. Call prepare_tools.load_live_data(symbols_filter)
+   → YFinanceDataHandler.download_data(ticker_list, start, end, interval='1d')
+   → OHLCProcessor.calculate_relative_prices(dfs, bmk)   # bmk = symbols_filter[0]
+   → generate_signals(dfs, config_path, search_spaces)
+   → calculate_return(dfs, signal_columns)
+   → StopLossCalculator ATR stop-loss for each signal
+   → {symbol: df}  (resolved_date = today)
+3. Same as Mode A step 3 onwards
+```
+
+> **Note on 2b variable naming**: in the plan's code snippet, `dfs` is the benchmark ETF
+> (H4ZX.DE) and `bmk` is the stock under analysis — the names are swapped vs. convention.
+> `load_live_data` will use the canonical names: `df_stock`, `df_benchmark`, `df_fx`.
 
 Both `build_snapshot()` calls compute all TA enrichments (ADX, RSI, range quality, volume
 profile) **once** in `prepare_node`. Workers reuse the pre-computed results from the snapshot
@@ -192,6 +345,8 @@ def build_subgraphs() -> dict[str, CompiledStateGraph]:
 ```python
 RESULTS_PATH = Path("data/results/it/analysis_results.parquet")
 HISTORY_BARS = 300  # enough for ADX(14), MA(150), RSI(14), slope windows
+BENCHMARK_LIVE = "H4ZX.DE"   # Hang Seng Tech ETF — benchmark for live mode
+FX_LIVE        = "EURUSD=X"  # EUR/USD — FX conversion for live mode
 
 def load_analysis_data(
     path: Path,
@@ -199,14 +354,34 @@ def load_analysis_data(
     symbols_filter: list[str] | None,
 ) -> tuple[str, dict[str, pd.DataFrame]]:
     """
-    Load parquet, resolve analysis date, return (resolved_date, {symbol: df}).
+    Mode A. Load parquet, resolve analysis date, return (resolved_date, {symbol: df}).
     Keeps last HISTORY_BARS per symbol. Excludes benchmark (FTSEMIB.MI).
+    """
+
+def load_live_data(
+    symbols: list[str],
+    config_path: Path = Path("config.json"),
+) -> tuple[str, dict[str, pd.DataFrame]]:
+    """
+    Mode B. Download live OHLC + enrich with signals/stops.
+    Appends BENCHMARK_LIVE and FX_LIVE to the download list automatically.
+    Returns (today_iso, {symbol: enriched_df}).
+
+    Pipeline:
+      YFinanceDataHandler.download_data(symbols + [BENCHMARK_LIVE, FX_LIVE], ...)
+      → OHLCProcessor.calculate_relative_prices(df_stock, df_benchmark)
+      → generate_signals(dfs, config_path, search_spaces)
+      → calculate_return(dfs, signal_columns)
+      → StopLossCalculator ATR stop-loss per signal
     """
 ```
 
 **Reuses directly** (no copying):
-- `ta.breakout.bo_snapshot.select_columns`, `ta.breakout.bo_snapshot.build_snapshot`
-- `ask_ma_trader.select_columns`, `ask_ma_trader.build_snapshot`
+- `ta.breakout.bo_snapshot.build_snapshot`
+- `ta.ma.ma_snapshot.build_snapshot`
+- `algoshort.YFinanceDataHandler`, `algoshort.OHLCProcessor`
+- `algoshort.wrappers.generate_signals`, `algoshort.wrappers.calculate_return`
+- `algoshort.StopLossCalculator`
 
 ---
 
@@ -312,7 +487,7 @@ Integration tests reading the real parquet are marked `@pytest.mark.integration`
 | File | What to reuse |
 |------|--------------|
 | `ta/breakout/bo_snapshot.py` | `select_columns()`, `build_snapshot()` |
-| `ask_ma_trader.py` | `select_columns()`, `build_snapshot()` |
+| `ta/ma/ma_snapshot.py` | `select_columns()`, `build_snapshot()` |
 | `ta/breakout/range_quality.py` | `RangeSetup`, `VolatilityState` (snapshot field types) |
 | `ta/ma/trend_quality.py` | `MATrendStrength` (snapshot field types) |
 | `ta/ma/volume.py` | `MAVolumeProfile` (snapshot field types) |
