@@ -136,7 +136,8 @@ Both raise `FileNotFoundError` (missing parquet) or `ValueError` (ticker not fou
 
 Runs breakout and MA AI analysis concurrently for a **single ticker** via a LangGraph manager +
 parallel subgraph topology. Each worker calls `ask_bo_trader` / `ask_ma_trader` (OpenAI) directly;
-`synthesise_node` formats both AI reports side by side into `final_output`.
+`synthesise_node` calls an LLM a third time to compile both reports into a structured brief
+(Position Recommendation → Signal Confluence → Deep-Dives → Entry/Exit Plan → Bottom Line).
 
 ### Package layout
 
@@ -174,7 +175,7 @@ graph = create_manager(
     fx             = None,           # FX ticker for currency conversion; None = same currency
 )
 result = graph.invoke({...})        # returns TechnicalAnalysisState dict
-brief  = result["final_output"]     # both AI reports formatted side by side
+brief  = result["final_output"]     # structured report compiled by LLM (markdown)
 ```
 
 ### Two data modes
@@ -195,7 +196,7 @@ brief  = result["final_output"]     # both AI reports formatted side by side
 | `payload_json` | `prepare_node` | sole data channel to workers; shape: `{"date", "symbol", "breakout_snapshot", "ma_snapshot"}` |
 | `breakout_result` | `breakout_worker` | `TraderAnalysis.model_dump()` or `{"error": ...}` — never raises |
 | `ma_result` | `ma_worker` | `MATraderAnalysis.model_dump()` or `{"error": ...}` — never raises |
-| `final_output` | `synthesise_node` | both AI reports formatted side by side |
+| `final_output` | `synthesise_node` | LLM-compiled report (Position Rec → Scorecard → Deep-Dives → Entry/Exit → Bottom Line) |
 
 **Invariant**: `payload_json` is the sole data channel from `prepare_node` to workers.
 After `prepare_node` completes, no worker reads from disk or network.
@@ -203,8 +204,9 @@ After `prepare_node` completes, no worker reads from disk or network.
 ### Dependencies added
 
 ```
-langgraph>=0.2      (installed: 1.1.9)
-langchain-core>=0.2 (installed: 1.3.1)
+langgraph>=0.2         (installed: 1.1.9)
+langchain-core>=0.2    (installed: 1.3.1)
+langchain-openai>=0.2  (installed: 1.2.0)   ← used by synthesise_node / ChatOpenAI
 ```
 
 ### CLI usage

@@ -2,11 +2,12 @@
 agents/graph_nodes.py — Node implementations for the TechnicalAnalysis graph.
 
 Nodes:
-  prepare_node      — loads data and builds breakout + MA snapshots for one symbol,
-                      serialises everything to payload_json.
-  create_subgraph() — factory: returns a compiled single-node subgraph that calls
-                      one AI trader (ask_bo_trader or ask_ma_trader).
-  synthesise_node   — formats both AI reports side by side into final_output.
+  prepare_node         — loads data and builds breakout + MA snapshots for one symbol,
+                         serialises everything to payload_json.
+  create_subgraph()    — factory: returns a compiled single-node subgraph that calls
+                         one AI trader (ask_bo_trader or ask_ma_trader).
+  _call_synthesis_llm  — calls the LLM once to compile both AI reports into a final brief.
+  synthesise_node      — formats inputs and delegates to _call_synthesis_llm.
 
 Invariant: payload_json is the sole data channel from prepare_node to workers.
            No worker reads from disk or network.
@@ -30,7 +31,90 @@ from ta.ma.ma_snapshot import build_snapshot as ma_build_snapshot
 
 log = logging.getLogger(__name__)
 
-RESULTS_PATH = Path("data/results/it/analysis_results.parquet")
+RESULTS_PATH   = Path("data/results/it/analysis_results.parquet")
+_DEFAULT_MODEL = "gpt-4o"
+
+# ---------------------------------------------------------------------------
+# Stage 3 — Report compilation prompt
+# ---------------------------------------------------------------------------
+
+_REPORT_SYSTEM = """\
+You are a senior technical analyst at a long/short equity proprietary trading desk.
+You have received two independent technical assessments for {ticker}:
+a range-breakout analysis and an MA-crossover analysis.
+
+Your audience is a portfolio manager who needs actionable entry/exit conviction,
+not a retail summary. Be direct, precise, and opinionated. Every claim must be
+backed by a specific signal or metric from the assessments. Do not fabricate data.
+If a figure is unavailable, say so explicitly.
+
+---
+
+## Position Recommendation
+
+State clearly: LONG · SHORT · NEUTRAL — and the conviction level: High / Medium / Low.
+
+Two to three paragraphs covering:
+- The primary technical catalyst driving the recommended position.
+- The key signal that would invalidate the thesis (stop-loss trigger).
+- Suggested holding horizon: short-term (< 4 weeks), medium-term (1–3 months),
+  or structural (> 3 months).
+
+---
+
+## Signal Confluence Scorecard
+
+Summary table with columns:
+| Dimension | Breakout | MA Crossover | Confluence |
+
+Where Confluence is one of: ✅ Aligned · ⚠️ Mixed · 🔴 Diverging
+
+Include these dimensions: Trend direction, Regime (rrg), Entry timing, \
+Volume confirmation, Risk/Stop level.
+
+---
+
+## Breakout Analysis Deep-Dive
+
+1. **Verdict** — direction and conviction from the breakout assessment.
+2. **Key signals** — bullet list of every active signal, age, and flip status.
+3. **Range quality** — range setup, volatility compression, touch count.
+4. **Volume** — breakout volume confirmation or consolidation quiet.
+5. **Stop level** — the specific stop-loss level from the assessment.
+6. **Trigger to watch** — the exact signal or price event that would change the call.
+
+---
+
+## MA Crossover Analysis Deep-Dive
+
+1. **Verdict** — direction and conviction from the MA assessment.
+2. **Key signals** — EMA/SMA alignment, triple-confluence status, signal age/flip.
+3. **Trend quality** — ADX level and slope, RSI, MA gap and gap slope.
+4. **Volume** — crossover volume confirmation and post-crossover sustainability.
+5. **Stop level** — the specific stop-loss level from the assessment.
+6. **Trigger to watch** — the exact signal or metric that would change the call.
+
+---
+
+## Entry & Exit Plan
+
+- **Entry trigger**: the specific signal flip or price level that confirms entry.
+- **Stop-loss**: the signal reversal or price level that invalidates the thesis.
+- **First target**: the nearest resistance or measured-move projection.
+
+---
+
+## Bottom Line
+
+One paragraph: net technical conviction, the single most important signal to
+monitor, and the specific event or price level that would change the call.
+"""
+
+_REPORT_HUMAN = """\
+Breakout analysis:    {breakout_analysis}
+
+MA crossover analysis: {ma_analysis}
+"""
 
 
 # ---------------------------------------------------------------------------
@@ -127,47 +211,61 @@ def create_subgraph(worker_name: str):
 # ---------------------------------------------------------------------------
 
 
-def _format_report(result: dict, title: str) -> list[str]:
-    """Format a TraderAnalysis / MATraderAnalysis model_dump() as a readable section."""
-    lines = [f"## {title}"]
-    if not result:
-        lines.append("  (no result)")
-        return lines
-    if "error" in result:
-        lines.append(f"  unavailable — {result['error']}")
-        return lines
-    # Verdict first for quick scan
-    if "verdict" in result:
-        lines.append(f"**Verdict:** {result['verdict']}")
-        lines.append("")
-    for key, val in result.items():
-        if key == "verdict":
-            continue
-        label = key.replace("_", " ").capitalize()
-        lines.append(f"**{label}:** {val}")
-    return lines
+def _call_synthesis_llm(ticker: str, breakout_analysis: str, ma_analysis: str) -> str:
+    """
+    Call the LLM once to compile both AI reports into a final technical brief.
+
+    Isolated into its own function so tests can mock the LLM call without
+    wrestling with LangChain's LCEL pipe internals.
+
+    Args:
+        ticker:            Ticker symbol (e.g. "A2A.MI") — injected into the system prompt.
+        breakout_analysis: JSON string of the breakout worker's result (or "unavailable").
+        ma_analysis:       JSON string of the MA worker's result (or "unavailable").
+
+    Returns:
+        Markdown string containing the compiled report.
+    """
+    from langchain_core.prompts import ChatPromptTemplate
+    from langchain_openai import ChatOpenAI
+
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", _REPORT_SYSTEM),
+        ("human",  _REPORT_HUMAN),
+    ])
+    llm = ChatOpenAI(model=_DEFAULT_MODEL, temperature=0)
+
+    response = (prompt | llm).invoke({
+        "ticker":             ticker,
+        "breakout_analysis":  breakout_analysis,
+        "ma_analysis":        ma_analysis,
+    })
+    return response.content if hasattr(response, "content") else str(response)
 
 
 def synthesise_node(state: TechnicalAnalysisState) -> dict:
     """
-    Format both AI reports side by side into final_output.
+    Compile both AI reports into a final technical brief via an LLM call.
 
-    Never raises — missing or errored results are reported as "unavailable".
+    Never raises — missing or errored worker results are passed as "unavailable"
+    to the LLM so it can still produce a partial report.
     """
-    resolved_date   = state.get("resolved_date", "unknown")
-    symbol          = state.get("symbol", "unknown")
+    ticker          = state.get("symbol", "unknown")
     breakout_result = state.get("breakout_result") or {}
     ma_result       = state.get("ma_result") or {}
 
-    lines: list[str] = [
-        f"# Technical Analysis — {symbol} — {resolved_date}",
-        "",
-    ]
-    lines.extend(_format_report(breakout_result, "Breakout Analysis"))
-    lines.append("")
-    lines.extend(_format_report(ma_result, "MA Crossover Analysis"))
+    def _fmt(result: dict) -> str:
+        if not result:
+            return "unavailable"
+        if "error" in result:
+            return f"unavailable — {result['error']}"
+        return json.dumps(result, indent=2)
 
-    brief = "\n".join(lines)
-    log.info("[synthesise] brief chars=%d", len(brief))
+    bo_analysis = _fmt(breakout_result)
+    ma_analysis = _fmt(ma_result)
+
+    log.info("[synthesise] generating report for %s", ticker)
+    brief = _call_synthesis_llm(ticker, bo_analysis, ma_analysis)
+    log.info("[synthesise] report generated (%d chars)", len(brief))
 
     return {"final_output": brief}

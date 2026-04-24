@@ -4,7 +4,8 @@ tests/agents/test_graph_nodes.py
 Covers:
   - prepare_node raises on missing parquet (bad state → abort)
   - subgraph worker mocks ask_bo_trader / ask_ma_trader; never raises on exception
-  - synthesise_node handles None/error results gracefully and returns final_output str
+  - synthesise_node delegates to _call_synthesis_llm; formats inputs correctly;
+    handles None/error results gracefully; never raises
 """
 
 from __future__ import annotations
@@ -113,61 +114,68 @@ class TestSynthesiseNode:
     def _ma_result(self):
         return {"verdict": "neutral", "regime": "ranging", "description": "MA crossover pending"}
 
+    # ── Happy path ─────────────────────────────────────────────────────────────
+
     def test_returns_final_output_string(self):
         state = {
-            "resolved_date":  "2026-04-24",
-            "symbol":         "A.MI",
+            "symbol":          "A.MI",
             "breakout_result": self._bo_result(),
             "ma_result":       self._ma_result(),
         }
-        out = synthesise_node(state)
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="LONG — High\n..."):
+            out = synthesise_node(state)
         assert "final_output" in out
-        assert isinstance(out["final_output"], str)
-        assert len(out["final_output"]) > 0
+        assert out["final_output"] == "LONG — High\n..."
 
-    def test_symbol_appears_in_output(self):
+    def test_passes_ticker_to_llm(self):
         state = {
-            "resolved_date":  "2026-04-24",
-            "symbol":         "A.MI",
+            "symbol":          "A.MI",
             "breakout_result": self._bo_result(),
             "ma_result":       self._ma_result(),
         }
-        out = synthesise_node(state)
-        assert "A.MI" in out["final_output"]
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="report") as mock_fn:
+            synthesise_node(state)
+        assert mock_fn.call_args[0][0] == "A.MI"
 
-    def test_date_appears_in_output(self):
+    def test_passes_both_analyses_as_json(self):
         state = {
-            "resolved_date":  "2026-04-24",
-            "symbol":         "A.MI",
+            "symbol":          "A.MI",
             "breakout_result": self._bo_result(),
             "ma_result":       self._ma_result(),
         }
-        out = synthesise_node(state)
-        assert "2026-04-24" in out["final_output"]
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="report") as mock_fn:
+            synthesise_node(state)
+        _, bo_arg, ma_arg = mock_fn.call_args[0]
+        assert "bullish" in bo_arg
+        assert "neutral" in ma_arg
 
-    def test_handles_none_breakout_result(self):
+    # ── None / error inputs ───────────────────────────────────────────────────
+
+    def test_passes_unavailable_for_none_breakout_result(self):
         state = {
-            "resolved_date":  "2026-04-24",
-            "symbol":         "A.MI",
+            "symbol":          "A.MI",
             "breakout_result": None,
             "ma_result":       self._ma_result(),
         }
-        out = synthesise_node(state)
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="report") as mock_fn:
+            out = synthesise_node(state)
         assert isinstance(out["final_output"], str)
+        assert mock_fn.call_args[0][1] == "unavailable"
 
-    def test_handles_error_breakout_result(self):
+    def test_passes_error_message_for_error_breakout_result(self):
         state = {
-            "resolved_date":  "2026-04-24",
-            "symbol":         "A.MI",
+            "symbol":          "A.MI",
             "breakout_result": {"error": "scoring failed"},
             "ma_result":       self._ma_result(),
         }
-        out = synthesise_node(state)
-        brief = out["final_output"]
-        assert isinstance(brief, str)
-        assert "unavailable" in brief.lower() or "scoring failed" in brief
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="report") as mock_fn:
+            synthesise_node(state)
+        bo_arg = mock_fn.call_args[0][1]
+        assert "unavailable" in bo_arg
+        assert "scoring failed" in bo_arg
 
     def test_handles_both_results_missing(self):
-        state = {"resolved_date": "2026-04-24", "symbol": "A.MI"}
-        out = synthesise_node(state)
+        state = {"symbol": "A.MI"}
+        with patch("agents.graph_nodes._call_synthesis_llm", return_value="report"):
+            out = synthesise_node(state)
         assert isinstance(out["final_output"], str)
