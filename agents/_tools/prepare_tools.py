@@ -59,14 +59,19 @@ def load_analysis_data(
     log.info("[prepare_tools] loading %s", path)
     df = pd.read_parquet(path)
 
-    # Resolve analysis date
+    # Filter to symbol first so date resolution is scoped to this symbol's own range
+    df = df[df["symbol"] == symbol]
+
+    if df.empty:
+        raise ValueError(f"Symbol {symbol!r} not found in parquet.")
+
     dates = pd.to_datetime(df["date"]).dt.date
     if analysis_date is not None:
         target = pd.Timestamp(analysis_date).date()
         if target not in set(dates):
             available = sorted(set(dates))
             raise ValueError(
-                f"analysis_date={analysis_date!r} not found in parquet. "
+                f"analysis_date={analysis_date!r} not in parquet for {symbol!r}. "
                 f"Available range: {available[0]} → {available[-1]}"
             )
         resolved = target
@@ -76,15 +81,8 @@ def load_analysis_data(
     resolved_date = str(resolved)
     log.info("[prepare_tools] symbol=%s resolved_date=%s", symbol, resolved_date)
 
-    # Filter to the requested symbol and slice up to resolved_date
-    df = df[df["symbol"] == symbol]
     df = df[pd.to_datetime(df["date"]).dt.date <= resolved]
     df = df.tail(HISTORY_BARS).copy()
-
-    if df.empty:
-        raise ValueError(
-            f"Symbol {symbol!r} not found in parquet at resolved_date={resolved_date}."
-        )
 
     return resolved_date, df
 
@@ -148,21 +146,30 @@ def load_live_data(
     df_benchmark = handler.get_ohlc_data(benchmark)
     df_stock     = handler.get_ohlc_data(symbol)
 
-    dfs = df_benchmark.copy()
+    df_bm = df_benchmark.copy()
 
-    # FX conversion: only when an FX ticker was provided
+    # FX conversion: normalise stock into benchmark currency before computing relative prices
     if fx:
         df_fx = (
             handler.get_ohlc_data(fx)
             .reset_index()
             .rename(columns={"close": "fx_close"})[["date", "fx_close"]]
         )
-        dfs = pd.merge(dfs, df_fx, how="left", on="date")
-        dfs["close"] = dfs["close"] / dfs["fx_close"]
-        dfs = dfs.drop(columns=["fx_close"])
+        # get_ohlc_data returns a DatetimeIndex; reset so "date" becomes a merge key
+        df_stock = df_stock.reset_index()
+        df_stock = pd.merge(df_stock, df_fx, how="left", on="date")
+        df_stock["fx_close"] = df_stock["fx_close"].ffill()
+        if df_stock["fx_close"].isna().any():
+            raise ValueError(
+                f"FX series {fx!r} has leading NaN values with no prior rate to forward-fill."
+            )
+        for col in ("open", "high", "low", "close"):
+            df_stock[col] = df_stock[col] / df_stock["fx_close"]
+        df_stock = df_stock.drop(columns=["fx_close"])
 
     processor = OHLCProcessor()
-    dfs = processor.calculate_relative_prices(dfs, df_stock)
+    # stock_data first, benchmark second — matches pipeline.py and trend_scorer.py convention
+    dfs = processor.calculate_relative_prices(df_stock, df_bm)
 
     dfs, signal_columns = generate_signals(
         df=dfs,
