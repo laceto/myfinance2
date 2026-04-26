@@ -36,6 +36,10 @@ from ta.breakout.range_quality import (
     assess_range,
     measure_volatility_compression,
 )
+from ta.breakout.swing_range_quality import (
+    assess_swing_range,
+    measure_swing_volatility,
+)
 from ta.breakout.volume import VolumeProfile, assess_volume_profile
 
 __all__ = [
@@ -227,6 +231,32 @@ def _compute_volatility_state(df: pd.DataFrame) -> dict | None:
         return None
 
 
+def _compute_swing_range_setup(df: pd.DataFrame) -> dict | None:
+    """
+    Run assess_swing_range + measure_swing_volatility using RegimeFC structural levels.
+
+    Uses rclg / rflr (ceiling/floor from _regime_floor_ceiling, already in parquet)
+    as resistance/support reference instead of the 20-day rolling band.
+    Returns None when structural levels are unavailable or no consolidation window exists.
+    """
+    try:
+        rs: RangeSetup = assess_swing_range(df)
+        vs: VolatilityState = measure_swing_volatility(df)
+        return {
+            "n_resistance_touches": rs.n_resistance_touches,
+            "n_support_touches":    rs.n_support_touches,
+            "is_sideways":          rs.is_sideways,
+            "slope_pct_per_day":    rs.slope_pct_per_day,
+            "consolidation_bars":   rs.consolidation_bars,
+            "band_width_pct":       rs.band_width_pct,
+            "swing_vol_compressed": vs.is_compressed,
+            "swing_bw_rank":        vs.band_width_pct_rank,
+        }
+    except ValueError as exc:
+        log.debug("assess_swing_range skipped: %s", exc)
+        return None
+
+
 def _compute_volume_profile(df: pd.DataFrame) -> dict | None:
     """
     Run assess_volume_profile over the full ticker history.
@@ -280,6 +310,7 @@ def build_snapshot(df_ticker: pd.DataFrame) -> dict:
     range_setup            = _compute_range_setup(df_ticker)
     volatility_compression = _compute_volatility_state(df_ticker)
     volume_profile         = _compute_volume_profile(df_ticker)
+    swing_range_setup      = _compute_swing_range_setup(df_ticker)
 
     df_prepared = select_columns(df_ticker)
     last = df_prepared.tail(1).copy()
@@ -291,6 +322,7 @@ def build_snapshot(df_ticker: pd.DataFrame) -> dict:
     snapshot["range_setup"]            = range_setup
     snapshot["volatility_compression"] = volatility_compression
     snapshot["volume_profile"]         = volume_profile
+    snapshot["swing_range_setup"]      = swing_range_setup
 
     return snapshot
 
