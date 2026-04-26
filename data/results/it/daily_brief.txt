@@ -95,17 +95,12 @@ STMMI.MI                      NaN                    NaN  8952454.0
   BPE.MI               BPER BANCA                Finance  6741035.0
   SRG.MI                     SNAM              Utilities  6189379.0
 
-  SIGNAL FLIPS — last bar  (41 flips across 9 methods)
+  SIGNAL FLIPS — last bar  (19 flips across 8 methods)
 ------------------------------------------------------------
   [rbo_20]
-direction  symbol                  name                sector marginabile change
-bear_flip AVIO.MI                  AVIO Electronic Technology         NaN 1 → -1
-bear_flip  UCG.MI             UNICREDIT               Finance          si 1 → -1
-bull_flip  FUM.MI FRANCHI UMBERTO MARMI   Non-Energy Minerals         NaN -1 → 1
-bull_flip    G.MI          GENERALI ASS               Finance         NaN -1 → 1
-bull_flip  NOV.DE                   NaN                   NaN         NaN -1 → 1
-bull_flip  SGC.MI            SG COMPANY        Communications         NaN -1 → 1
-bull_flip  SPM.MI                SAIPEM   Industrial Services          si -1 → 1
+direction  symbol   name                sector marginabile change
+bear_flip AVIO.MI   AVIO Electronic Technology         NaN 1 → -1
+bull_flip  SPM.MI SAIPEM   Industrial Services          si -1 → 1
 
   [rbo_50]
 direction  symbol    name                sector marginabile change
@@ -117,74 +112,34 @@ direction symbol                                   name         sector marginabi
 bear_flip ADB.MI AEROPORTO GUGLIELMO MARCONI DI BOLOGNA Transportation         NaN 1 → -1
 
   [rema_50100]
-direction symbol                             name                sector marginabile change
-bear_flip BDB.MI                BCO DESIO BRIANZA               Finance         NaN 1 → -1
-bea UMBERTO MARMI   Non-Energy Minerals         NaN -1 → 1
-bull_flip    G.MI          GENERALI ASS               Finance         NaN -1 → 1
-bull_flip  NOV.DE                   NaN                   NaN         NaN -1 → 1
-bull_flip  SGC.MI            SG COMPANY        Communications         NaN -1 → 1
-bull_flip  SPM.MI                SAIPEM   Industrial Services          si -1 → 1
-
-  [rbo_50]
-direction  symbol    name                sector marginabile change
-bear_flip AVIO.MI    AVIO Electronic Technology         NaN 1 → -1
-bear_flip  CPR.MI CAMPARI Consumer Non-Durables          si 1 → -1
-
-  [rema_100150]
-direction symbol                                   name         sector marginabile change
-bear_flip ADB.MI AEROPORTO GUGLIELMO MARCONI DI BOLOGNA Transportation         NaN 1 → -1
-
-  [rema_50100]
-direction symbol                             name                sector marginabile change
-bear_flip BDB.MI                BCO DESIO BRIANZA               Finance         NaN 1 → -1
-bear_flip SCM.MI SOLUTIONS CAPITAL MANAGEMENT SIM               Finance         NaN 1 → -1
-bull_flip   G.MI                     GENERALI ASS               Finance         NaN -1 → 1
-bull_flip LFG.MI                 LEONE FILM GROUP     Consumer Services         NaN -1 → 1
-bull_flip PWS.MI                        POWERSOFT Electronic Technology         NaN -1 → 1
+direction symbol              name                sector marginabile change
+bear_flip BDB.MI BCO DESIO BRIANZA               Finance         NaN 1 → -1
+bull_flip PWS.MI         POWERSOFT Electronic Technology         NaN -1 → 1
 
   [rema_50100150]
-direction symbol                                   name                sector marginabile change
-bear_flip BDB.MI                      BCO DESIO BRIANZA               Finance         NaN 1 → -1
-bear_flip   G.MI                           GENERALI ASS               Finance         NaN 1 → -1
-bear_flip LFG.MI                       LEONE FILM GROUP     Consumer Services         NaN 1 → -1
-bear_flip PWS.MI                              POWERSOFT Electronic Technology         NaN 1 → -1
-bear_flip SCM.MI       SOLUTIONS CAPITAL MANAGEMENT SIM               Finance         NaN 1 → -1
-bull_flip ADB.MI AEROPORTO GUGLIELMO MARCONI DI BOLOGNA        Transportation         NaN -1 → 1
-
-  [rsma_100150]
-direction symbol       name              sector marginabile change
-bear_flip DOX.MI      DOXEE Technology Services         NaN 1 → -1
-bear_flip FBK.MI FINECOBANK             Finance         NaN 1 → -1
-bull_flip  MB.MI MEDIOBANCA             Finance          si -1 → 1
+direction symbol              name            sector marginabile change
+bear_flip BDB.MI BCO DESIO BRIANZA           Finance         NaN 1 → -1
+bear_flip   G.MI      GENERALI ASS           Finance         NaN 1 → -1
+bear_flip LFG.MI  LEONE FILM GROUP Consumer Services         NaN 1 → -1
 
   [rsma_50100]
-direction  symbol                 name                sector marginabile change
-bear_flip   IB.MI INIZIATIVE BRESCIANE             Utilities         NaN 1 → -1
-bull_flip  LFG.MI     LEONE FILM GROUP     Consumer Services         NaN -1 → 1
-bull_flip MONC.MI              MONCLER Consumer Non-Durables          si -1 → 1
+direction symbol                 name    sector marginabile change
+bear_flip  IB.MI INIZIATIVE BRESCIANE Utilities         NaN 1 → -1
 
   [rsma_50100150]
-direction  symbol                 name                sector marginabile change
-bear_flip  LFG.MI     LEONE FILM GROUP     Consumer Services         NaN 1 → -1
-bear_flip   MB.MI           MEDIOBANCA               Finance          si 1 → -1
-bear_flip MONC.MI              MONCLER Consumer Non-Durables          si 1 → -1
-bull_flip  DOX.MI                DOXEE   Technology Services         NaN -1 → 1
-bull_flip  FBK.MI           FINECOBANK               Finance         NaN -1 → 1
-bull_flip   IB.MI INIZIATIVE BRESCIANE             Utilities         NaN -1 → 1
+direction  symbol             name                sector marginabile change
+bear_flip  LFG.MI LEONE FILM GROUP     Consumer Services         NaN 1 → -1
+bear_flip   MB.MI       MEDIOBANCA               Finance          si 1 → -1
+bear_flip MONC.MI          MONCLER Consumer Non-Durables          si 1 → -1
+bull_flip  DOX.MI            DOXEE   Technology Services         NaN -1 → 1
+bull_flip  FBK.MI       FINECOBANK               Finance         NaN -1 → 1
 
   [rtt_5020]
-direction  symbol                  name                sector marginabile change
-bear_flip AVIO.MI                  AVIO Electronic Technology         NaN 1 → -1
-bear_flip  CPR.MI               CAMPARI Consumer Non-Durables          si 0 → -1
-bear_flip  UCG.MI             UNICREDIT               Finance          si 0 → -1
-bull_flip  FUM.MI FRANCHI UMBERTO MARMI   Non-Energy Minerals         NaN -1 → 0
-bull_flip    G.MI          GENERALI ASS               Finance         NaN  0 → 1
-bull_flip  NOV.DE                   NaN                   NaN         NaN -1 → 0
-bull_flip  SGC.MI            SG COMPANY        Communications         NaN -1 → 0
-bull_flip  SPM.MI                SAIPEM   Industrial Services          si  0 → 1
+direction  symbol    name                sector marginabile change
+bear_flip AVIO.MI    AVIO Electronic Technology         NaN 1 → -1
+bear_flip  CPR.MI CAMPARI Consumer Non-Durables          si 0 → -1
+bull_flip  SPM.MI  SAIPEM   Industrial Services          si  0 → 1
 
 ====================================================================================================
-  Full detail -> data/results/it/daily_brief.xlsx
+  Full detail -> data\results\it\daily_brief.xlsx
 ====================================================================================================
-
-2026-04-24 21:48:18,112 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
