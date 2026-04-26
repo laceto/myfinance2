@@ -113,6 +113,32 @@ def semi_join(left: pd.DataFrame, right: pd.DataFrame, on: str | List[str]) -> p
     return left.merge(right[keys].drop_duplicates(), on=keys, how="inner")
 
 
+def filter_aligned_flips(
+    flips: pd.DataFrame,
+    last_bar: pd.DataFrame,
+) -> pd.DataFrame:
+    """Keep only signal flips that are concordant with the symbol's current rrg regime.
+
+    Why: a bear_flip in a bull regime (rrg=1) is noise; showing it alongside bull
+    candidates misleads the morning review. Only concordant flips add signal value.
+
+    Concordance rule:
+        rrg ==  1  →  keep bull_flip  (signal moved toward +1)
+        rrg == -1  →  keep bear_flip  (signal moved toward -1)
+        rrg ==  0  →  drop (neutral regime, no directional edge)
+    """
+    if flips.empty:
+        return flips
+    rrg_map = last_bar.set_index("symbol")["rrg"]
+    tmp = flips.copy()
+    tmp["_rrg"] = tmp["symbol"].map(rrg_map)
+    mask = (
+        ((tmp["_rrg"] == 1)  & (tmp["direction"] == "bull_flip")) |
+        ((tmp["_rrg"] == -1) & (tmp["direction"] == "bear_flip"))
+    )
+    return tmp[mask].drop(columns=["_rrg"]).reset_index(drop=True)
+
+
 def get_last_swing(df: pd.DataFrame, swing: str) -> pd.DataFrame:
     """Per symbol, return the last row where *swing* is not NA."""
     return (
@@ -513,8 +539,11 @@ bear_swing = get_last_swing(semi_join(output_signal, bear, on="symbol"), "rh3")
 
 log.info("Computing last-bar signal flips...")
 signal_flips = compute_last_bar_changes(output_signal)
+_n_raw = len(signal_flips)
+signal_flips = filter_aligned_flips(signal_flips, _last_bar)
 log.info(
-    "Signal flips on last bar: %d total  (%d bull, %d bear)",
+    "Signal flips on last bar: %d raw → %d concordant with rrg  (%d bull, %d bear)",
+    _n_raw,
     len(signal_flips),
     (signal_flips["direction"] == "bull_flip").sum() if not signal_flips.empty else 0,
     (signal_flips["direction"] == "bear_flip").sum() if not signal_flips.empty else 0,
