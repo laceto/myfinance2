@@ -1,12 +1,15 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-04-23 to 2026-04-28 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-04-24 to 2026-04-29 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker  price      action  stop_loss  risk_pct
-2026-04-28 rtt_5020 GHC.MI  5.060  EXIT SHORT   5.242857       NaN
-2026-04-28 rtt_5020 ILP.MI  5.900  ENTER LONG   5.664286  3.995162
-2026-04-28 rtt_5020 TSL.MI  0.075 ENTER SHORT   0.080400  7.199998
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-04-29 rtt_5020     B.MI  1.175000   EXIT LONG   1.052857       NaN
+2026-04-29 rtt_5020 MAIRE.MI 16.520000  ENTER LONG  15.364287  6.995847
+2026-04-29 rtt_5020   MET.MI  1.790000 ENTER SHORT   1.874286  4.708700
+2026-04-29 rtt_5020  MONC.MI 52.299999 ENTER SHORT  55.722856  6.544660
+2026-04-29 rtt_5020   PST.MI 22.450001  EXIT SHORT  23.165000       NaN
+2026-04-29 rtt_5020  SFER.MI  7.265000   EXIT LONG   7.039285       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-28)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-04-29)
 ===============================================================================================
