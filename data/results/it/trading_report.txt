@@ -1,19 +1,23 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-05 to 2026-05-08 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-05 to 2026-05-11 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-05-08 rtt_5020  BRE.MI 10.590000  ENTER LONG   9.896429  6.549303
-2026-05-08 rtt_5020  CDG.MI  3.020000   EXIT LONG   2.901428       NaN
-2026-05-08 rtt_5020 GROW.MI  2.350000  EXIT SHORT   2.348571       NaN
-2026-05-08 rtt_5020   IF.MI 22.540001 ENTER SHORT  24.040001  6.654836
-2026-05-08 rtt_5020  PIA.MI  1.632000 ENTER SHORT   1.727571  5.856091
-2026-05-08 rtt_5020 PIRC.MI  6.250000  EXIT SHORT   6.457143       NaN
-2026-05-08 rtt_5020  PRO.MI  0.179400   EXIT LONG   0.169529       NaN
-2026-05-08 rtt_5020 SFER.MI  8.690000  ENTER LONG   8.022142  7.685353
-2026-05-08 rtt_5020  TIT.MI  0.696200  ENTER LONG   0.670171  3.738660
-2026-05-08 rtt_5020   ZV.MI  7.520000  EXIT SHORT   7.637143       NaN
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-05-11 rtt_5020 AEDES.MI  0.082000 ENTER SHORT   0.088371  7.770036
+2026-05-11 rtt_5020   BST.MI  1.714000 ENTER SHORT   1.778000  3.733955
+2026-05-11 rtt_5020  CULT.MI 19.049999 ENTER SHORT  19.099999  0.262467
+2026-05-11 rtt_5020   CY4.MI  8.810000  ENTER LONG   8.132858  7.686070
+2026-05-11 rtt_5020   DAL.MI  5.330000   EXIT LONG   5.230000       NaN
+2026-05-11 rtt_5020   DIA.MI 66.699997  EXIT SHORT  67.320002       NaN
+2026-05-11 rtt_5020   DOV.MI  2.100000 ENTER SHORT   2.302286  9.632654
+2026-05-11 rtt_5020  EXAI.MI  1.706000 ENTER SHORT   1.782286  4.471614
+2026-05-11 rtt_5020  GRAL.MI  0.660000 ENTER SHORT   0.710000  7.575757
+2026-05-11 rtt_5020  MARR.MI  8.380000 ENTER SHORT   8.830000  5.369926
+2026-05-11 rtt_5020  MFEB.MI  3.714000 ENTER SHORT   3.862286  3.992617
+2026-05-11 rtt_5020   SGC.MI  0.273000 ENTER SHORT   0.285286  4.500269
+2026-05-11 rtt_5020   SSL.MI  1.345000   EXIT LONG   1.307857       NaN
+2026-05-11 rtt_5020   TXT.MI 33.349998   EXIT LONG  31.321428       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-08)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-11)
 ===============================================================================================
