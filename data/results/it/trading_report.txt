@@ -1,23 +1,17 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-05 to 2026-05-11 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-07 to 2026-05-12 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-05-11 rtt_5020 AEDES.MI  0.082000 ENTER SHORT   0.088371  7.770036
-2026-05-11 rtt_5020   BST.MI  1.714000 ENTER SHORT   1.778000  3.733955
-2026-05-11 rtt_5020  CULT.MI 19.049999 ENTER SHORT  19.099999  0.262467
-2026-05-11 rtt_5020   CY4.MI  8.810000  ENTER LONG   8.132858  7.686070
-2026-05-11 rtt_5020   DAL.MI  5.330000   EXIT LONG   5.230000       NaN
-2026-05-11 rtt_5020   DIA.MI 66.699997  EXIT SHORT  67.320002       NaN
-2026-05-11 rtt_5020   DOV.MI  2.100000 ENTER SHORT   2.302286  9.632654
-2026-05-11 rtt_5020  EXAI.MI  1.706000 ENTER SHORT   1.782286  4.471614
-2026-05-11 rtt_5020  GRAL.MI  0.660000 ENTER SHORT   0.710000  7.575757
-2026-05-11 rtt_5020  MARR.MI  8.380000 ENTER SHORT   8.830000  5.369926
-2026-05-11 rtt_5020  MFEB.MI  3.714000 ENTER SHORT   3.862286  3.992617
-2026-05-11 rtt_5020   SGC.MI  0.273000 ENTER SHORT   0.285286  4.500269
-2026-05-11 rtt_5020   SSL.MI  1.345000   EXIT LONG   1.307857       NaN
-2026-05-11 rtt_5020   TXT.MI 33.349998   EXIT LONG  31.321428       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-05-12 rtt_5020 ABTG.MI  1.480000 ENTER SHORT   1.572857  6.274132
+2026-05-12 rtt_5020  ACE.MI 23.420000  EXIT SHORT  24.437141       NaN
+2026-05-12 rtt_5020  DGT.MI  1.820000 ENTER SHORT   1.902857  4.552592
+2026-05-12 rtt_5020 INDB.MI 20.700001  EXIT SHORT  20.285714       NaN
+2026-05-12 rtt_5020  IRE.MI  2.674000  EXIT SHORT   2.754000       NaN
+2026-05-12 rtt_5020   MB.MI 20.730000  ENTER LONG  19.681429  5.058228
+2026-05-12 rtt_5020  PHN.MI 88.000000  ENTER LONG  82.142860  6.655840
+2026-05-12 rtt_5020  PIA.MI  1.750000  EXIT SHORT   1.808429       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-11)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-12)
 ===============================================================================================
