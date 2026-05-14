@@ -1,20 +1,21 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-07 to 2026-05-13 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-11 to 2026-05-14 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-05-13 rtt_5020  BAMI.MI 13.190000  ENTER LONG  12.540000  4.927976
-2026-05-13 rtt_5020   BSS.MI  5.850000 ENTER SHORT   6.290000  7.521369
-2026-05-13 rtt_5020   DBA.MI  4.140000  ENTER LONG   3.890000  6.038650
-2026-05-13 rtt_5020    GE.MI 10.700000 ENTER SHORT  11.442857  6.942591
-2026-05-13 rtt_5020    IB.MI 11.700000 ENTER SHORT  12.085714  3.296698
-2026-05-13 rtt_5020   IWB.MI 19.000000 ENTER SHORT  19.838571  4.413532
-2026-05-13 rtt_5020 MAIRE.MI 14.750000   EXIT LONG  13.241429       NaN
-2026-05-13 rtt_5020   MOL.MI 33.750000 ENTER SHORT  36.050001  6.814819
-2026-05-13 rtt_5020   PWS.MI 19.100000   EXIT LONG  18.492856       NaN
-2026-05-13 rtt_5020   REY.MI 91.449997 ENTER SHORT  97.357136  6.459420
-2026-05-13 rtt_5020   TIP.MI  8.540000 ENTER SHORT   8.841429  3.529610
+ last_date   signal  ticker  price      action  stop_loss  risk_pct
+2026-05-14 rtt_5020  ACE.MI 23.100 ENTER SHORT  24.242856  4.947428
+2026-05-14 rtt_5020 CALT.MI  9.280 ENTER SHORT   9.938571  7.096677
+2026-05-14 rtt_5020  CED.MI  2.170   EXIT LONG   2.094286       NaN
+2026-05-14 rtt_5020  ENV.MI  4.860   EXIT LONG   4.464285       NaN
+2026-05-14 rtt_5020  ETH.MI  1.014  EXIT SHORT   1.014000       NaN
+2026-05-14 rtt_5020  EUK.MI  0.600 ENTER SHORT   0.647857  7.976192
+2026-05-14 rtt_5020  ITD.MI  9.400 ENTER SHORT   9.757143  3.799399
+2026-05-14 rtt_5020  ITM.MI 27.650 ENTER SHORT  28.907143  4.546632
+2026-05-14 rtt_5020 NEXI.MI  3.796   EXIT LONG   3.450786       NaN
+2026-05-14 rtt_5020  PRT.MI  7.595  ENTER LONG   6.947143  8.530050
+2026-05-14 rtt_5020  SSL.MI  1.510  ENTER LONG   1.425714  5.581832
+2026-05-14 rtt_5020   ZV.MI  7.020 ENTER SHORT   7.470000  6.410259
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-13)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-14)
 ===============================================================================================
