@@ -1,16 +1,20 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-12 to 2026-05-15 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-11 to 2026-05-18 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker     price     action  stop_loss  risk_pct
-2026-05-15 rtt_5020 BPE.MI 12.212000  EXIT LONG  11.917144       NaN
-2026-05-15 rtt_5020 DIB.MI 10.300000 EXIT SHORT  10.808571       NaN
-2026-05-15 rtt_5020 IMS.MI  0.522000 EXIT SHORT   0.525071       NaN
-2026-05-15 rtt_5020 PMT.MI  2.740000 ENTER LONG   2.594286  5.318041
-2026-05-15 rtt_5020 REC.MI 51.500000 EXIT SHORT  53.871426       NaN
-2026-05-15 rtt_5020 SGC.MI  0.283000 EXIT SHORT   0.295571       NaN
-2026-05-15 rtt_5020 SOM.MI 16.950001  EXIT LONG  16.064285       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-05-18 rtt_5020  BGN.MI 54.900002 ENTER SHORT  57.850001  5.373405
+2026-05-18 rtt_5020 BMPS.MI  8.632000   EXIT LONG   8.907215       NaN
+2026-05-18 rtt_5020  BPE.MI 11.554000 ENTER SHORT  12.429714  7.579315
+2026-05-18 rtt_5020  ERG.MI 22.620001 ENTER SHORT  23.948573  5.873439
+2026-05-18 rtt_5020  FDA.MI  0.015000  EXIT SHORT   0.007114       NaN
+2026-05-18 rtt_5020    G.MI 37.560001   EXIT LONG  37.052862       NaN
+2026-05-18 rtt_5020  PST.MI 24.639999  ENTER LONG  23.543571  4.449790
+2026-05-18 rtt_5020  SFT.MI  1.405000  EXIT SHORT   1.273571       NaN
+2026-05-18 rtt_5020  UCG.MI 71.459999  EXIT SHORT  75.502861       NaN
+2026-05-18 rtt_5020  VIM.MI  1.460000   EXIT LONG   1.478571       NaN
+2026-05-18 rtt_5020  WBD.MI  2.510000 ENTER SHORT   2.683571  6.915195
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-15)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-18)
 ===============================================================================================
