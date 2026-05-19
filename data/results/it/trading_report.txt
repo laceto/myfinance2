@@ -1,20 +1,20 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-11 to 2026-05-18 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-14 to 2026-05-19 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-05-18 rtt_5020  BGN.MI 54.900002 ENTER SHORT  57.850001  5.373405
-2026-05-18 rtt_5020 BMPS.MI  8.632000   EXIT LONG   8.907215       NaN
-2026-05-18 rtt_5020  BPE.MI 11.554000 ENTER SHORT  12.429714  7.579315
-2026-05-18 rtt_5020  ERG.MI 22.620001 ENTER SHORT  23.948573  5.873439
-2026-05-18 rtt_5020  FDA.MI  0.015000  EXIT SHORT   0.007114       NaN
-2026-05-18 rtt_5020    G.MI 37.560001   EXIT LONG  37.052862       NaN
-2026-05-18 rtt_5020  PST.MI 24.639999  ENTER LONG  23.543571  4.449790
-2026-05-18 rtt_5020  SFT.MI  1.405000  EXIT SHORT   1.273571       NaN
-2026-05-18 rtt_5020  UCG.MI 71.459999  EXIT SHORT  75.502861       NaN
-2026-05-18 rtt_5020  VIM.MI  1.460000   EXIT LONG   1.478571       NaN
-2026-05-18 rtt_5020  WBD.MI  2.510000 ENTER SHORT   2.683571  6.915195
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-05-19 rtt_5020   CIR.MI  0.700000  EXIT SHORT   0.717714       NaN
+2026-05-19 rtt_5020   ELN.MI 14.320000  ENTER LONG  13.425714  6.245012
+2026-05-19 rtt_5020 EVISO.MI  8.710000  ENTER LONG   8.277143  4.969658
+2026-05-19 rtt_5020  GROW.MI  2.100000 ENTER SHORT   2.227143  6.054421
+2026-05-19 rtt_5020   GVS.MI  4.350000  EXIT SHORT   4.531428       NaN
+2026-05-19 rtt_5020   KME.MI  0.900000  EXIT SHORT   0.955000       NaN
+2026-05-19 rtt_5020   MET.MI  1.900000  EXIT SHORT   2.024286       NaN
+2026-05-19 rtt_5020  PINF.MI  0.768000  EXIT SHORT   0.793429       NaN
+2026-05-19 rtt_5020   SFT.MI  1.540000  ENTER LONG   1.355000 12.012986
+2026-05-19 rtt_5020   TNX.MI  1.300000  EXIT SHORT   1.217143       NaN
+2026-05-19 rtt_5020   TXT.MI 35.650002  ENTER LONG  32.000001 10.238429
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-18)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-19)
 ===============================================================================================
