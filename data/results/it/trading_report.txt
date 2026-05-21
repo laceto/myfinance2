@@ -1,16 +1,15 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-15 to 2026-05-20 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-15 to 2026-05-21 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-05-20 rtt_5020  DAN.MI 69.550003  ENTER LONG  64.785718  6.850159
-2026-05-20 rtt_5020 ENAV.MI  5.210000  EXIT SHORT   5.352857       NaN
-2026-05-20 rtt_5020  IRC.MI  2.230000 ENTER SHORT   2.311429  3.651502
-2026-05-20 rtt_5020  KME.MI  0.880000 ENTER SHORT   0.931429  5.844155
-2026-05-20 rtt_5020  SGF.MI  2.075000 ENTER SHORT   2.202857  6.161785
-2026-05-20 rtt_5020  TNX.MI  1.530000  ENTER LONG   1.438571  5.975725
-2026-05-20 rtt_5020  UNI.MI 21.549999 ENTER SHORT  22.717142  5.415976
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-05-21 rtt_5020  AVIO.MI 34.099998  EXIT SHORT  35.709999       NaN
+2026-05-21 rtt_5020   BST.MI  1.772000  EXIT SHORT   1.800286       NaN
+2026-05-21 rtt_5020   GHC.MI  5.120000 ENTER SHORT   5.408572  5.636165
+2026-05-21 rtt_5020   PLC.MI  3.020000   EXIT LONG   3.198571       NaN
+2026-05-21 rtt_5020 STLAM.MI  6.307000 ENTER SHORT   6.857286  8.724995
+2026-05-21 rtt_5020  TNXT.MI 15.570000  EXIT SHORT  15.728572       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-20)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-21)
 ===============================================================================================
