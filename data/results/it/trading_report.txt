@@ -1,15 +1,14 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-15 to 2026-05-21 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-19 to 2026-05-22 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-05-21 rtt_5020  AVIO.MI 34.099998  EXIT SHORT  35.709999       NaN
-2026-05-21 rtt_5020   BST.MI  1.772000  EXIT SHORT   1.800286       NaN
-2026-05-21 rtt_5020   GHC.MI  5.120000 ENTER SHORT   5.408572  5.636165
-2026-05-21 rtt_5020   PLC.MI  3.020000   EXIT LONG   3.198571       NaN
-2026-05-21 rtt_5020 STLAM.MI  6.307000 ENTER SHORT   6.857286  8.724995
-2026-05-21 rtt_5020  TNXT.MI 15.570000  EXIT SHORT  15.728572       NaN
+ last_date   signal ticker     price     action  stop_loss  risk_pct
+2026-05-22 rtt_5020 ARN.MI 25.200001  EXIT LONG  25.342857       NaN
+2026-05-22 rtt_5020 IEG.MI 12.800000  EXIT LONG  12.285715       NaN
+2026-05-22 rtt_5020 IMS.MI  0.559000 ENTER LONG   0.518571  7.232301
+2026-05-22 rtt_5020 MET.MI  2.400000 ENTER LONG   2.094286 12.738094
+2026-05-22 rtt_5020 SPM.MI  4.230000  EXIT LONG   4.037143       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-21)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-22)
 ===============================================================================================
