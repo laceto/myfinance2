@@ -1,15 +1,14 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-19 to 2026-05-25 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-21 to 2026-05-26 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker  price      action  stop_loss  risk_pct
-2026-05-25 rtt_5020    B.MI  1.120 ENTER SHORT   1.200000  7.142862
-2026-05-25 rtt_5020  BFG.MI  4.940   EXIT LONG   4.911429       NaN
-2026-05-25 rtt_5020  DIS.MI  8.060   EXIT LONG   7.275714       NaN
-2026-05-25 rtt_5020 FARM.MI  0.161  EXIT SHORT   0.168143       NaN
-2026-05-25 rtt_5020  SAB.MI 13.800 ENTER SHORT  14.678572  6.366459
-2026-05-25 rtt_5020 TFIN.MI  6.700  ENTER LONG   5.729514 14.484862
+ last_date   signal ticker      price     action  stop_loss  risk_pct
+2026-05-26 rtt_5020 ABT.MI   2.860000 EXIT SHORT   3.021429       NaN
+2026-05-26 rtt_5020 IGD.MI   4.470000 EXIT SHORT   4.700714       NaN
+2026-05-26 rtt_5020 LFG.MI   1.630000  EXIT LONG   1.558571       NaN
+2026-05-26 rtt_5020 LLY.DE 926.900024 ENTER LONG 877.171448  5.365042
+2026-05-26 rtt_5020 UCG.MI  73.459999 ENTER LONG  69.904286  4.840339
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-25)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-26)
 ===============================================================================================
