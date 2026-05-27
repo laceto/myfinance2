@@ -1,14 +1,21 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-21 to 2026-05-26 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-22 to 2026-05-27 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker      price     action  stop_loss  risk_pct
-2026-05-26 rtt_5020 ABT.MI   2.860000 EXIT SHORT   3.021429       NaN
-2026-05-26 rtt_5020 IGD.MI   4.470000 EXIT SHORT   4.700714       NaN
-2026-05-26 rtt_5020 LFG.MI   1.630000  EXIT LONG   1.558571       NaN
-2026-05-26 rtt_5020 LLY.DE 926.900024 ENTER LONG 877.171448  5.365042
-2026-05-26 rtt_5020 UCG.MI  73.459999 ENTER LONG  69.904286  4.840339
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-05-27 rtt_5020  AVIO.MI 41.689999  ENTER LONG  37.589999  9.834493
+2026-05-27 rtt_5020  CIRC.MI 13.250000   EXIT LONG  12.271429       NaN
+2026-05-27 rtt_5020   DHH.MI 23.700001  EXIT SHORT  24.571428       NaN
+2026-05-27 rtt_5020   DIS.MI  7.510000 ENTER SHORT   8.325000 10.852198
+2026-05-27 rtt_5020 ESIGM.MI  1.265000  EXIT SHORT   1.233571       NaN
+2026-05-27 rtt_5020   ETH.MI  1.080000  ENTER LONG   0.980571  9.206351
+2026-05-27 rtt_5020   INC.MI  0.189200  EXIT SHORT   0.190143       NaN
+2026-05-27 rtt_5020 MAIRE.MI 14.210000 ENTER SHORT  15.090000  6.192824
+2026-05-27 rtt_5020  NRST.MI  0.645000  EXIT SHORT   0.640714       NaN
+2026-05-27 rtt_5020   SGC.MI  0.297000  ENTER LONG   0.282857  4.761902
+2026-05-27 rtt_5020 STLAM.MI  7.020000  EXIT SHORT   7.293143       NaN
+2026-05-27 rtt_5020   VNT.MI  0.850000 ENTER SHORT   0.907857  6.806723
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-26)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-27)
 ===============================================================================================
