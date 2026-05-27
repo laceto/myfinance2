@@ -1,5 +1,5 @@
 """
-app.py — Streamlit UI for the Italian Equities Trader assistants.
+app.py — Streamlit UI for the Trader assistants.
 
 Wraps both ask_bo_trader (range breakout) and ask_ma_trader (MA crossover)
 so users can run either or both analyses from a single web interface.
@@ -27,16 +27,31 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="Italian Equities Trader",
+    page_title="Trader Assistant",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # ---------------------------------------------------------------------------
-# Constants
+# Universe configurations
 # ---------------------------------------------------------------------------
 
-DEFAULT_DATA_PATH = "data/results/it/analysis_results.parquet"
+_UNIVERSES: dict[str, dict] = {
+    "Italian Equities": {
+        "data_path":    "data/results/it/analysis_results.parquet",
+        "default_tick": "A2A.MI",
+        "title":        "Italian Equities Trader",
+        "caption":      "Borsa Italiana — AI-powered technical analysis",
+    },
+    "ETF": {
+        "data_path":    "data/results/etf/analysis_results.parquet",
+        "default_tick": "IWDA.AS",
+        "title":        "ETF Trader",
+        "caption":      "Global ETF universe — AI-powered technical analysis",
+    },
+}
+
+DEFAULT_DATA_PATH = _UNIVERSES["Italian Equities"]["data_path"]
 
 # ---------------------------------------------------------------------------
 # Data loading — cached so the parquet is read once per session
@@ -358,14 +373,22 @@ def _run_ma(df_ticker: pd.DataFrame, ticker: str, question: str | None) -> tuple
 def _sidebar() -> dict:
     """Render the sidebar and return a dict of user inputs."""
     with st.sidebar:
-        st.title("Italian Equities Trader")
-        st.caption("Borsa Italiana — AI-powered technical analysis")
+        universe = st.selectbox(
+            "Universe",
+            options=list(_UNIVERSES.keys()),
+            index=0,
+            help="Switch between asset-class universes.",
+        )
+        ucfg = _UNIVERSES[universe]
+
+        st.title(ucfg["title"])
+        st.caption(ucfg["caption"])
         st.divider()
 
         ticker = st.text_input(
             "Ticker symbol",
-            value="A2A.MI",
-            help="Yahoo Finance ticker, e.g. A2A.MI, ENI.MI, ENEL.MI",
+            value=ucfg["default_tick"],
+            help="Yahoo Finance ticker, e.g. A2A.MI, ENI.MI, IWDA.AS",
         ).strip().upper()
 
         mode = st.selectbox(
@@ -391,18 +414,19 @@ def _sidebar() -> dict:
         with st.expander("Advanced"):
             data_path = st.text_input(
                 "Parquet path",
-                value=DEFAULT_DATA_PATH,
+                value=ucfg["data_path"],
                 help="Path to analysis_results.parquet",
             )
 
         run = st.button("Run Analysis", type="primary", use_container_width=True)
 
     return {
-        "ticker": ticker,
-        "mode": mode,
+        "ticker":   ticker,
+        "mode":     mode,
         "question": question,
         "data_path": data_path,
-        "run": run,
+        "universe": universe,
+        "run":      run,
     }
 
 
@@ -413,8 +437,9 @@ def _sidebar() -> dict:
 
 def main() -> None:
     inputs = _sidebar()
+    ucfg = _UNIVERSES[inputs["universe"]]
 
-    st.title("Italian Equities Trader")
+    st.title(ucfg["title"])
     st.caption(
         "Powered by OpenAI structured output. "
         "Select a ticker and analysis mode in the sidebar, then click **Run Analysis**."
@@ -438,7 +463,7 @@ def main() -> None:
     # --- Trigger on button click ---
     if inputs["run"]:
         ticker = inputs["ticker"]
-        mode = inputs["mode"]
+        mode   = inputs["mode"]
         question = inputs["question"]
 
         if not ticker:
@@ -457,8 +482,9 @@ def main() -> None:
             )
             return
 
-        st.session_state["last_ticker"] = ticker
-        st.session_state["last_mode"] = mode
+        st.session_state["last_ticker"]   = ticker
+        st.session_state["last_mode"]     = mode
+        st.session_state["last_universe"] = inputs["universe"]
 
         # --- Run selected analysis ---
         if mode in ("BO Breakout", "Both"):
@@ -467,9 +493,9 @@ def main() -> None:
                     bo_snapshot, bo_analysis = _run_bo(df_ticker, ticker, question)
                     st.session_state["bo_snapshot"] = bo_snapshot
                     st.session_state["bo_analysis"] = bo_analysis
-                    st.session_state["bo_error"] = None
+                    st.session_state["bo_error"]    = None
                 except Exception as exc:
-                    st.session_state["bo_error"] = str(exc)
+                    st.session_state["bo_error"]    = str(exc)
                     st.session_state["bo_analysis"] = None
 
         if mode in ("MA Crossover", "Both"):
@@ -478,13 +504,13 @@ def main() -> None:
                     ma_snapshot, ma_analysis = _run_ma(df_ticker, ticker, question)
                     st.session_state["ma_snapshot"] = ma_snapshot
                     st.session_state["ma_analysis"] = ma_analysis
-                    st.session_state["ma_error"] = None
+                    st.session_state["ma_error"]    = None
                 except Exception as exc:
-                    st.session_state["ma_error"] = str(exc)
+                    st.session_state["ma_error"]    = str(exc)
                     st.session_state["ma_analysis"] = None
 
     # --- Render cached results (persist across reruns) ---
-    mode = st.session_state.get("last_mode", inputs["mode"])
+    mode   = st.session_state.get("last_mode",   inputs["mode"])
     ticker = st.session_state.get("last_ticker", inputs["ticker"])
 
     show_bo = mode in ("BO Breakout", "Both") and "bo_analysis" in st.session_state

@@ -80,8 +80,8 @@
   },
   "universe": {
     "id": "etf",
-    "ticker_path": "data/ticker/etf/ticker.xlsx",
-    "ohlc_path": "data/ohlc/today/etf/ohlc_data.parquet",
-    "results_path": "data/results/etf/analysis_results.parquet"
+    "ticker_path":           "data/ticker/etf/ticker.xlsx",
+    "ohlc_historical_path":  "data/ohlc/historical/etf/ohlc_data.parquet",
+    "results_dir":           "data/results/etf"
   }
 }
