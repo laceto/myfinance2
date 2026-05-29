@@ -1,9 +1,13 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-25 to 2026-05-28 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-26 to 2026-05-29 (Last 4 Days)
 ===============================================================================================
-  No Enter/Exit signals detected in the last 4 trading days.
+ last_date   signal  ticker     price     action  stop_loss  risk_pct
+2026-05-29 rtt_5020  DIB.MI 11.360000 ENTER LONG  10.464286  7.884807
+2026-05-29 rtt_5020  DOX.MI  4.430000  EXIT LONG   4.075714       NaN
+2026-05-29 rtt_5020 MONC.MI 55.860001 EXIT SHORT  58.904285       NaN
+2026-05-29 rtt_5020  TSL.MI  0.080900 EXIT SHORT   0.077286       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-28)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-05-29)
 ===============================================================================================
