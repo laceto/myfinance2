@@ -1,16 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-05-26 to 2026-06-01 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-05-28 to 2026-06-02 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-06-01 rtt_5020  BDB.MI  9.130000  EXIT SHORT   9.781429       NaN
-2026-06-01 rtt_5020  DHH.MI 26.500000  ENTER LONG  24.785715  6.469002
-2026-06-01 rtt_5020 FARM.MI  0.202000  ENTER LONG   0.185286  8.274400
-2026-06-01 rtt_5020  IEG.MI 12.750000  ENTER LONG  12.142857  4.761905
-2026-06-01 rtt_5020 MASI.MI  4.840000  ENTER LONG   4.631429  4.309330
-2026-06-01 rtt_5020  SOL.MI 56.200001 ENTER SHORT  58.642858  4.346721
-2026-06-01 rtt_5020  TIP.MI  8.920000  EXIT SHORT   9.321429       NaN
+ last_date   signal  ticker   price      action  stop_loss  risk_pct
+2026-06-02 rtt_5020  CYB.MI  1.3050  ENTER LONG   1.203571  7.772302
+2026-06-02 rtt_5020  ECK.MI  3.1000   EXIT LONG   2.954286       NaN
+2026-06-02 rtt_5020 ECNL.MI  1.4000 ENTER SHORT   1.522286  8.734695
+2026-06-02 rtt_5020  GVS.MI  4.2400 ENTER SHORT   4.430000  4.481134
+2026-06-02 rtt_5020  IOT.MI  2.9850  EXIT SHORT   2.941428       NaN
+2026-06-02 rtt_5020  NOV.DE 37.1600   EXIT LONG  35.654286       NaN
+2026-06-02 rtt_5020  TSL.MI  0.0889  ENTER LONG   0.081443  8.388238
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-01)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-02)
 ===============================================================================================
