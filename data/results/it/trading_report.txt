@@ -1,17 +1,20 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-02 to 2026-06-05 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-01 to 2026-06-08 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-06-05 rtt_5020  CLI.MI  4.200000  EXIT SHORT   4.247143       NaN
-2026-06-05 rtt_5020  COM.MI 49.900002   EXIT LONG  47.014285       NaN
-2026-06-05 rtt_5020  ERG.MI 24.639999  EXIT SHORT  24.317142       NaN
-2026-06-05 rtt_5020 EXAI.MI  1.680000  EXIT SHORT   1.784571       NaN
-2026-06-05 rtt_5020  FPE.MI 46.799999  ENTER LONG  44.571429  4.761903
-2026-06-05 rtt_5020 INDB.MI 19.500000 ENTER SHORT  20.121429  3.186813
-2026-06-05 rtt_5020  OLI.MI  1.900000  ENTER LONG   1.707714 10.120304
-2026-06-05 rtt_5020  PTR.MI  2.580000  EXIT SHORT   2.677143       NaN
+ last_date   signal   ticker      price      action  stop_loss  risk_pct
+2026-06-08 rtt_5020   AMP.MI  10.605000 ENTER SHORT  11.447143  7.941002
+2026-06-08 rtt_5020  BAMI.MI  13.320000   EXIT LONG  12.722857       NaN
+2026-06-08 rtt_5020  BMPS.MI  10.104000  ENTER LONG   9.580572  5.180407
+2026-06-08 rtt_5020   CED.MI   2.270000  ENTER LONG   2.170000  4.405284
+2026-06-08 rtt_5020   CMB.MI  90.000000   EXIT LONG  81.492857       NaN
+2026-06-08 rtt_5020   MNL.MI   0.694000  EXIT SHORT   0.798857       NaN
+2026-06-08 rtt_5020   PIA.MI   1.679000 ENTER SHORT   1.763857  5.054028
+2026-06-08 rtt_5020   PRO.MI   0.162000 ENTER SHORT   0.170543  5.273371
+2026-06-08 rtt_5020   PRY.MI 148.699997   EXIT LONG 133.782155       NaN
+2026-06-08 rtt_5020   SFL.MI   1.681000  EXIT SHORT   1.683714       NaN
+2026-06-08 rtt_5020 STLAM.MI   6.150000 ENTER SHORT   6.683000  8.666668
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-05)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-08)
 ===============================================================================================
