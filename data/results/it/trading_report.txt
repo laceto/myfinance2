@@ -1,22 +1,18 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-01 to 2026-06-09 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-05 to 2026-06-10 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker      price      action  stop_loss  risk_pct
-2026-06-09 rtt_5020  ARN.MI  22.700001 ENTER SHORT  25.321429 11.548142
-2026-06-09 rtt_5020 BAMI.MI  13.525000  ENTER LONG  12.993571  3.929231
-2026-06-09 rtt_5020   BC.MI  87.120003  EXIT SHORT  91.780001       NaN
-2026-06-09 rtt_5020  BDB.MI   9.950000  ENTER LONG   9.268571  6.848529
-2026-06-09 rtt_5020  BPE.MI  12.626000  EXIT SHORT  12.796858       NaN
-2026-06-09 rtt_5020  CIR.MI   0.671000 ENTER SHORT   0.702429  4.683844
-2026-06-09 rtt_5020    G.MI  40.750000  ENTER LONG  39.378573  3.365464
-2026-06-09 rtt_5020 MAPS.MI   2.600000  EXIT SHORT   2.607143       NaN
-2026-06-09 rtt_5020 PHIL.MI  21.750000 ENTER SHORT  23.000000  5.747126
-2026-06-09 rtt_5020  PWS.MI  17.750000 ENTER SHORT  18.450000  3.943660
-2026-06-09 rtt_5020 RACE.MI 308.549988  EXIT SHORT 326.964299       NaN
-2026-06-09 rtt_5020  TIP.MI   9.300000  ENTER LONG   8.854286  4.792626
-2026-06-09 rtt_5020  UNI.MI  22.840000  EXIT SHORT  22.702857       NaN
+ last_date   signal  ticker     price     action  stop_loss  risk_pct
+2026-06-10 rtt_5020  ABT.MI  2.690000 ENTER LONG   2.502857  6.956988
+2026-06-10 rtt_5020  CEM.MI 14.570000 EXIT SHORT  15.155715       NaN
+2026-06-10 rtt_5020  GSP.MI  6.090000 EXIT SHORT   6.194285       NaN
+2026-06-10 rtt_5020   IG.MI 10.665000 EXIT SHORT  10.896143       NaN
+2026-06-10 rtt_5020 JUVE.MI  2.120000 EXIT SHORT   2.100143       NaN
+2026-06-10 rtt_5020  LON.MI  1.080000  EXIT LONG   1.062857       NaN
+2026-06-10 rtt_5020  SGC.MI  0.285000  EXIT LONG   0.278571       NaN
+2026-06-10 rtt_5020  SOL.MI 60.700001 EXIT SHORT  62.514287       NaN
+2026-06-10 rtt_5020  UCG.MI 70.650002  EXIT LONG  68.325717       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-09)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-10)
 ===============================================================================================
