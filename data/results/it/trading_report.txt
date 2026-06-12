@@ -1,11 +1,25 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-08 to 2026-06-11 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-05 to 2026-06-12 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker     price    action  stop_loss  risk_pct
-2026-06-11 rtt_5020 CRL.MI 29.700001 EXIT LONG  27.328570       NaN
-2026-06-11 rtt_5020 DBA.MI  4.030000 EXIT LONG   4.062857       NaN
+ last_date   signal  ticker      price      action  stop_loss  risk_pct
+2026-06-12 rtt_5020  ABT.MI   2.740000   EXIT LONG   2.515714       NaN
+2026-06-12 rtt_5020  BGN.MI  60.900002  EXIT SHORT  60.585711       NaN
+2026-06-12 rtt_5020  BST.MI   1.772000 ENTER SHORT   1.839428  3.805222
+2026-06-12 rtt_5020 CALT.MI   9.520000  EXIT SHORT   9.567143       NaN
+2026-06-12 rtt_5020   CE.MI  16.459999  EXIT SHORT  16.011428       NaN
+2026-06-12 rtt_5020  CFM.MI   1.240000  EXIT SHORT   1.212857       NaN
+2026-06-12 rtt_5020  CFV.MI   2.140000   EXIT LONG   1.948572       NaN
+2026-06-12 rtt_5020 EXAI.MI   1.664000 ENTER SHORT   1.745143  4.876373
+2026-06-12 rtt_5020  FUM.MI   3.570000 ENTER SHORT   3.697143  3.561430
+2026-06-12 rtt_5020 MAPS.MI   2.800000  ENTER LONG   2.651429  5.306121
+2026-06-12 rtt_5020  REC.MI  50.799999 ENTER SHORT  51.607143  1.588866
+2026-06-12 rtt_5020  REY.MI 100.199997   EXIT LONG  92.778573       NaN
+2026-06-12 rtt_5020   SL.MI  37.560001   EXIT LONG  34.871428       NaN
+2026-06-12 rtt_5020 TNXT.MI  15.540000 ENTER SHORT  16.011428  3.033645
+2026-06-12 rtt_5020  VIM.MI   1.330000 ENTER SHORT   1.448571  8.915144
+2026-06-12 rtt_5020   ZV.MI   7.920000  EXIT SHORT   7.660000       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-11)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-12)
 ===============================================================================================
