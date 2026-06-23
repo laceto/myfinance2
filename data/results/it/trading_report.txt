@@ -1,16 +1,15 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-16 to 2026-06-22 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-18 to 2026-06-23 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker  price      action  stop_loss  risk_pct
-2026-06-22 rtt_5020   DIB.MI 10.680   EXIT LONG  10.028571       NaN
-2026-06-22 rtt_5020  ENAV.MI  5.240 ENTER SHORT   5.502857  5.016358
-2026-06-22 rtt_5020 EVISO.MI  8.480 ENTER SHORT   9.205714  8.557955
-2026-06-22 rtt_5020   IRC.MI  2.430  EXIT SHORT   2.417143       NaN
-2026-06-22 rtt_5020   ISP.MI  6.234  EXIT SHORT   6.449571       NaN
-2026-06-22 rtt_5020   PRT.MI  6.870   EXIT LONG   6.519286       NaN
-2026-06-22 rtt_5020   SSL.MI  1.565   EXIT LONG   1.393571       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-06-23 rtt_5020  AEF.MI  0.181000  EXIT SHORT   0.162071       NaN
+2026-06-23 rtt_5020  BPE.MI 13.814000  ENTER LONG  13.177714  4.606094
+2026-06-23 rtt_5020  LFG.MI  1.430000 ENTER SHORT   1.508571  5.494508
+2026-06-23 rtt_5020 LUVE.MI 66.199997   EXIT LONG  64.085716       NaN
+2026-06-23 rtt_5020 SEIF.MI  0.252000  EXIT SHORT   0.266286       NaN
+2026-06-23 rtt_5020  SES.MI 91.500000 ENTER SHORT  97.928570  7.025760
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-22)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-23)
 ===============================================================================================
