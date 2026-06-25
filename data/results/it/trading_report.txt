@@ -1,16 +1,11 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-19 to 2026-06-24 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-22 to 2026-06-25 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-06-24 rtt_5020   CE.MI 17.000000  ENTER LONG  16.340001  3.882349
-2026-06-24 rtt_5020  CLF.MI  0.790000  EXIT SHORT   0.865429       NaN
-2026-06-24 rtt_5020  COM.MI 46.799999 ENTER SHORT  50.242857  7.356533
-2026-06-24 rtt_5020  DIS.MI  8.050000  EXIT SHORT   8.782143       NaN
-2026-06-24 rtt_5020 EQUI.MI  5.910000  EXIT SHORT   6.162857       NaN
-2026-06-24 rtt_5020  NOV.DE 41.669998  ENTER LONG  38.989999  6.431483
-2026-06-24 rtt_5020  TSL.MI  0.075300   EXIT LONG   0.068914       NaN
+ last_date   signal  ticker  price      action  stop_loss  risk_pct
+2026-06-25 rtt_5020  AC5.MI   2.30  EXIT SHORT   2.274286       NaN
+2026-06-25 rtt_5020 AVIO.MI  28.48 ENTER SHORT  32.948572 15.690213
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-24)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-25)
 ===============================================================================================
