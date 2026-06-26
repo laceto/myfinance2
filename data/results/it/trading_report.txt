@@ -1,11 +1,13 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-22 to 2026-06-25 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-23 to 2026-06-26 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker  price      action  stop_loss  risk_pct
-2026-06-25 rtt_5020  AC5.MI   2.30  EXIT SHORT   2.274286       NaN
-2026-06-25 rtt_5020 AVIO.MI  28.48 ENTER SHORT  32.948572 15.690213
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-06-26 rtt_5020  DAN.MI 67.849998   EXIT LONG  69.021432       NaN
+2026-06-26 rtt_5020 ENEL.MI 10.098000  EXIT SHORT  10.397429       NaN
+2026-06-26 rtt_5020  TSL.MI  0.073900 ENTER SHORT   0.079971  8.215735
+2026-06-25 rtt_5020  COP.MI  7.600000 ENTER SHORT   7.764286  2.161653
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-25)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-26)
 ===============================================================================================
