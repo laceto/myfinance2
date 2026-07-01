@@ -1,15 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-25 to 2026-06-30 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-26 to 2026-07-01 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker  price      action  stop_loss  risk_pct
-2026-06-30 rtt_5020  AZM.MI 35.480 ENTER SHORT  37.094285  4.549847
-2026-06-30 rtt_5020  CYB.MI  1.250   EXIT LONG   1.168571       NaN
-2026-06-30 rtt_5020   IG.MI 10.135 ENTER SHORT  10.545715  4.052435
-2026-06-30 rtt_5020  ILP.MI  7.600  ENTER LONG   7.264285  4.417297
-2026-06-30 rtt_5020 NEXI.MI  3.542  EXIT SHORT   3.665857       NaN
-2026-06-30 rtt_5020  OLI.MI  1.468   EXIT LONG   1.306286       NaN
+ last_date   signal  ticker      price      action  stop_loss  risk_pct
+2026-07-01 rtt_5020 ARBS.MI   3.020000  EXIT SHORT   2.957143       NaN
+2026-07-01 rtt_5020  ETH.MI   1.230000   EXIT LONG   1.090857       NaN
+2026-07-01 rtt_5020  MOL.MI  37.200001 ENTER SHORT  40.157145  7.949312
+2026-07-01 rtt_5020  ORS.MI  15.960000  EXIT SHORT  16.111429       NaN
+2026-07-01 rtt_5020  OVS.MI   6.060000   EXIT LONG   5.690714       NaN
+2026-07-01 rtt_5020 RACE.MI 331.500000  ENTER LONG 312.714294  5.666880
+2026-07-01 rtt_5020  UNI.MI  25.360001  ENTER LONG  24.100001  4.968454
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-06-30)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-07-01)
 ===============================================================================================
