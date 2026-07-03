@@ -1,22 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-06-26 to 2026-07-02 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-06-30 to 2026-07-03 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-07-02 rtt_5020   BAN.MI  6.960000 ENTER SHORT   7.291429  4.761907
-2026-07-02 rtt_5020   BFG.MI  4.940000 ENTER SHORT   4.977143  0.751886
-2026-07-02 rtt_5020   BSS.MI  5.450000 ENTER SHORT   5.928571  8.781128
-2026-07-02 rtt_5020   CIR.MI  0.779000  EXIT SHORT   0.743286       NaN
-2026-07-02 rtt_5020  CIRC.MI 14.050000  ENTER LONG  13.271429  5.541435
-2026-07-02 rtt_5020   COP.MI  7.950000  EXIT SHORT   7.842857       NaN
-2026-07-02 rtt_5020   IRC.MI  2.360000 ENTER SHORT   2.514286  6.537529
-2026-07-02 rtt_5020   MOL.MI 38.400002  EXIT SHORT  40.157145       NaN
-2026-07-02 rtt_5020  NRST.MI  0.655000 ENTER SHORT   0.667143  1.853872
-2026-07-02 rtt_5020   NWL.MI 16.129999  EXIT SHORT  16.434286       NaN
-2026-07-02 rtt_5020   SPM.MI  4.243000 ENTER SHORT   4.678857 10.272382
-2026-07-02 rtt_5020 STMMI.MI 61.840000   EXIT LONG  56.139997       NaN
-2026-07-02 rtt_5020   TPS.MI  8.350000 ENTER SHORT   8.550000  2.395210
+ last_date   signal ticker     price      action  stop_loss  risk_pct
+2026-07-03 rtt_5020 ABT.MI  2.730000 ENTER SHORT   2.850000  4.395604
+2026-07-03 rtt_5020 CED.MI  2.380000   EXIT LONG   2.212857       NaN
+2026-07-03 rtt_5020 CIR.MI  0.783000  ENTER LONG   0.745000  4.853129
+2026-07-03 rtt_5020 FIC.MI 17.549999  EXIT SHORT  17.492857       NaN
+2026-07-03 rtt_5020 PIA.MI  1.722000  EXIT SHORT   1.724571       NaN
+2026-07-03 rtt_5020 SFL.MI  1.684000 ENTER SHORT   1.840143  9.272139
+2026-07-03 rtt_5020 TXT.MI 43.000000  ENTER LONG  39.585713  7.940202
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-07-02)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-07-03)
 ===============================================================================================
