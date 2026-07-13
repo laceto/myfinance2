@@ -11,8 +11,18 @@ permissions:
   contents: write
 
 jobs:
-  download-ohlc:
+  download:
     runs-on: ubuntu-latest
+    strategy:
+      # Independent markets: a failure in one must not cancel or block the
+      # other. Each leg downloads, appends, and commits ONLY its own market.
+      fail-fast: false
+      matrix:
+        include:
+          - market: it
+            script: get_daily_ohlc_data.py
+          - market: etf
+            script: get_daily_ohlc_data_etf.py
 
     steps:
       - name: Checkout repository
@@ -29,32 +39,37 @@ jobs:
           pip install yfinance pandas openpyxl pyarrow joblib tqdm
           pip install algoshort-0.1.1-py3-none-any.whl
 
-      - name: Create output directories
-        run: mkdir -p data/ohlc/today/it data/ohlc/today/etf
+      - name: Create output directory
+        run: mkdir -p data/ohlc/today/${{ matrix.market }}
 
-      # Both markets download sequentially in a single job. A matrix would run
-      # two jobs that each `git push` to this branch, racing on the same ref;
-      # sequential keeps a single atomic commit. If a download fails, the job
-      # fails before committing, so no partial/stale data is published.
-      - name: Download it OHLC (Borsa Italiana)
-        run: python get_daily_ohlc_data.py
+      - name: Download ${{ matrix.market }} OHLC
+        run: python ${{ matrix.script }}
 
-      - name: Download etf OHLC (ETF universe)
-        run: python get_daily_ohlc_data_etf.py
+      - name: Append ${{ matrix.market }} today data to historical
+        run: python append_daily_to_historical.py --market ${{ matrix.market }}
 
-      # append_daily_to_historical.py is the single, unit-tested source of
-      # truth for folding today's bar into history (see tests/).
-      - name: Append it today data to historical
-        run: python append_daily_to_historical.py --market it
-
-      - name: Append etf today data to historical
-        run: python append_daily_to_historical.py --market etf
-
-      - name: Commit results
+      - name: Commit and push ${{ matrix.market }} data
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/ohlc/today/it/ohlc_data.parquet data/ohlc/historical/it/ohlc_data.parquet \
-                  data/ohlc/today/etf/ohlc_data.parquet data/ohlc/historical/etf/ohlc_data.parquet
-          git commit -m "chore: update daily OHLC data (it, etf) [skip ci]" || echo "No changes to commit"
-          git push
+          git add data/ohlc/today/${{ matrix.market }}/ohlc_data.parquet \
+                  data/ohlc/historical/${{ matrix.market }}/ohlc_data.parquet
+          if git diff --cached --quiet; then
+            echo "No changes to commit for ${{ matrix.market }}"
+            exit 0
+          fi
+          git commit -m "chore: update daily OHLC data (${{ matrix.market }}) [skip ci]"
+          # The two market legs run in parallel and push to the same branch.
+          # They touch different files, so on a rejected push we just fetch the
+          # other leg's commit and rebase on top — never losing either market.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push rejected; syncing and retrying (attempt $attempt)"
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+          done
+          echo "failed to push ${{ matrix.market }} data after retries"
+          exit 1
