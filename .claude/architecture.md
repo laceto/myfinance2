@@ -83,23 +83,25 @@ Italiana close) and downloads **two markets** in one job:
 | `it` | `data/ticker/it/ticker.xlsx` | `get_daily_ohlc_data.py` | `data/ohlc/{today,historical}/it/` |
 | `etf` | `data/ticker/etf/ticker_active.xlsx` | `get_daily_ohlc_data_etf.py` | `data/ohlc/{today,historical}/etf/` |
 
-Steps:
+Each market runs as an **independent matrix leg** (`fail-fast: false`):
 1. Install dependencies (including the wheel)
-2. Run each market's download script (`it`, then `etf`)
-3. Append today's bar to history via `append_daily_to_historical.py --market <it|etf>`
+2. Run that market's download script
+3. Append today's bar via `append_daily_to_historical.py --market <it|etf>`
    (single, unit-tested source of truth — see `tests/test_append_daily_to_historical.py`)
-4. Commit and push all four Parquet files in one commit with `[skip ci]`
+4. Commit and push **only that market's** two Parquet files with `[skip ci]`
 
-**Why one sequential job, not a matrix:** a matrix would spawn one job per
-market, each `git push`-ing to the same branch and racing on the ref. A single
-job commits once, atomically. A download failure fails the job *before* the
-commit, so no partial/stale data is published (fail-fast, no silent gaps).
+**Why two independent legs, not one job:** the markets must not block each
+other — an `etf` download failure should never stop the `it` update (or vice
+versa). Each leg commits its own files. Because the two legs run in parallel and
+push to the same branch, the commit step **rebase-retries** on a rejected push
+(they touch disjoint files, so the rebase never conflicts). A leg that fails to
+download fails only its own market, before committing — no partial/stale data.
 
 **ETF cold start (one-time backfill):** the `etf` market's *active universe* is
 the curated 15 largest UCITS ETFs by AUM (the reviewed core) plus 100 more
 tickers drawn from the justETF list, minus symbols that returned no Yahoo data
-(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=250` this is **246**
-downloadable tickers (15 core + 231 extras; 19 known-dead symbols pruned).
+(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=350` this is **346**
+downloadable tickers (15 core + 331 extras; 19 known-dead symbols pruned).
 
 | Concern | Where |
 |---------|-------|

@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 # now holds the full active universe (core + extras), not just the top 15.
 ACTIVE_SEED_FILE = Path("data/ticker/etf/ticker_active.xlsx")
 JUSTETF_FILE = Path("data/ticker/etf/ticker.xlsx")
-DEFAULT_EXTRA_COUNT = 250
+DEFAULT_EXTRA_COUNT = 350
 
 # Yahoo symbols that returned zero rows in the 2026-07-12 cold-start runs
 # (delisted, renamed, or no Yahoo history for that listing). Pruned from the
