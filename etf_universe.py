@@ -65,6 +65,8 @@ KNOWN_DEAD = frozenset(
         "AVAX.AS", "AWDS.PA", "AXLM.AS", "AXTZ.AS", "BNBA.AS", "BOLD.AS",
         "ETHC.AS", "GRAM.AS", "HODL.AS", "PRAE.PA", "PRAZ.PA", "QGHY.PA",
         "QGLO.PA", "QUIG.PA", "QUSA.PA", "SRIC7.SW", "SRID7.SW",
+        # found in the 395-ticker run (AUM enrichment from profiles.jsonl)
+        "BNKS.SW", "D28A.AS", "EEJD.AS", "EEWD.AS", "IEXXF",
     }
 )
 
