@@ -76,7 +76,7 @@ All Parquet files use a **long/tidy format**:
 ## CI / GitHub Actions
 
 `download_daily_ohlc.yml` runs **Monday–Friday at 21:00 UTC** (after Borsa
-Italiana close) and downloads **two markets** in one job:
+Italiana close) and downloads **two markets** as independent jobs:
 
 | Market | Ticker source | Download script | Output paths |
 |--------|---------------|-----------------|--------------|
@@ -100,8 +100,8 @@ download fails only its own market, before committing — no partial/stale data.
 **ETF cold start (one-time backfill):** the `etf` market's *active universe* is
 the curated 15 largest UCITS ETFs by AUM (the reviewed core) plus 100 more
 tickers drawn from the justETF list, minus symbols that returned no Yahoo data
-(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=350` this is **346**
-downloadable tickers (15 core + 331 extras; 19 known-dead symbols pruned).
+(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=350` this is **317**
+downloadable tickers (15 core + 302 extras; 48 known-dead symbols pruned).
 
 | Concern | Where |
 |---------|-------|

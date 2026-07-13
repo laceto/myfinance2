@@ -57,6 +57,13 @@ KNOWN_DEAD = frozenset(
         # found in the 257-ticker run (extra_count=250)
         "10AJ.PA", "ACWU.SW", "AHYC.PA", "AHYI.PA", "CUIK.PA", "DECR.PA",
         "ESTE.PA", "GCSG.PA", "IBX35.SW", "PRAM.PA", "UCRH.PA",
+        # found in the 346-ticker run (extra_count=350) — mostly crypto ETPs
+        # and thin .PA/.SW listings with no Yahoo history
+        "0W76.L", "500D.PA", "AAVE.AS", "ACD27.PA", "ACD29.PA", "ACD32.PA",
+        "ACESD.SW", "AGESD.SW", "AHYK.PA", "ALGO.AS", "ALINK.AS", "ALTS.AS",
+        "AVAX.AS", "AWDS.PA", "AXLM.AS", "AXTZ.AS", "BNBA.AS", "BOLD.AS",
+        "ETHC.AS", "GRAM.AS", "HODL.AS", "PRAE.PA", "PRAZ.PA", "QGHY.PA",
+        "QGLO.PA", "QUIG.PA", "QUSA.PA", "SRIC7.SW", "SRID7.SW",
     }
 )
 
