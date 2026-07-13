@@ -1,7 +1,9 @@
 # Architecture Reference — myfinance2
 
 Quantitative finance project focused on Italian stock market (Borsa Italiana) analysis
-with automated daily data collection via GitHub Actions.
+with automated daily data collection via GitHub Actions. Daily OHLC collection now
+covers two markets — `it` (Borsa Italiana) and `etf` (ETF universe) — sharing the same
+pipeline shape; downstream analysis currently runs for `it` only (see CI section).
 
 ## Data Flow
 
@@ -73,11 +75,62 @@ All Parquet files use a **long/tidy format**:
 
 ## CI / GitHub Actions
 
-Workflow runs **Monday–Friday at 21:00 UTC** (after Borsa Italiana close):
+`download_daily_ohlc.yml` runs **Monday–Friday at 21:00 UTC** (after Borsa
+Italiana close) and downloads **two markets** in one job:
+
+| Market | Ticker source | Download script | Output paths |
+|--------|---------------|-----------------|--------------|
+| `it` | `data/ticker/it/ticker.xlsx` | `get_daily_ohlc_data.py` | `data/ohlc/{today,historical}/it/` |
+| `etf` | `data/ticker/etf/ticker_active.xlsx` | `get_daily_ohlc_data_etf.py` | `data/ohlc/{today,historical}/etf/` |
+
+Steps:
 1. Install dependencies (including the wheel)
-2. Run `get_daily_ohlc_data.py`
-3. Append today's bar to `data/ohlc/historical/it/ohlc_data.parquet`
-4. Commit and push updated Parquet with `[skip ci]` in the message
+2. Run each market's download script (`it`, then `etf`)
+3. Append today's bar to history via `append_daily_to_historical.py --market <it|etf>`
+   (single, unit-tested source of truth — see `tests/test_append_daily_to_historical.py`)
+4. Commit and push all four Parquet files in one commit with `[skip ci]`
+
+**Why one sequential job, not a matrix:** a matrix would spawn one job per
+market, each `git push`-ing to the same branch and racing on the ref. A single
+job commits once, atomically. A download failure fails the job *before* the
+commit, so no partial/stale data is published (fail-fast, no silent gaps).
+
+**ETF cold start (one-time backfill):** the `etf` market's *active universe* is
+the curated 15 largest UCITS ETFs by AUM (the reviewed core) plus 100 more
+tickers drawn from the justETF list, minus symbols that returned no Yahoo data
+(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=250` this is **246**
+downloadable tickers (15 core + 231 extras; 19 known-dead symbols pruned).
+
+| Concern | Where |
+|---------|-------|
+| Curated 15-ETF core (single source of truth) | `etf_top15.py` (`TOP15_ETFS`, ordered by AUM; `TOP15_AS_OF` provenance) |
+| Active universe = core + `DEFAULT_EXTRA_COUNT` justETF extras | `etf_universe.py` (`build_active_universe_table`, `write_active_seed`) |
+| Seed ticker file (name, ticker) | `data/ticker/etf/ticker_active.xlsx` — read by **both** the cold-start and daily scripts |
+| Historical backfill (2016 → today) | `cold_start_etf.py` → `data/ohlc/historical/etf/ohlc_data.parquet` |
+| Trigger | `.github/workflows/cold_start_etf.yml` (`workflow_dispatch` only — never scheduled) |
+
+The justETF extras are taken in list order (not AUM-ranked — AUM is not in the
+repo), so expect a higher zero-row rate than the vetted core; `cold_start_etf.py`
+retries each empty symbol once and reports the survivors at WARNING rather than
+failing the run. Symbols confirmed dead in a run are added to `KNOWN_DEAD` in
+`etf_universe.py` (pruned, not replaced). Tune the count via `DEFAULT_EXTRA_COUNT`
+or swap the extras' source in `etf_universe.py`.
+
+Run the cold start **once** (manually) to seed history; the scheduled daily
+workflow then appends each trading day. `cold_start_etf.py` injects the Yahoo
+client via a factory (lazy `algoshort` import) so its orchestration — download,
+save, retry zero-row symbols once, fail-fast on an empty universe — is unit-
+tested with a fake handler and no network (`tests/test_cold_start_etf.py`).
+The AUM figures in `etf_top15.py` are approximate; refresh and regenerate the
+seed with `python etf_top15.py`. The wider 2217-ticker `data/ticker/etf/ticker.xlsx`
+(justETF universe) is retained for future full-universe use.
+
+**Scope note:** CI currently downloads OHLC for both markets, but the
+analysis/report pipeline (`analyze_stock.py` → `trading_report.py` →
+`get_insights.py`, wired by `analyze_and_report.yml`) still targets `it` only.
+`analyze_stock.py` already reads `universe.ohlc_historical_path` /
+`universe.results_dir` from its config; extending analysis to `etf` requires
+parametrizing `trading_report.py` and `get_insights.py` the same way.
 
 Parquet files are committed directly to the repo as the persistence layer (no external DB).
 
