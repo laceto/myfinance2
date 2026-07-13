@@ -1,0 +1,58 @@
+name: Cold Start ETF Historical
+
+# Manual, one-time (or on-demand) backfill of the ETF market's historical OHLC
+# for the curated top-15 UCITS ETFs (etf_top15.py). Run this once to seed
+# data/ohlc/historical/etf/ohlc_data.parquet; the scheduled
+# "Download Daily OHLC Data" workflow appends each trading day afterwards.
+#
+# Deliberately NOT scheduled — a cold start overwrites history and should be an
+# explicit, human-triggered action.
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Inclusive start date (YYYY-MM-DD)"
+        required: false
+        default: "2016-01-01"
+      end:
+        description: "Inclusive end date (YYYY-MM-DD); blank = today"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  cold-start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install yfinance pandas openpyxl pyarrow joblib tqdm
+          pip install algoshort-0.1.1-py3-none-any.whl
+
+      - name: Run ETF cold start (backfill historical)
+        run: |
+          python cold_start_etf.py \
+            --start "${{ inputs.start || '2016-01-01' }}" \
+            ${{ inputs.end != '' && format('--end "{0}"', inputs.end) || '' }}
+
+      - name: Commit seed and historical data
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/ticker/etf/ticker_active.xlsx \
+                  data/ohlc/historical/etf/ohlc_data.parquet
+          git commit -m "chore: cold-start ETF historical OHLC (active universe) [skip ci]" || echo "No changes to commit"
+          git push

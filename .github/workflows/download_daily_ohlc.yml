@@ -29,38 +29,32 @@ jobs:
           pip install yfinance pandas openpyxl pyarrow joblib tqdm
           pip install algoshort-0.1.1-py3-none-any.whl
 
-      - name: Create output directory
-        run: mkdir -p data/ohlc/today/it
+      - name: Create output directories
+        run: mkdir -p data/ohlc/today/it data/ohlc/today/etf
 
-      - name: Run OHLC download script
+      # Both markets download sequentially in a single job. A matrix would run
+      # two jobs that each `git push` to this branch, racing on the same ref;
+      # sequential keeps a single atomic commit. If a download fails, the job
+      # fails before committing, so no partial/stale data is published.
+      - name: Download it OHLC (Borsa Italiana)
         run: python get_daily_ohlc_data.py
 
-      - name: Append today data to historical
-        run: |
-          python - <<'EOF'
-          import pandas as pd
-          from pathlib import Path
+      - name: Download etf OHLC (ETF universe)
+        run: python get_daily_ohlc_data_etf.py
 
-          today_path = Path("data/ohlc/today/it/ohlc_data.parquet")
-          historical_path = Path("data/ohlc/historical/it/ohlc_data.parquet")
+      # append_daily_to_historical.py is the single, unit-tested source of
+      # truth for folding today's bar into history (see tests/).
+      - name: Append it today data to historical
+        run: python append_daily_to_historical.py --market it
 
-          today_df = pd.read_parquet(today_path)
-
-          if historical_path.exists():
-              historical_df = pd.read_parquet(historical_path)
-              combined = pd.concat([historical_df, today_df], ignore_index=True)
-          else:
-              historical_path.parent.mkdir(parents=True, exist_ok=True)
-              combined = today_df
-
-          combined.to_parquet(historical_path, index=False)
-          print(f"Historical data updated: {len(combined)} rows")
-          EOF
+      - name: Append etf today data to historical
+        run: python append_daily_to_historical.py --market etf
 
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/ohlc/today/it/ohlc_data.parquet data/ohlc/historical/it/ohlc_data.parquet
-          git commit -m "chore: update daily OHLC data [skip ci]" || echo "No changes to commit"
+          git add data/ohlc/today/it/ohlc_data.parquet data/ohlc/historical/it/ohlc_data.parquet \
+                  data/ohlc/today/etf/ohlc_data.parquet data/ohlc/historical/etf/ohlc_data.parquet
+          git commit -m "chore: update daily OHLC data (it, etf) [skip ci]" || echo "No changes to commit"
           git push
