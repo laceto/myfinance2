@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
 
@@ -64,6 +65,8 @@ KNOWN_DEAD = frozenset(
         "AVAX.AS", "AWDS.PA", "AXLM.AS", "AXTZ.AS", "BNBA.AS", "BOLD.AS",
         "ETHC.AS", "GRAM.AS", "HODL.AS", "PRAE.PA", "PRAZ.PA", "QGHY.PA",
         "QGLO.PA", "QUIG.PA", "QUSA.PA", "SRIC7.SW", "SRID7.SW",
+        # found in the 395-ticker run (AUM enrichment from profiles.jsonl)
+        "BNKS.SW", "D28A.AS", "EEJD.AS", "EEWD.AS", "IEXXF",
     }
 )
 
@@ -75,21 +78,24 @@ def build_active_universe_table(
     core: pd.DataFrame,
     extra_count: int = DEFAULT_EXTRA_COUNT,
     exclude=KNOWN_DEAD,
+    aum_extras: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
-    """Return the active universe: the core, then up to ``extra_count`` extras.
+    """Return the active universe: core, justETF extras, then AUM extras.
 
-    Extras are the first justETF tickers not already present in the core, in
-    justETF order. The core keeps its own order and comes first. Duplicate
-    tickers are dropped (core wins). Any ticker in ``exclude`` is pruned from
-    the result and is **not** replaced — the universe shrinks by the excluded
-    count (so pruning known-dead symbols from the first ``extra_count`` window
-    yields fewer than ``extra_count`` extras, on purpose).
+    Order: the curated ``core`` first (own order), then the first
+    ``extra_count`` justETF tickers not already in the core (justETF order),
+    then ``aum_extras`` (AUM-ranked funds — see ``etf_profiles``). Duplicate
+    tickers are dropped keeping the first occurrence, so a fund already present
+    from an earlier source is **not** re-added ("if not already there"). Any
+    ticker in ``exclude`` is pruned and not replaced.
 
     Args:
         justetf: DataFrame with at least ``name`` and ``ticker`` columns.
         core: the curated core table (``name``, ``ticker``), kept first.
-        extra_count: maximum number of extra tickers to consider from justETF.
+        extra_count: maximum number of justETF extra tickers to consider.
         exclude: tickers to prune (default: ``KNOWN_DEAD``).
+        aum_extras: optional (``name``, ``ticker``) table of AUM-ranked funds to
+            union in after the justETF extras.
 
     Raises:
         ValueError: if ``justetf`` lacks the required columns.
@@ -107,10 +113,31 @@ def build_active_universe_table(
         .head(extra_count)
     )
 
-    combined = pd.concat([core[_REQUIRED_COLUMNS], extras], ignore_index=True)
+    parts = [core[_REQUIRED_COLUMNS], extras]
+    if aum_extras is not None and len(aum_extras) > 0:
+        parts.append(aum_extras[_REQUIRED_COLUMNS])
+
+    combined = pd.concat(parts, ignore_index=True)
     combined = combined[~combined["ticker"].isin(set(exclude))]
     combined = combined.drop_duplicates(subset=["ticker"], keep="first")
     return combined.reset_index(drop=True)
+
+
+PROFILES_TOP_N = 100
+
+
+def _aum_extras(justetf: pd.DataFrame) -> Optional[pd.DataFrame]:
+    """Top-``PROFILES_TOP_N`` funds by real AUM from profiles.jsonl, mapped to
+    Yahoo tickers via the justETF name -> ticker table. Returns None when the
+    profiles export is absent (keeps the seed reproducible without it)."""
+    from etf_profiles import PROFILES_FILE, load_profiles, profiles_ticker_table
+
+    if not PROFILES_FILE.exists():
+        logger.info("No profiles export at %s; skipping AUM enrichment", PROFILES_FILE)
+        return None
+
+    name_to_ticker = dict(zip(justetf["name"], justetf["ticker"]))
+    return profiles_ticker_table(load_profiles(), name_to_ticker, n=PROFILES_TOP_N)
 
 
 def write_active_seed(
@@ -120,21 +147,27 @@ def write_active_seed(
 ) -> Path:
     """Materialise the active universe seed (.xlsx) that the pipeline reads.
 
+    The universe = curated core + justETF list-order extras + the top-N funds by
+    real AUM from ``profiles.jsonl`` (deduped, ``KNOWN_DEAD`` pruned).
+
     ``path`` is first so this matches the ``seed_writer(path)`` contract used by
     ``cold_start_etf.cold_start``.
     """
     path = Path(path)
     justetf = pd.read_excel(justetf_file)
     core = build_top15_ticker_table()
+    aum_extras = _aum_extras(justetf)
 
-    table = build_active_universe_table(justetf, core, extra_count)
+    table = build_active_universe_table(justetf, core, extra_count, aum_extras=aum_extras)
 
     path.parent.mkdir(parents=True, exist_ok=True)
     table.to_excel(path, index=False)
 
+    n_aum = 0 if aum_extras is None else len(aum_extras)
     logger.info(
-        "Wrote active ETF universe seed: %s (%d tickers = %d core + %d extras)",
-        path, len(table), len(core), len(table) - len(core),
+        "Wrote active ETF universe seed: %s (%d tickers = %d core + justETF extras "
+        "+ up to %d AUM-ranked)",
+        path, len(table), len(core), n_aum,
     )
     return path
 

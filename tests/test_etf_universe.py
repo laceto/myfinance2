@@ -117,6 +117,38 @@ class TestBuildActiveUniverseExcludesDead:
         assert "AEMD.PA" not in result["ticker"].tolist()
 
 
+class TestBuildActiveUniverseAumExtras:
+
+    def test_appends_aum_extras_after_justetf_extras(self):
+        core = _core(["CSPX.L"])
+        justetf = _justetf(["AAA.L", "BBB.L"])
+        aum = pd.DataFrame({"name": ["Big Fund"], "ticker": ["XAUM.MI"]})
+
+        result = build_active_universe_table(justetf, core, extra_count=1, aum_extras=aum, exclude=set())
+
+        # core, then first justETF extra, then the AUM extra.
+        assert result["ticker"].tolist() == ["CSPX.L", "AAA.L", "XAUM.MI"]
+
+    def test_aum_extras_not_duplicated_when_already_present(self):
+        core = _core(["CSPX.L"])
+        justetf = _justetf(["AAA.L", "BBB.L"])
+        aum = pd.DataFrame({"name": ["dup"], "ticker": ["AAA.L"]})   # already a justETF extra
+
+        result = build_active_universe_table(justetf, core, extra_count=2, aum_extras=aum, exclude=set())
+
+        assert result["ticker"].tolist() == ["CSPX.L", "AAA.L", "BBB.L"]
+        assert result["ticker"].is_unique
+
+    def test_aum_extras_respect_known_dead_exclusion(self):
+        core = _core(["CSPX.L"])
+        justetf = _justetf(["AAA.L"])
+        aum = pd.DataFrame({"name": ["dead fund"], "ticker": ["DEAD.PA"]})
+
+        result = build_active_universe_table(justetf, core, extra_count=1, aum_extras=aum, exclude={"DEAD.PA"})
+
+        assert "DEAD.PA" not in result["ticker"].tolist()
+
+
 class TestBuildActiveUniverseFailureModes:
 
     def test_missing_source_columns_raises_value_error(self):

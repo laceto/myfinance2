@@ -100,8 +100,11 @@ download fails only its own market, before committing — no partial/stale data.
 **ETF cold start (one-time backfill):** the `etf` market's *active universe* is
 the curated 15 largest UCITS ETFs by AUM (the reviewed core) plus 100 more
 tickers drawn from the justETF list, minus symbols that returned no Yahoo data
-(pruned via `KNOWN_DEAD`). At `DEFAULT_EXTRA_COUNT=350` this is **317**
-downloadable tickers (15 core + 302 extras; 48 known-dead symbols pruned).
+(pruned via `KNOWN_DEAD`), **plus** the top-100 funds by real AUM from
+`data/ticker/etf/profiles.jsonl` (justETF export; `fund_size_eur_mln` mapped to
+Yahoo tickers by name via `etf_profiles.py`). At `DEFAULT_EXTRA_COUNT=350` the
+universe is **390** tickers (core + justETF list-order extras + AUM top-100,
+deduped; 53 known-dead pruned).
 
 | Concern | Where |
 |---------|-------|
