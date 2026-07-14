@@ -67,6 +67,11 @@ SHORT_TERM_WINDOWS_DAYS: Dict[str, int] = {
     "1W": 7,
 }
 
+# Any |single-day close change| above this within a window is treated as a
+# split / re-denomination data artifact (real ETFs don't move this much in a
+# day), and the affected window return is dropped.
+DEFAULT_MAX_DAILY_MOVE = 0.50
+
 
 def latest_close_asof(ohlc: pd.DataFrame, as_of: pd.Timestamp) -> pd.Series:
     """Last close on or before ``as_of`` for each symbol (index: symbol)."""
@@ -109,18 +114,47 @@ def period_return(
     return ratio - 1.0
 
 
+def price_artifact_symbols(
+    ohlc: pd.DataFrame,
+    base_date: pd.Timestamp,
+    as_of: pd.Timestamp,
+    max_daily_move: float = DEFAULT_MAX_DAILY_MOVE,
+) -> list:
+    """Symbols whose close makes an implausible single-day move within
+    ``(base_date, as_of]`` — a signature of an unadjusted split / re-denomination.
+
+    Daily moves are computed over full history (so the first in-window bar is
+    measured against the base bar), then sliced to the window. A ``max_daily_move``
+    of 0.5 means "flag any |day-over-day close change| > 50%"; real ETFs (even
+    2x leveraged) do not move that much in a day, so such a jump is a data
+    artifact, and the affected window return is unreliable.
+    """
+    df = ohlc[["symbol", "date", "close"]].copy()
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.sort_values(["symbol", "date"])
+    df["dmove"] = df.groupby("symbol")["close"].pct_change().abs()
+
+    window = df[(df["date"] > pd.Timestamp(base_date)) & (df["date"] <= pd.Timestamp(as_of))]
+    worst = window.groupby("symbol")["dmove"].max()
+    return sorted(worst[worst > max_daily_move].index.tolist())
+
+
 def compute_returns(
     ohlc: pd.DataFrame,
     as_of: Optional[pd.Timestamp] = None,
     windows_days: Optional[Dict[str, int]] = None,
     include_ytd: bool = True,
     method: str = "simple",
+    max_daily_move: Optional[float] = None,
 ) -> pd.DataFrame:
     """Return a wide table (index: symbol) with one column per window.
 
     ``as_of`` defaults to the latest date in ``ohlc``. YTD (when included) uses
-    the prior year-end close as its base. ``method`` is ``"simple"`` or
-    ``"log"`` (see ``period_return``).
+    the prior year-end close as its base. ``method`` is ``"simple"`` or ``"log"``
+    (see ``period_return``). When ``max_daily_move`` is set, any symbol with an
+    implausible single-day move within a window (a split/re-denomination
+    artifact) gets NaN for **that** window, so it drops from that window's
+    ranking while its clean windows are unaffected.
     """
     if windows_days is None:
         windows_days = DEFAULT_WINDOWS_DAYS
@@ -131,13 +165,19 @@ def compute_returns(
         as_of = ohlc["date"].max()
     as_of = pd.Timestamp(as_of)
 
+    def _column(base_date: pd.Timestamp) -> pd.Series:
+        col = period_return(ohlc, as_of, base_date, method=method)
+        if max_daily_move is not None:
+            flagged = price_artifact_symbols(ohlc, base_date, as_of, max_daily_move)
+            col.loc[col.index.isin(flagged)] = np.nan
+        return col
+
     columns = {}
     for label, days in windows_days.items():
-        columns[label] = period_return(ohlc, as_of, as_of - pd.Timedelta(days=days), method=method)
+        columns[label] = _column(as_of - pd.Timedelta(days=days))
 
     if include_ytd:
-        prior_year_end = pd.Timestamp(year=as_of.year - 1, month=12, day=31)
-        columns["YTD"] = period_return(ohlc, as_of, prior_year_end, method=method)
+        columns["YTD"] = _column(pd.Timestamp(year=as_of.year - 1, month=12, day=31))
 
     return pd.DataFrame(columns)
 
@@ -275,7 +315,29 @@ def _parse_args() -> argparse.Namespace:
                    help="Lookback (days) for the liquidity screen.")
     p.add_argument("--no-liquidity-filter", action="store_true",
                    help="Disable the illiquidity screen (rank the full universe).")
+    p.add_argument("--max-daily-move", type=float, default=DEFAULT_MAX_DAILY_MOVE,
+                   help="Flag |single-day close change| above this as a split/re-denomination "
+                        "artifact and drop the affected window return.")
+    p.add_argument("--no-artifact-filter", action="store_true",
+                   help="Disable the split/re-denomination artifact screen.")
     return p.parse_args()
+
+
+def _write_flagged_artifacts(ohlc: pd.DataFrame, names: Dict[str, str], as_of: pd.Timestamp,
+                             max_daily_move: float, results_dir: Path = RESULTS_DIR) -> None:
+    """List symbols with a suspect price jump over the analysis horizon (~3Y),
+    for review — these are excluded per-window from the rankings."""
+    horizon = max(DEFAULT_WINDOWS_DAYS.values())
+    flagged = price_artifact_symbols(ohlc, as_of - pd.Timedelta(days=horizon), as_of, max_daily_move)
+    lines = [
+        "ETF price artifacts (suspect split / re-denomination — excluded from rankings)",
+        f"criterion: |single-day close change| > {max_daily_move:.0%} within the last {horizon}d",
+        f"flagged: {len(flagged)}",
+        "",
+    ]
+    lines += [f"  {sym:<10} {names.get(sym, '')}" for sym in flagged]
+    (results_dir / "flagged_artifacts.txt").write_text("\n".join(lines), encoding="utf-8")
+    log.info("Flagged %d price-artifact symbol(s)", len(flagged))
 
 
 def _apply_liquidity_filter(ohlc, args):
@@ -297,16 +359,22 @@ def main() -> None:
     names = _name_map()
 
     kept, screen = _apply_liquidity_filter(ohlc, args)
+    max_move = None if args.no_artifact_filter else args.max_daily_move
+    if max_move is not None:
+        screen = f"{screen}; drop |1-day move| > {max_move:.0%} (split/re-denomination)"
 
     def _screened(returns: pd.DataFrame) -> pd.DataFrame:
         return returns if kept is None else returns[returns.index.isin(kept)]
 
-    returns = _screened(compute_returns(ohlc, method=args.method))
+    returns = _screened(compute_returns(ohlc, method=args.method, max_daily_move=max_move))
     write_outputs(returns, names, top=args.top, method=args.method, screen=screen)
 
     short = _screened(compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS,
-                                      include_ytd=False, method=args.method))
+                                      include_ytd=False, method=args.method, max_daily_move=max_move))
     write_short_term_report(short, names, top=args.top, method=args.method, screen=screen)
+
+    if max_move is not None:
+        _write_flagged_artifacts(ohlc, names, pd.to_datetime(ohlc["date"]).max(), max_move)
 
 
 if __name__ == "__main__":

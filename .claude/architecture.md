@@ -139,8 +139,12 @@ date), so funds with too little history drop out. An **illiquidity screen**
 (`etf_liquidity.py`) drops thin symbols before ranking — default: median daily
 traded value (close*volume) >= 50,000 and >= 80% active days over ~90d
 (`--min-traded-value` / `--min-active` / `--liquidity-lookback` / `--no-liquidity-filter`).
-Note this is orthogonal to split/re-denomination *data artifacts* (e.g. `LQQ.PA`,
-`JPXX.L`), which are liquid and need a separate sanity check. `.github/workflows/etf_returns.yml`
+A separate **split/re-denomination screen** drops a symbol's window return when the
+close makes an implausible single-day move (>50% by default, `--max-daily-move` /
+`--no-artifact-filter`) within that window — per-window, so a fund is only removed
+from the windows its glitch spans. Flagged symbols (e.g. `LQQ.PA`, `JPXX.L`, `SPEQ.MI`)
+are listed in `data/results/etf/flagged_artifacts.txt` for review. This is orthogonal
+to the liquidity screen (those artifacts are liquid). `.github/workflows/etf_returns.yml`
 runs it after each **Download Daily OHLC Data** completes (`workflow_run`) and
 commits `data/results/etf/{returns_ranking.xlsx,returns_report.txt,short_term_movers.txt}`.
 It is pure pandas over the committed parquet — no network or `algoshort` wheel.
