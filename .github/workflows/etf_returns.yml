@@ -43,7 +43,8 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add data/results/etf/returns_ranking.xlsx \
                   data/results/etf/returns_report.txt \
-                  data/results/etf/short_term_movers.txt
+                  data/results/etf/short_term_movers.txt \
+                  data/results/etf/flagged_artifacts.txt
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

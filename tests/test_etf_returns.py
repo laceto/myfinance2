@@ -29,6 +29,7 @@ from etf_returns import (
     compute_returns,
     latest_close_asof,
     period_return,
+    price_artifact_symbols,
     top_outperformers,
 )
 
@@ -98,6 +99,44 @@ class TestPeriodReturn:
         with pytest.raises(ValueError, match="method"):
             period_return(ohlc, as_of=pd.Timestamp("2026-03-01"),
                           base_date=pd.Timestamp("2026-02-01"), method="bogus")
+
+
+class TestPriceArtifactSymbols:
+
+    def test_flags_symbol_with_extreme_single_day_move_in_window(self):
+        ohlc = _ohlc([
+            ("A.L", "2026-06-01", 100), ("A.L", "2026-06-02", 100.5),   # normal
+            ("B.L", "2026-06-01", 100), ("B.L", "2026-06-02", 30),      # -70% jump
+        ])
+
+        flagged = price_artifact_symbols(
+            ohlc, base_date=pd.Timestamp("2026-05-31"),
+            as_of=pd.Timestamp("2026-06-02"), max_daily_move=0.5)
+
+        assert flagged == ["B.L"]
+
+    def test_no_flag_when_all_moves_within_threshold(self):
+        ohlc = _ohlc([("A.L", "2026-06-01", 100), ("A.L", "2026-06-02", 105),
+                      ("A.L", "2026-06-03", 103)])
+
+        flagged = price_artifact_symbols(
+            ohlc, base_date=pd.Timestamp("2026-05-31"),
+            as_of=pd.Timestamp("2026-06-03"), max_daily_move=0.5)
+
+        assert flagged == []
+
+    def test_ignores_jump_outside_the_window(self):
+        ohlc = _ohlc([
+            ("A.L", "2026-01-01", 100), ("A.L", "2026-01-02", 30),   # jump in January
+            ("A.L", "2026-06-01", 30),  ("A.L", "2026-06-02", 31),   # calm in June
+        ])
+
+        # Window starts after the January jump -> not flagged.
+        flagged = price_artifact_symbols(
+            ohlc, base_date=pd.Timestamp("2026-05-01"),
+            as_of=pd.Timestamp("2026-06-02"), max_daily_move=0.5)
+
+        assert flagged == []
 
 
 class TestComputeReturns:
