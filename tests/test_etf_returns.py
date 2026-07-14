@@ -25,6 +25,7 @@ import numpy as np
 import pandas as pd
 
 from etf_returns import (
+    bottom_underperformers,
     compute_returns,
     latest_close_asof,
     period_return,
@@ -107,3 +108,17 @@ class TestTopOutperformers:
 
         assert top["symbol"].tolist() == ["B.L", "D.L"]   # 0.20, 0.12
         assert "C.L" not in top["symbol"].tolist()        # NaN dropped
+
+
+class TestBottomUnderperformers:
+
+    def test_orders_ascending_drops_nan_and_limits_n(self):
+        returns = pd.DataFrame(
+            {"1W": [0.05, -0.20, np.nan, -0.12]},
+            index=["A.L", "B.L", "C.L", "D.L"],
+        )
+
+        bottom = bottom_underperformers(returns, "1W", n=2)
+
+        assert bottom["symbol"].tolist() == ["B.L", "D.L"]   # -0.20, -0.12 (worst first)
+        assert "C.L" not in bottom["symbol"].tolist()        # NaN dropped

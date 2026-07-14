@@ -50,6 +50,14 @@ DEFAULT_WINDOWS_DAYS: Dict[str, int] = {
     "3Y": 1095,
 }
 
+# Very-short-term lookbacks for the up/down snapshot. "1D" = last trading-day
+# move (a calendar day back over a weekend lands on the previous session's
+# close, so on a Monday "1D" is the Fri->Mon move).
+SHORT_TERM_WINDOWS_DAYS: Dict[str, int] = {
+    "1D": 1,
+    "1W": 7,
+}
+
 
 def latest_close_asof(ohlc: pd.DataFrame, as_of: pd.Timestamp) -> pd.Series:
     """Last close on or before ``as_of`` for each symbol (index: symbol)."""
@@ -109,20 +117,28 @@ def compute_returns(
     return pd.DataFrame(columns)
 
 
+def _ranked(returns: pd.DataFrame, window: str, n: int, ascending: bool) -> pd.DataFrame:
+    return (
+        returns[[window]]
+        .dropna()
+        .sort_values(window, ascending=ascending)
+        .head(n)
+        .reset_index()
+        .rename(columns={"index": "symbol"})
+    )
+
+
 def top_outperformers(returns: pd.DataFrame, window: str, n: int = 15) -> pd.DataFrame:
     """Top ``n`` symbols by return in ``window``, best first, NaNs dropped.
 
     Returns a tidy frame with columns ``symbol`` and ``window``.
     """
-    ranked = (
-        returns[[window]]
-        .dropna()
-        .sort_values(window, ascending=False)
-        .head(n)
-        .reset_index()
-        .rename(columns={"index": "symbol"})
-    )
-    return ranked
+    return _ranked(returns, window, n, ascending=False)
+
+
+def bottom_underperformers(returns: pd.DataFrame, window: str, n: int = 15) -> pd.DataFrame:
+    """Bottom ``n`` symbols by return in ``window``, worst first, NaNs dropped."""
+    return _ranked(returns, window, n, ascending=True)
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +171,44 @@ def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int) -> str:
     return "\n".join(lines)
 
 
+def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int) -> str:
+    """Short-term who's-up / who's-down report: per window, the up/down split
+    plus the top gainers and top decliners."""
+    lines = [
+        "ETF short-term movers — who is up and who is down",
+        f"universe: {len(returns)} ETFs   (windows: {', '.join(returns.columns)})",
+        "",
+    ]
+    for window in returns.columns:
+        col = returns[window].dropna()
+        up, down, flat = int((col > 0).sum()), int((col < 0).sum()), int((col == 0).sum())
+        lines.append(f"== {window}  —  {up} up / {down} down / {flat} flat  (median {col.median():+.1%}) ==")
+
+        lines.append(f"  UP (top {top}):")
+        for rank, (_, row) in enumerate(top_outperformers(returns, window, top).iterrows(), 1):
+            sym = row["symbol"]
+            lines.append(f"    {rank:>2}. {sym:<10} {row[window]:+7.1%}  {names.get(sym, '')}")
+
+        lines.append(f"  DOWN (bottom {top}):")
+        for rank, (_, row) in enumerate(bottom_underperformers(returns, window, top).iterrows(), 1):
+            sym = row["symbol"]
+            lines.append(f"    {rank:>2}. {sym:<10} {row[window]:+7.1%}  {names.get(sym, '')}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def write_short_term_report(short: pd.DataFrame, names: Dict[str, str], top: int,
+                            results_dir: Path = RESULTS_DIR) -> Path:
+    """Write the short-term up/down text report and return its path."""
+    results_dir.mkdir(parents=True, exist_ok=True)
+    report = build_up_down_report(short, names, top)
+    path = results_dir / "short_term_movers.txt"
+    path.write_text(report, encoding="utf-8")
+    log.info("Wrote %s", path)
+    print(report)
+    return path
+
+
 def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
                   results_dir: Path = RESULTS_DIR) -> None:
     """Write an xlsx (one sheet per window) and a text report."""
@@ -184,8 +238,13 @@ def _parse_args() -> argparse.Namespace:
 def main() -> None:
     args = _parse_args()
     ohlc = pd.read_parquet(HISTORICAL_PATH)
+    names = _name_map()
+
     returns = compute_returns(ohlc)
-    write_outputs(returns, _name_map(), top=args.top)
+    write_outputs(returns, names, top=args.top)
+
+    short = compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS, include_ytd=False)
+    write_short_term_report(short, names, top=args.top)
 
 
 if __name__ == "__main__":
