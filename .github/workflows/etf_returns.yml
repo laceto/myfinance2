@@ -1,0 +1,64 @@
+name: ETF Return Analysis
+
+on:
+  # Runs right after the daily download so the reports reflect fresh data.
+  # workflow_run fires on the default branch once the named workflow completes.
+  workflow_run:
+    workflows: ["Download Daily OHLC Data"]
+    types: [completed]
+  # Manual trigger for on-demand refresh / testing.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  returns:
+    runs-on: ubuntu-latest
+    # Skip if the download run failed (but always run on manual dispatch).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # etf_returns.py is pure pandas over the committed parquet — no network,
+      # no yfinance, no algoshort wheel needed.
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pandas pyarrow openpyxl numpy
+
+      - name: Run ETF return analysis
+        run: python etf_returns.py --top 15
+
+      - name: Commit reports
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/results/etf/returns_ranking.xlsx \
+                  data/results/etf/returns_report.txt \
+                  data/results/etf/short_term_movers.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: update ETF return analysis [skip ci]"
+          # Another job (the daily download) may push to the same branch around
+          # the same time; rebase-retry on a rejected push (disjoint files).
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push rejected; syncing and retrying (attempt $attempt)"
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+          done
+          echo "failed to push after retries"
+          exit 1

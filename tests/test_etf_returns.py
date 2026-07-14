@@ -83,6 +83,22 @@ class TestPeriodReturn:
 
         assert np.isnan(r["A.L"])   # no bar on/before 2026-01-01
 
+    def test_log_method_returns_natural_log_of_ratio(self):
+        ohlc = _ohlc([("A.L", "2026-02-01", 100), ("A.L", "2026-03-01", 110)])
+
+        r = period_return(ohlc, as_of=pd.Timestamp("2026-03-01"),
+                          base_date=pd.Timestamp("2026-02-01"), method="log")
+
+        assert abs(r["A.L"] - np.log(1.10)) < 1e-9   # ln(110/100)
+
+    def test_unknown_method_raises_value_error(self):
+        import pytest
+        ohlc = _ohlc([("A.L", "2026-02-01", 100), ("A.L", "2026-03-01", 110)])
+
+        with pytest.raises(ValueError, match="method"):
+            period_return(ohlc, as_of=pd.Timestamp("2026-03-01"),
+                          base_date=pd.Timestamp("2026-02-01"), method="bogus")
+
 
 class TestComputeReturns:
 
