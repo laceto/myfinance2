@@ -103,7 +103,7 @@ tickers drawn from the justETF list, minus symbols that returned no Yahoo data
 (pruned via `KNOWN_DEAD`), **plus** the top-100 funds by real AUM from
 `data/ticker/etf/profiles.jsonl` (justETF export; `fund_size_eur_mln` mapped to
 Yahoo tickers by name via `etf_profiles.py`). At `DEFAULT_EXTRA_COUNT=450` the
-universe is **~488** tickers (core + justETF list-order extras + AUM top-100,
+universe is **471** tickers (core + justETF list-order extras + AUM top-100,
 deduped; known-dead pruned).
 
 | Concern | Where |
