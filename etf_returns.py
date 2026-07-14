@@ -27,6 +27,7 @@ import logging
 from pathlib import Path
 from typing import Dict, Optional
 
+import numpy as np
 import pandas as pd
 
 logging.basicConfig(
@@ -73,17 +74,31 @@ def period_return(
     ohlc: pd.DataFrame,
     as_of: pd.Timestamp,
     base_date: pd.Timestamp,
+    method: str = "simple",
 ) -> pd.Series:
-    """Per-symbol total return between ``base_date`` and ``as_of``.
+    """Per-symbol return between ``base_date`` and ``as_of``.
+
+    ``method`` selects the return convention:
+      - ``"simple"``: discrete return ``close(as_of)/close(base) - 1``
+      - ``"log"``: continuously-compounded ``ln(close(as_of)/close(base))``
 
     NaN for any symbol lacking a bar on/before ``base_date`` (insufficient
-    history) — such symbols must not appear in a ranking.
+    history) — such symbols must not appear in a ranking. Both conventions
+    preserve ranking order, so top/bottom lists are identical; only the
+    magnitudes differ.
     """
+    if method not in ("simple", "log"):
+        raise ValueError(f"unknown method {method!r}; expected 'simple' or 'log'")
+
     latest = latest_close_asof(ohlc, as_of)
     base = latest_close_asof(ohlc, base_date)
     # Align on symbols present at as_of; symbols missing a base close -> NaN.
     base = base.reindex(latest.index)
-    return latest / base - 1.0
+    ratio = latest / base
+
+    if method == "log":
+        return np.log(ratio)
+    return ratio - 1.0
 
 
 def compute_returns(
@@ -91,11 +106,13 @@ def compute_returns(
     as_of: Optional[pd.Timestamp] = None,
     windows_days: Optional[Dict[str, int]] = None,
     include_ytd: bool = True,
+    method: str = "simple",
 ) -> pd.DataFrame:
     """Return a wide table (index: symbol) with one column per window.
 
     ``as_of`` defaults to the latest date in ``ohlc``. YTD (when included) uses
-    the prior year-end close as its base.
+    the prior year-end close as its base. ``method`` is ``"simple"`` or
+    ``"log"`` (see ``period_return``).
     """
     if windows_days is None:
         windows_days = DEFAULT_WINDOWS_DAYS
@@ -108,11 +125,11 @@ def compute_returns(
 
     columns = {}
     for label, days in windows_days.items():
-        columns[label] = period_return(ohlc, as_of, as_of - pd.Timedelta(days=days))
+        columns[label] = period_return(ohlc, as_of, as_of - pd.Timedelta(days=days), method=method)
 
     if include_ytd:
         prior_year_end = pd.Timestamp(year=as_of.year - 1, month=12, day=31)
-        columns["YTD"] = period_return(ohlc, as_of, prior_year_end)
+        columns["YTD"] = period_return(ohlc, as_of, prior_year_end, method=method)
 
     return pd.DataFrame(columns)
 
@@ -152,11 +169,12 @@ def _name_map(seed_path: Path = SEED_PATH) -> Dict[str, str]:
     return dict(zip(seed["ticker"], seed["name"]))
 
 
-def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int) -> str:
+def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
+                 method: str = "simple") -> str:
     """Human-readable top-N-per-window report with the universe median for context."""
     lines = [
         "ETF multi-timeframe return analysis — top out-performers",
-        f"universe: {len(returns)} ETFs",
+        f"universe: {len(returns)} ETFs   (returns: {method}, cumulative, close-to-close)",
         "",
     ]
     for window in [c for c in returns.columns]:
@@ -171,12 +189,13 @@ def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int) -> str:
     return "\n".join(lines)
 
 
-def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int) -> str:
+def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
+                         method: str = "simple") -> str:
     """Short-term who's-up / who's-down report: per window, the up/down split
     plus the top gainers and top decliners."""
     lines = [
         "ETF short-term movers — who is up and who is down",
-        f"universe: {len(returns)} ETFs   (windows: {', '.join(returns.columns)})",
+        f"universe: {len(returns)} ETFs   (windows: {', '.join(returns.columns)}; returns: {method})",
         "",
     ]
     for window in returns.columns:
@@ -198,10 +217,10 @@ def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int)
 
 
 def write_short_term_report(short: pd.DataFrame, names: Dict[str, str], top: int,
-                            results_dir: Path = RESULTS_DIR) -> Path:
+                            method: str = "simple", results_dir: Path = RESULTS_DIR) -> Path:
     """Write the short-term up/down text report and return its path."""
     results_dir.mkdir(parents=True, exist_ok=True)
-    report = build_up_down_report(short, names, top)
+    report = build_up_down_report(short, names, top, method=method)
     path = results_dir / "short_term_movers.txt"
     path.write_text(report, encoding="utf-8")
     log.info("Wrote %s", path)
@@ -210,7 +229,7 @@ def write_short_term_report(short: pd.DataFrame, names: Dict[str, str], top: int
 
 
 def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
-                  results_dir: Path = RESULTS_DIR) -> None:
+                  method: str = "simple", results_dir: Path = RESULTS_DIR) -> None:
     """Write an xlsx (one sheet per window) and a text report."""
     results_dir.mkdir(parents=True, exist_ok=True)
 
@@ -222,7 +241,7 @@ def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
             table.to_excel(writer, sheet_name=window, index=False)
     log.info("Wrote %s", xlsx_path)
 
-    report = build_report(returns, names, top)
+    report = build_report(returns, names, top, method=method)
     txt_path = results_dir / "returns_report.txt"
     txt_path.write_text(report, encoding="utf-8")
     log.info("Wrote %s", txt_path)
@@ -232,6 +251,8 @@ def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
 def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Multi-timeframe ETF return analysis (top out-performers).")
     p.add_argument("--top", type=int, default=15, help="How many out-performers to list per window.")
+    p.add_argument("--method", choices=["simple", "log"], default="simple",
+                   help="Return convention: 'simple' (discrete) or 'log' (continuously compounded).")
     return p.parse_args()
 
 
@@ -240,11 +261,12 @@ def main() -> None:
     ohlc = pd.read_parquet(HISTORICAL_PATH)
     names = _name_map()
 
-    returns = compute_returns(ohlc)
-    write_outputs(returns, names, top=args.top)
+    returns = compute_returns(ohlc, method=args.method)
+    write_outputs(returns, names, top=args.top, method=args.method)
 
-    short = compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS, include_ytd=False)
-    write_short_term_report(short, names, top=args.top)
+    short = compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS,
+                            include_ytd=False, method=args.method)
+    write_short_term_report(short, names, top=args.top, method=args.method)
 
 
 if __name__ == "__main__":

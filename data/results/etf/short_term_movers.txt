@@ -1,8 +1,8 @@
 ETF short-term movers — who is up and who is down
-universe: 559 ETFs   (windows: 1D, 1W)
+universe: 559 ETFs   (windows: 1D, 1W; returns: simple)
 
 == 1D  —  183 up / 257 down / 119 flat  (median +0.0%) ==
-  UP (top 10):
+  UP (top 15):
      1. SXLE.AS      +3.5%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
      2. STN.PA       +3.2%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
      3. NRGW.PA      +2.5%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
@@ -13,7 +13,12 @@ universe: 559 ETFs   (windows: 1D, 1W)
      8. BCCMA.SW     +1.2%  UBS BBG Commodity CMCI SF UCITS ETF USD acc
      9. DSP5.PA      +1.1%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
     10. COMO.PA      +1.1%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
-  DOWN (bottom 10):
+    11. GSCE.AS      +1.1%  BNP Paribas Easy Energy & Metals Enhanced Roll UCITS ETF EUR
+    12. AEUSE.PA     +1.0%  BNP Paribas Easy ESG Enhanced Europe UCITS ETF Acc
+    13. CBVS.SW      +1.0%  Amundi Multi-Asset Portfolio UCITS ETF Dist
+    14. UTI.PA       +1.0%  Amundi STOXX Europe 600 Utilities UCITS ETF Acc
+    15. STU.PA       +1.0%  State Street SPDR MSCI Europe Utilities UCITS ETF EUR
+  DOWN (bottom 15):
      1. IKRA.AS      -6.6%  iShares MSCI Korea UCITS ETF (Dist)
      2. KRW.PA       -6.6%  Amundi MSCI Korea UCITS ETF Acc
      3. JSOL.AS      -5.5%  21shares Jito Staked SOL ETP
@@ -24,9 +29,14 @@ universe: 559 ETFs   (windows: 1D, 1W)
      8. APTB.SW      -3.8%  Bitwise Aptos Staking ETP
      9. CSDA.PA      -3.7%  CoinShares Physical Staked Cardano
     10. APX.PA       -3.4%  Amundi MSCI AC Asia Ex Japan UCITS ETF Acc
+    11. AASU.PA      -3.3%  Amundi MSCI Emerging Markets Asia UCITS ETF USD
+    12. EXCD.AS      -3.2%  iShares MSCI EM ex-China UCITS ETF USD (Dist)
+    13. DOGE.SW      -3.1%  21shares Dogecoin ETP
+    14. AASI.PA      -3.1%  Amundi MSCI Emerging Markets Asia UCITS ETF EUR (C)
+    15. EMXC.PA      -3.0%  Amundi MSCI Emerging Ex China UCITS ETF Acc
 
 == 1W  —  183 up / 319 down / 50 flat  (median -0.2%) ==
-  UP (top 10):
+  UP (top 15):
      1. TIAB.PA     +12.4%  Bitwise Celestia Staking ETP
      2. AUNI.AS     +12.3%  21shares Uniswap ETP
      3. ET32.PA      +8.7%  Bitwise Ethereum Staking ETP
@@ -37,7 +47,12 @@ universe: 559 ETFs   (windows: 1D, 1W)
      8. SXLE.AS      +5.8%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
      9. NRGW.PA      +4.9%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
     10. BXX.PA       +4.2%  Amundi EURO STOXX 50 Daily (-2x) Inverse UCITS ETF Acc
-  DOWN (bottom 10):
+    11. BCCMA.SW     +3.7%  UBS BBG Commodity CMCI SF UCITS ETF USD acc
+    12. TELE.PA      +3.5%  Amundi STOXX Europe 600 Telecommunications UCITS ETF Acc
+    13. ABBA.SW      +2.8%  21shares Bitcoin Ethereum Core ETP
+    14. FBTC.MI      +2.7%  Fidelity Physical Bitcoin ETP
+    15. INDO.PA      +2.5%  Amundi MSCI Indonesia UCITS ETF Acc
+  DOWN (bottom 15):
      1. LQQ.PA      -99.5%  Amundi Nasdaq-100 Daily (2x) Leveraged UCITS ETF Acc
      2. KRW.PA      -10.5%  Amundi MSCI Korea UCITS ETF Acc
      3. IKRA.AS     -10.5%  iShares MSCI Korea UCITS ETF (Dist)
@@ -48,3 +63,8 @@ universe: 559 ETFs   (windows: 1D, 1W)
      8. FEQP.L       -5.8%  Fidelity Europe Quality Income UCITS ETF ACC-GBP (hedged)
      9. LVD.PA       -5.8%  Amundi LevDax Daily (2x) leveraged UCITS ETF Acc
     10. SLNC.PA      -5.5%  CoinShares Physical Staked Solana
+    11. JSOL.AS      -5.5%  21shares Jito Staked SOL ETP
+    12. CSOL.MI      -5.2%  21shares Solana Core Staking ETP
+    13. EXCD.AS      -5.1%  iShares MSCI EM ex-China UCITS ETF USD (Dist)
+    14. EMXC.PA      -5.1%  Amundi MSCI Emerging Ex China UCITS ETF Acc
+    15. FEMI.MI      -4.8%  Fidelity Emerging Markets Quality Income UCITS ETF ACC-USD

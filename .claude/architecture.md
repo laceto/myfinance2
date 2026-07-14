@@ -130,6 +130,16 @@ The AUM figures in `etf_top15.py` are approximate; refresh and regenerate the
 seed with `python etf_top15.py`. The wider 2217-ticker `data/ticker/etf/ticker.xlsx`
 (justETF universe) is retained for future full-universe use.
 
+**ETF return analysis (daily):** `etf_returns.py` computes each ETF's
+cumulative return over 1W/1M/3M/6M/1Y/3Y + YTD (and a 1D/1W short-term movers
+view) from the historical parquet, ranking top out-performers and bottom
+decliners per window. Returns are close-to-close, simple by default
+(`--method log` for continuously-compounded); no lookahead (close on/before each
+date), so funds with too little history drop out. `.github/workflows/etf_returns.yml`
+runs it after each **Download Daily OHLC Data** completes (`workflow_run`) and
+commits `data/results/etf/{returns_ranking.xlsx,returns_report.txt,short_term_movers.txt}`.
+It is pure pandas over the committed parquet — no network or `algoshort` wheel.
+
 **Scope note:** CI currently downloads OHLC for both markets, but the
 analysis/report pipeline (`analyze_stock.py` → `trading_report.py` →
 `get_insights.py`, wired by `analyze_and_report.yml`) still targets `it` only.
