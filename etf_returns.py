@@ -30,6 +30,14 @@ from typing import Dict, Optional
 import numpy as np
 import pandas as pd
 
+from etf_liquidity import (
+    DEFAULT_LOOKBACK_DAYS,
+    DEFAULT_MIN_ACTIVE_FRAC,
+    DEFAULT_MIN_TRADED_VALUE,
+    liquid_symbols,
+    liquidity_stats,
+)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)7s] %(name)s: %(message)s",
@@ -170,13 +178,15 @@ def _name_map(seed_path: Path = SEED_PATH) -> Dict[str, str]:
 
 
 def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
-                 method: str = "simple") -> str:
+                 method: str = "simple", screen: str = "") -> str:
     """Human-readable top-N-per-window report with the universe median for context."""
     lines = [
         "ETF multi-timeframe return analysis — top out-performers",
         f"universe: {len(returns)} ETFs   (returns: {method}, cumulative, close-to-close)",
-        "",
     ]
+    if screen:
+        lines.append(f"liquidity screen: {screen}")
+    lines.append("")
     for window in [c for c in returns.columns]:
         median = returns[window].median()
         lines.append(f"== {window}  (universe median {median:+.1%}) ==")
@@ -190,14 +200,16 @@ def build_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
 
 
 def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
-                         method: str = "simple") -> str:
+                         method: str = "simple", screen: str = "") -> str:
     """Short-term who's-up / who's-down report: per window, the up/down split
     plus the top gainers and top decliners."""
     lines = [
         "ETF short-term movers — who is up and who is down",
         f"universe: {len(returns)} ETFs   (windows: {', '.join(returns.columns)}; returns: {method})",
-        "",
     ]
+    if screen:
+        lines.append(f"liquidity screen: {screen}")
+    lines.append("")
     for window in returns.columns:
         col = returns[window].dropna()
         up, down, flat = int((col > 0).sum()), int((col < 0).sum()), int((col == 0).sum())
@@ -217,10 +229,11 @@ def build_up_down_report(returns: pd.DataFrame, names: Dict[str, str], top: int,
 
 
 def write_short_term_report(short: pd.DataFrame, names: Dict[str, str], top: int,
-                            method: str = "simple", results_dir: Path = RESULTS_DIR) -> Path:
+                            method: str = "simple", screen: str = "",
+                            results_dir: Path = RESULTS_DIR) -> Path:
     """Write the short-term up/down text report and return its path."""
     results_dir.mkdir(parents=True, exist_ok=True)
-    report = build_up_down_report(short, names, top, method=method)
+    report = build_up_down_report(short, names, top, method=method, screen=screen)
     path = results_dir / "short_term_movers.txt"
     path.write_text(report, encoding="utf-8")
     log.info("Wrote %s", path)
@@ -229,7 +242,8 @@ def write_short_term_report(short: pd.DataFrame, names: Dict[str, str], top: int
 
 
 def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
-                  method: str = "simple", results_dir: Path = RESULTS_DIR) -> None:
+                  method: str = "simple", screen: str = "",
+                  results_dir: Path = RESULTS_DIR) -> None:
     """Write an xlsx (one sheet per window) and a text report."""
     results_dir.mkdir(parents=True, exist_ok=True)
 
@@ -241,7 +255,7 @@ def write_outputs(returns: pd.DataFrame, names: Dict[str, str], top: int,
             table.to_excel(writer, sheet_name=window, index=False)
     log.info("Wrote %s", xlsx_path)
 
-    report = build_report(returns, names, top, method=method)
+    report = build_report(returns, names, top, method=method, screen=screen)
     txt_path = results_dir / "returns_report.txt"
     txt_path.write_text(report, encoding="utf-8")
     log.info("Wrote %s", txt_path)
@@ -253,7 +267,28 @@ def _parse_args() -> argparse.Namespace:
     p.add_argument("--top", type=int, default=15, help="How many out-performers to list per window.")
     p.add_argument("--method", choices=["simple", "log"], default="simple",
                    help="Return convention: 'simple' (discrete) or 'log' (continuously compounded).")
+    p.add_argument("--min-traded-value", type=float, default=DEFAULT_MIN_TRADED_VALUE,
+                   help="Liquidity floor: min median daily traded value (close*volume).")
+    p.add_argument("--min-active", type=float, default=DEFAULT_MIN_ACTIVE_FRAC,
+                   help="Liquidity floor: min fraction of days with volume > 0.")
+    p.add_argument("--liquidity-lookback", type=int, default=DEFAULT_LOOKBACK_DAYS,
+                   help="Lookback (days) for the liquidity screen.")
+    p.add_argument("--no-liquidity-filter", action="store_true",
+                   help="Disable the illiquidity screen (rank the full universe).")
     return p.parse_args()
+
+
+def _apply_liquidity_filter(ohlc, args):
+    """Return (kept_symbols, screen_note). Empty screen_note means no filter."""
+    if args.no_liquidity_filter:
+        return None, ""
+    stats = liquidity_stats(ohlc, lookback_days=args.liquidity_lookback)
+    kept = liquid_symbols(stats, args.min_traded_value, args.min_active)
+    note = (f"median daily traded value >= {args.min_traded_value:,.0f} "
+            f"& active >= {args.min_active:.0%} over {args.liquidity_lookback}d "
+            f"-> {len(kept)} of {len(stats)} ETFs")
+    log.info("Liquidity screen kept %d of %d ETFs", len(kept), len(stats))
+    return set(kept), note
 
 
 def main() -> None:
@@ -261,12 +296,17 @@ def main() -> None:
     ohlc = pd.read_parquet(HISTORICAL_PATH)
     names = _name_map()
 
-    returns = compute_returns(ohlc, method=args.method)
-    write_outputs(returns, names, top=args.top, method=args.method)
+    kept, screen = _apply_liquidity_filter(ohlc, args)
 
-    short = compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS,
-                            include_ytd=False, method=args.method)
-    write_short_term_report(short, names, top=args.top, method=args.method)
+    def _screened(returns: pd.DataFrame) -> pd.DataFrame:
+        return returns if kept is None else returns[returns.index.isin(kept)]
+
+    returns = _screened(compute_returns(ohlc, method=args.method))
+    write_outputs(returns, names, top=args.top, method=args.method, screen=screen)
+
+    short = _screened(compute_returns(ohlc, windows_days=SHORT_TERM_WINDOWS_DAYS,
+                                      include_ytd=False, method=args.method))
+    write_short_term_report(short, names, top=args.top, method=args.method, screen=screen)
 
 
 if __name__ == "__main__":
