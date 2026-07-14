@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 # now holds the full active universe (core + extras), not just the top 15.
 ACTIVE_SEED_FILE = Path("data/ticker/etf/ticker_active.xlsx")
 JUSTETF_FILE = Path("data/ticker/etf/ticker.xlsx")
-DEFAULT_EXTRA_COUNT = 350
+DEFAULT_EXTRA_COUNT = 450
 
 # Yahoo symbols that returned zero rows in the 2026-07-12 cold-start runs
 # (delisted, renamed, or no Yahoo history for that listing). Pruned from the
@@ -67,6 +67,10 @@ KNOWN_DEAD = frozenset(
         "QGLO.PA", "QUIG.PA", "QUSA.PA", "SRIC7.SW", "SRID7.SW",
         # found in the 395-ticker run (AUM enrichment from profiles.jsonl)
         "BNKS.SW", "D28A.AS", "EEJD.AS", "EEWD.AS", "IEXXF",
+        # found in the 488-ticker run (extra_count=450)
+        "ALLC.PA", "BGUS.PA", "BRIXU.PA", "BTCE.AS", "BTCG.AS", "CASHD.PA",
+        "DA20.PA", "EDEC.PA", "EEE.AS", "EMEXC.PA", "EMGXC.PA", "GLOBD.PA",
+        "GLOBU.PA", "SPTR.PA", "WETF.PA", "WEWE.PA", "ZETH.AS",
     }
 )
 
