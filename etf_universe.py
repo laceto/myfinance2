@@ -71,6 +71,9 @@ KNOWN_DEAD = frozenset(
         "ALLC.PA", "BGUS.PA", "BRIXU.PA", "BTCE.AS", "BTCG.AS", "CASHD.PA",
         "DA20.PA", "EDEC.PA", "EEE.AS", "EMEXC.PA", "EMGXC.PA", "GLOBD.PA",
         "GLOBU.PA", "SPTR.PA", "WETF.PA", "WEWE.PA", "ZETH.AS",
+        # found in the 571-ticker run (extra_count=550)
+        "0MPZ.L", "0MQ3.L", "0W81.L", "BEWGF", "BMAC.PA", "CASL.SW",
+        "CFMOM.SW", "ESOLGBP.SW", "FEIG.MI", "FUIE.MI", "FUIG.MI", "XBTI.AS",
     }
 )
 
