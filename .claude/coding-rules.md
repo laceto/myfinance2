@@ -74,7 +74,33 @@ When writing or explaining code, always:
 4. Suggestions for testing approach
 5. Notes on potential improvements or follow-ups
 
+## Assess GH Actions impact — mandatory, every code change
+
+A code change is not "just code": the workflows in `.github/workflows/` invoke
+these scripts (`get_daily_ohlc_data*.py`, `append_daily_to_historical.py`,
+`analyze_stock.py`, `trading_report.py`, `get_insights.py`, `etf_returns.py`,
+`cold_start_etf.py`). Before considering any change done:
+
+1. **Trace the blast radius.** Grep `.github/workflows/` for the script,
+   function, CLI flag, or output path you touched. If a workflow runs it,
+   your change reaches CI.
+2. **No breaking changes to the CI contract.** CLI flags, expected input
+   files, and committed output paths that a workflow depends on are a public
+   API — keep them backward-compatible, or update every workflow that uses
+   them **in the same change**. Renaming/removing a flag or output path a
+   workflow references is a breaking change.
+3. **Respect the CI concurrency invariant.** Any workflow step that commits
+   and pushes to the shared branch must use the rebase-retry loop, never a
+   plain `git push` (see `architecture.md` → CI concurrency model). Do not add
+   a new committing step without it.
+4. **State the impact explicitly** in your summary: "affects workflow X" or
+   "no workflow references this — CI unaffected." Never leave it unassessed.
+
 ## When Done
 → Do not modify data files or config.json
 → Do not write CI workflow changes — that is a separate task
+   (but you MUST still assess whether your code change *affects* existing
+   workflows — see the section above)
+→ Update docs affected by the change (`.claude/architecture.md` and any
+   rules file whose contract you changed) — docs are part of the change
 → READ: git-rules.md before committing
