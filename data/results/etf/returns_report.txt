@@ -1,6 +1,6 @@
 ETF multi-timeframe return analysis — top out-performers
-universe: 253 ETFs   (returns: simple, cumulative, close-to-close)
-liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -> 253 of 554 ETFs; drop |1-day move| > 50% (split/re-denomination)
+universe: 252 ETFs   (returns: simple, cumulative, close-to-close)
+liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -> 252 of 554 ETFs; drop |1-day move| > 50% (split/re-denomination)
 
 == 1W  (universe median -0.1%) ==
    1. XUCM.L       +5.0%  Xtrackers MSCI USA Communication Services UCITS ETF 1D
@@ -29,8 +29,8 @@ liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -
    7. HLTW.PA      +4.6%  Amundi MSCI World Health Care UCITS ETF EUR Acc
    8. JPXH.PA      +4.5%  Amundi MSCI Japan SRI Climate Paris Aligned UCITS ETF DR - EUR Hedged (C)
    9. DSP5.PA      +4.5%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
-  10. JPXX.L       +4.3%  Amundi MSCI Japan SRI Climate Paris Aligned UCITS ETF DR - GBP Hedged (C)
-  11. SXLE.AS      +4.1%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
+  10. SXLE.AS      +4.1%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
+  11. JPXX.L       +4.1%  Amundi MSCI Japan SRI Climate Paris Aligned UCITS ETF DR - GBP Hedged (C)
   12. BNKE.PA      +4.0%  Amundi Euro Stoxx Banks UCITS ETF Acc
   13. XSMC.SW      +3.7%  Xtrackers Swiss Large Cap UCITS ETF 1C
   14. VMIG.MI      +3.1%  Vanguard FTSE 250 UCITS ETF (GBP) Accumulating
@@ -53,7 +53,7 @@ liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -
   14. LVE.PA      +12.5%  Amundi EURO STOXX 50 Daily (2x) Leveraged UCITS ETF Acc
   15. STZ.PA      +12.2%  State Street SPDR MSCI Europe Financials UCITS ETF EUR
 
-== 6M  (universe median +7.8%) ==
+== 6M  (universe median +7.7%) ==
    1. KRW.PA      +49.8%  Amundi MSCI Korea UCITS ETF Acc
    2. IKRA.AS     +49.6%  iShares MSCI Korea UCITS ETF (Dist)
    3. AINF.AS     +37.4%  iShares AI Infrastructure UCITS ETF USD (Acc)
@@ -118,5 +118,5 @@ liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -
   11. NRGW.PA     +28.4%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
   12. COMO.PA     +26.0%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
   13. CL2.PA      +24.7%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
-  14. AASI.PA     +24.4%  Amundi MSCI Emerging Markets Asia UCITS ETF EUR (C)
-  15. AJEUAS.MI   +23.9%  UBS MSCI AC Asia ex Japan SF UCITS ETF USD acc
+  14. AJEUAS.MI   +23.9%  UBS MSCI AC Asia ex Japan SF UCITS ETF USD acc
+  15. AASI.PA     +23.1%  Amundi MSCI Emerging Markets Asia UCITS ETF EUR (C)
