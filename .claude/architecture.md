@@ -146,8 +146,62 @@ from the windows its glitch spans. Flagged symbols (e.g. `LQQ.PA`, `JPXX.L`, `SP
 are listed in `data/results/etf/flagged_artifacts.txt` for review. This is orthogonal
 to the liquidity screen (those artifacts are liquid). `.github/workflows/etf_returns.yml`
 runs it after each **Download Daily OHLC Data** completes (`workflow_run`) and
-commits `data/results/etf/{returns_ranking.xlsx,returns_report.txt,short_term_movers.txt}`.
+commits `data/results/etf/{returns_ranking.xlsx,returns_report.txt,short_term_movers.txt,flagged_artifacts.txt}`.
 It is pure pandas over the committed parquet — no network or `algoshort` wheel.
+
+### CI concurrency model (invariant: workflows that can push concurrently rebase-retry)
+
+`workflow_run` fans out: **one** successful **Download Daily OHLC Data** run
+triggers **both** `analyze_and_report.yml` (results/it) **and**
+`etf_returns.yml` (results/etf) at the same time. Both push commits to the same
+default branch, so their pushes race even though they touch **disjoint files**.
+The two download matrix legs (`it`, `etf`) likewise push in parallel.
+
+**Invariant:** any workflow that commits and pushes to the shared branch **and
+can run concurrently with another pusher** must use the rebase-retry loop, never
+a plain `git push`. Concretely that is the three scheduled/`workflow_run`
+pushers: the **download** legs, **analyze_and_report**, and **etf_returns**. The
+pattern is:
+
+```
+git add <only this workflow's own files>
+git diff --cached --quiet && exit 0        # nothing to commit is success
+git commit -m "... [skip ci]"
+for attempt in 1..5:
+    git push origin HEAD:<ref> && exit 0
+    git fetch origin <ref>
+    git rebase --autostash origin/<ref> || { git rebase --abort; exit 1; }
+```
+
+Because the concurrent workflows write disjoint paths, the rebase never
+conflicts — it just replays this workflow's commit on top of the other's.
+**Failure mode this prevents:** without the loop, the second pusher gets
+`! [rejected] ... (fetch first)` and the whole job fails (this was the
+analyze-vs-etf_returns race). **When adding a new committing workflow that
+fires on the same `workflow_run`, it must adopt this same loop** — otherwise it
+reintroduces the race.
+
+**`--autostash` is mandatory, not optional.** A job may run a script that
+regenerates *tracked* files it deliberately does **not** commit — the analyze
+job commits only 4 result files but `analyze_stock.py` also rewrites
+`cumul_snapshot.xlsx`, `returns_dashboard.xlsx`, `trending_dashboard.xlsx`, and
+`trending_heatmap.png`, leaving the working tree dirty. Plain `git rebase`
+refuses on a dirty tree (`error: cannot rebase: You have unstaged changes`),
+which failed the analyze job **every day** even though the analysis itself
+succeeded. `--autostash` stashes those changes, rebases, and re-applies them; on
+a clean tree it is a harmless no-op. (Reproduced and fixed with a two-repo git
+race harness before shipping.)
+
+`generate_symbol_notebooks.yml` is **`workflow_dispatch`-only** (manual). It
+does not commit to the branch (it only uploads an artifact), so it is outside
+the race. Its trigger is `workflow_dispatch:` — **never `on: {}`**, which is an
+invalid trigger that makes GitHub emit a *startup-failure* on every push that
+touches `.github/workflows/`.
+
+`cold_start_etf.yml` also pushes (plain `git push`, no loop) but is the
+deliberate **exception**: it is `workflow_dispatch`-only, never scheduled, and
+is a one-time manual history overwrite you run when nothing else is pushing —
+so it cannot race the daily fan-out. If it ever becomes scheduled or `workflow_run`-triggered, it must adopt the rebase-retry loop.
 
 **Scope note:** CI currently downloads OHLC for both markets, but the
 analysis/report pipeline (`analyze_stock.py` → `trading_report.py` →

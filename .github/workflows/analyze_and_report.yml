@@ -69,6 +69,11 @@ jobs:
           # The ETF Return Analysis workflow also fires on the same download
           # completion and pushes to this branch; rebase-retry on a rejected
           # push (disjoint files: results/it vs results/etf -> no conflict).
+          # --autostash is REQUIRED: the analysis run regenerates tracked files
+          # we deliberately do NOT commit (cumul_snapshot.xlsx, returns_dashboard.xlsx,
+          # trending_dashboard.xlsx, trending_heatmap.png), leaving the tree dirty.
+          # Without --autostash, `git rebase` aborts with "cannot rebase: you have
+          # unstaged changes" and the whole job fails.
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${{ github.ref_name }}"; then
               echo "pushed on attempt $attempt"
@@ -76,7 +81,7 @@ jobs:
             fi
             echo "push rejected; syncing and retrying (attempt $attempt)"
             git fetch origin "${{ github.ref_name }}"
-            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+            git rebase --autostash "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
           done
           echo "failed to push after retries"
           exit 1

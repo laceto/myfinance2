@@ -62,6 +62,8 @@ jobs:
           # The two market legs run in parallel and push to the same branch.
           # They touch different files, so on a rejected push we just fetch the
           # other leg's commit and rebase on top — never losing either market.
+          # --autostash keeps the rebase robust even if the run left any tracked
+          # file unstaged (rebase refuses to run on a dirty tree otherwise).
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${{ github.ref_name }}"; then
               echo "pushed on attempt $attempt"
@@ -69,7 +71,7 @@ jobs:
             fi
             echo "push rejected; syncing and retrying (attempt $attempt)"
             git fetch origin "${{ github.ref_name }}"
-            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+            git rebase --autostash "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
           done
           echo "failed to push ${{ matrix.market }} data after retries"
           exit 1
