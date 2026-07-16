@@ -90,9 +90,12 @@ these scripts (`get_daily_ohlc_data*.py`, `append_daily_to_historical.py`,
    them **in the same change**. Renaming/removing a flag or output path a
    workflow references is a breaking change.
 3. **Respect the CI concurrency invariant.** Any workflow step that commits
-   and pushes to the shared branch must use the rebase-retry loop, never a
-   plain `git push` (see `architecture.md` → CI concurrency model). Do not add
-   a new committing step without it.
+   and pushes to the shared branch must use the rebase-retry loop with
+   `git rebase --autostash`, never a plain `git push` (see `architecture.md` →
+   CI concurrency model). `--autostash` is required because a job that
+   regenerates *tracked* files it does not commit leaves the tree dirty, and a
+   plain rebase aborts on a dirty tree. Do not add a new committing step
+   without it.
 4. **State the impact explicitly** in your summary: "affects workflow X" or
    "no workflow references this — CI unaffected." Never leave it unassessed.
 

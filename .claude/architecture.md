@@ -170,7 +170,7 @@ git commit -m "... [skip ci]"
 for attempt in 1..5:
     git push origin HEAD:<ref> && exit 0
     git fetch origin <ref>
-    git rebase origin/<ref> || { git rebase --abort; exit 1; }
+    git rebase --autostash origin/<ref> || { git rebase --abort; exit 1; }
 ```
 
 Because the concurrent workflows write disjoint paths, the rebase never
@@ -180,6 +180,17 @@ conflicts — it just replays this workflow's commit on top of the other's.
 analyze-vs-etf_returns race). **When adding a new committing workflow that
 fires on the same `workflow_run`, it must adopt this same loop** — otherwise it
 reintroduces the race.
+
+**`--autostash` is mandatory, not optional.** A job may run a script that
+regenerates *tracked* files it deliberately does **not** commit — the analyze
+job commits only 4 result files but `analyze_stock.py` also rewrites
+`cumul_snapshot.xlsx`, `returns_dashboard.xlsx`, `trending_dashboard.xlsx`, and
+`trending_heatmap.png`, leaving the working tree dirty. Plain `git rebase`
+refuses on a dirty tree (`error: cannot rebase: You have unstaged changes`),
+which failed the analyze job **every day** even though the analysis itself
+succeeded. `--autostash` stashes those changes, rebases, and re-applies them; on
+a clean tree it is a harmless no-op. (Reproduced and fixed with a two-repo git
+race harness before shipping.)
 
 `generate_symbol_notebooks.yml` is **`workflow_dispatch`-only** (manual). It
 does not commit to the branch (it only uploads an artifact), so it is outside

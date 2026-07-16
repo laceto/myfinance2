@@ -50,8 +50,10 @@ jobs:
             exit 0
           fi
           git commit -m "chore: update ETF return analysis [skip ci]"
-          # Another job (the daily download) may push to the same branch around
-          # the same time; rebase-retry on a rejected push (disjoint files).
+          # Another job (the daily download / analyze) may push to the same branch
+          # around the same time; rebase-retry on a rejected push (disjoint files).
+          # --autostash keeps the retry robust if the run left any tracked file
+          # unstaged (rebase refuses to run on a dirty tree otherwise).
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${{ github.ref_name }}"; then
               echo "pushed on attempt $attempt"
@@ -59,7 +61,7 @@ jobs:
             fi
             echo "push rejected; syncing and retrying (attempt $attempt)"
             git fetch origin "${{ github.ref_name }}"
-            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+            git rebase --autostash "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
           done
           echo "failed to push after retries"
           exit 1
