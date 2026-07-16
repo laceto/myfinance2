@@ -61,5 +61,22 @@ jobs:
                   data/results/it/trading_report.txt \
                   data/results/it/daily_brief.xlsx \
                   data/results/it/daily_brief.txt
-          git commit -m "chore: update trading dashboard, report and daily insights brief [skip ci]" || echo "No changes to commit"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: update trading dashboard, report and daily insights brief [skip ci]"
+          # The ETF Return Analysis workflow also fires on the same download
+          # completion and pushes to this branch; rebase-retry on a rejected
+          # push (disjoint files: results/it vs results/etf -> no conflict).
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push rejected; syncing and retrying (attempt $attempt)"
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+          done
+          echo "failed to push after retries"
+          exit 1

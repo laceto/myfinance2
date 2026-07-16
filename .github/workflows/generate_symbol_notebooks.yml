@@ -1,7 +1,10 @@
 name: Generate Symbol Notebooks
 
-# Disabled: no triggers. To re-enable, restore workflow_run and/or workflow_dispatch.
-on: {}
+# Effectively disabled: manual-only. `on: {}` is an invalid trigger that makes
+# GitHub emit a startup-failure on every push touching .github/workflows/, so
+# use workflow_dispatch (never fires automatically) instead.
+on:
+  workflow_dispatch:
 
 permissions:
   contents: read
