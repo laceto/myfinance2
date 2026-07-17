@@ -149,6 +149,18 @@ runs it after each **Download Daily OHLC Data** completes (`workflow_run`) and
 commits `data/results/etf/{returns_ranking.xlsx,returns_report.txt,short_term_movers.txt,flagged_artifacts.txt}`.
 It is pure pandas over the committed parquet — no network or `algoshort` wheel.
 
+**ETF sector rotation (on-demand, not in CI):** `etf_sector_rotation.py` is a
+read-only companion that groups the liquid universe into sectors (keyword
+classification on the fund name) and ranks them by *momentum acceleration*
+(`accel_1M_vs_3M = 1M − 3M/3`) to surface money rotating **into** vs **out of**
+sectors — the sector-level view that `returns_ranking.xlsx` (top-N funds only)
+can't give. It reuses `etf_liquidity` and `etf_returns.compute_returns` so the
+screens match the daily pipeline exactly. Run `python etf_sector_rotation.py`
+(add `--output data/results/etf/sector_rotation.txt` to save, `-v` for logs).
+Leveraged/inverse funds and thin buckets (`--min-funds`, default 2) are excluded
+— small `n` is directional, not statistical. Deliberately **not** wired into any
+workflow; logic is unit-tested in `tests/test_etf_sector_rotation.py`.
+
 ### CI concurrency model (invariant: workflows that can push concurrently rebase-retry)
 
 `workflow_run` fans out: **one** successful **Download Daily OHLC Data** run

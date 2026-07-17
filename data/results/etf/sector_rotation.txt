@@ -1,0 +1,44 @@
+ETF sector rotation
+as_of 2026-07-15   liquid universe 253 ETFs   (returns: simple, cumulative, close-to-close)
+universe median: 1W +1.2%  1M +0.3%  3M +7.3%  6M +8.7%  YTD +11.2%
+sectors: name-keyword classification; leveraged/inverse excluded; thin buckets (n<min) dropped — small n is directional, not statistical.
+
+== ROTATING IN  (1M pace above 3M trend) ==
+  Biotech/Genomics           n=2   1W  -2.0%  1M +13.5%  3M +24.5%  6M +20.7%  YTD +29.7%  [accel_1M_vs_3M +5.3%]
+  Financials                 n=2   1W  +2.9%  1M  +7.2%  3M +12.3%  6M +12.9%  YTD +13.6%  [accel_1M_vs_3M +3.1%]
+  Utilities                  n=4   1W  +0.7%  1M  +3.7%  3M  +1.9%  6M +12.7%  YTD +15.4%  [accel_1M_vs_3M +3.0%]
+  Latin America              n=2   1W  +4.0%  1M  +0.6%  3M  -6.8%  6M  +8.8%  YTD +14.8%  [accel_1M_vs_3M +2.8%]
+  Health Care                n=3   1W  -2.9%  1M  +2.8%  3M  +0.8%  6M  -3.6%  YTD  +1.5%  [accel_1M_vs_3M +2.6%]
+  Banks                      n=2   1W  +3.1%  1M  +6.5%  3M +14.0%  6M +15.1%  YTD +18.5%  [accel_1M_vs_3M +1.8%]
+  Energy                     n=3   1W  +0.3%  1M  +1.8%  3M  +1.5%  6M +21.1%  YTD +28.4%  [accel_1M_vs_3M +1.3%]
+  Communication Services     n=3   1W  +3.1%  1M  -0.1%  3M  -3.0%  6M  +4.2%  YTD  +4.1%  [accel_1M_vs_3M +0.9%]
+
+== ROTATING OUT (1M pace below 3M trend) ==
+  Korea                      n=2   1W  -3.1%  1M -18.1%  3M +19.6%  6M +57.4%  YTD +77.2%  [accel_1M_vs_3M -24.6%]
+  China                      n=2   1W  -0.4%  1M  -6.8%  3M +10.7%  6M +25.6%  YTD +34.4%  [accel_1M_vs_3M -10.4%]
+  AI/Robotics                n=3   1W  -0.0%  1M  -5.3%  3M +11.3%  6M +22.3%  YTD +28.0%  [accel_1M_vs_3M -9.1%]
+  Emerging Markets           n=11  1W  +0.1%  1M  -5.0%  3M  +8.8%  6M +15.9%  YTD +22.9%  [accel_1M_vs_3M -8.0%]
+  Crypto/Blockchain          n=2   1W  +2.1%  1M  -6.0%  3M  +0.1%  6M -14.2%  YTD +17.8%  [accel_1M_vs_3M -6.0%]
+  Clean energy/Climate       n=7   1W  +1.9%  1M  -0.7%  3M  +9.3%  6M  +7.4%  YTD +11.5%  [accel_1M_vs_3M -3.8%]
+  Basic Resources/Materials  n=3   1W  +2.8%  1M  -4.5%  3M  -2.4%  6M  +7.6%  YTD +13.5%  [accel_1M_vs_3M -3.7%]
+  US broad                   n=37  1W  +1.6%  1M  +0.0%  3M  +9.0%  6M  +9.8%  YTD +10.2%  [accel_1M_vs_3M -3.0%]
+
+== 3M/6M LEADERS (established trend) ==
+  Biotech/Genomics           n=2   1W  -2.0%  1M +13.5%  3M +24.5%  6M +20.7%  YTD +29.7%
+  Korea                      n=2   1W  -3.1%  1M -18.1%  3M +19.6%  6M +57.4%  YTD +77.2%
+  Banks                      n=2   1W  +3.1%  1M  +6.5%  3M +14.0%  6M +15.1%  YTD +18.5%
+  Financials                 n=2   1W  +2.9%  1M  +7.2%  3M +12.3%  6M +12.9%  YTD +13.6%
+  AI/Robotics                n=3   1W  -0.0%  1M  -5.3%  3M +11.3%  6M +22.3%  YTD +28.0%
+  China                      n=2   1W  -0.4%  1M  -6.8%  3M +10.7%  6M +25.6%  YTD +34.4%
+  Clean energy/Climate       n=7   1W  +1.9%  1M  -0.7%  3M  +9.3%  6M  +7.4%  YTD +11.5%
+  US broad                   n=37  1W  +1.6%  1M  +0.0%  3M  +9.0%  6M  +9.8%  YTD +10.2%
+
+== 3M/6M LAGGARDS ==
+  Latin America              n=2   1W  +4.0%  1M  +0.6%  3M  -6.8%  6M  +8.8%  YTD +14.8%
+  Communication Services     n=3   1W  +3.1%  1M  -0.1%  3M  -3.0%  6M  +4.2%  YTD  +4.1%
+  Basic Resources/Materials  n=3   1W  +2.8%  1M  -4.5%  3M  -2.4%  6M  +7.6%  YTD +13.5%
+  India                      n=2   1W  +0.5%  1M  -0.2%  3M  -0.5%  6M  -8.5%  YTD  -9.3%
+  Crypto/Blockchain          n=2   1W  +2.1%  1M  -6.0%  3M  +0.1%  6M -14.2%  YTD +17.8%
+  Health Care                n=3   1W  -2.9%  1M  +2.8%  3M  +0.8%  6M  -3.6%  YTD  +1.5%
+  Energy                     n=3   1W  +0.3%  1M  +1.8%  3M  +1.5%  6M +21.1%  YTD +28.4%
+  Utilities                  n=4   1W  +0.7%  1M  +3.7%  3M  +1.9%  6M +12.7%  YTD +15.4%
