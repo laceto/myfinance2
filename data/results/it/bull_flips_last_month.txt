@@ -1,0 +1,162 @@
+BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
+window: 2026-06-25   events: 115
+change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-07-27  (13 bull flips) --
+   ILP.MI    -1->1    rbo_20        ILPRA Producer Manufacturing NaN
+   ILP.MI    0->1    rtt_5020      ILPRA Producer Manufacturing NaN
+   ISP.MI    -1->1    rsma_50100    INTESA SANPAOLO Finance si
+   OS.MI     -1->1    rbo_20        OFFICINA STELLARE Electronic Technology NaN
+   OS.MI     0->1    rtt_5020      OFFICINA STELLARE Electronic Technology NaN
+   PRO.MI    -1->1    rbo_150       BCA PROFILO Finance NaN
+   PRO.MI    -1->1    rbo_50        BCA PROFILO Finance NaN
+   PRO.MI    -1->1    rema_100150   BCA PROFILO Finance NaN
+   PRO.MI    -1->1    rema_50100    BCA PROFILO Finance NaN
+   PRO.MI    -1->1    rsma_50100    BCA PROFILO Finance NaN
+   PRO.MI    0->1    rtt_5020      BCA PROFILO Finance NaN
+   PRT.MI    -1->1    rsma_100150   ESPRINET Distribution Services si
+   PRT.MI    -1->1    rsma_50100150 ESPRINET Distribution Services si
+
+-- 2026-07-24  (5 bull flips) --
+   BMED.MI   -1->1    rsma_100150   BANCA MEDIOLANUM Finance si
+   BMED.MI   -1->1    rsma_50100150 BANCA MEDIOLANUM Finance si
+   DAN.MI    -1->1    rbo_20        DANIELI & C Producer Manufacturing si
+   DAN.MI    -1->1    rsma_50100150 DANIELI & C Producer Manufacturing si
+   DAN.MI    -1->0    rtt_5020      DANIELI & C Producer Manufacturing si
+
+-- 2026-07-23  (14 bull flips) --
+   BMED.MI   -1->1    rbo_150       BANCA MEDIOLANUM Finance si
+   BO.MI     -1->1    rbo_20        BORGOSESIA Finance NaN
+   BO.MI     -1->0    rtt_5020      BORGOSESIA Finance NaN
+   BPE.MI    -1->1    rbo_20        BPER BANCA Finance si
+   BPE.MI    0->1    rtt_5020      BPER BANCA Finance si
+   COM.MI    -1->1    rbo_20        COMER INDUSTRIES Producer Manufacturing NaN
+   COM.MI    -1->0    rtt_5020      COMER INDUSTRIES Producer Manufacturing NaN
+   EQUI.MI   -1->1    rbo_50        EQUITA GROUP Finance NaN
+   EQUI.MI   0->1    rtt_5020      EQUITA GROUP Finance NaN
+   G.MI      -1->1    rbo_20        GENERALI ASS Finance NaN
+   G.MI      0->1    rtt_5020      GENERALI ASS Finance NaN
+   IG.MI     -1->1    rbo_20        ITALGAS Utilities si
+   IG.MI     -1->0    rtt_5020      ITALGAS Utilities si
+   ISP.MI    -1->1    rema_50100    INTESA SANPAOLO Finance si
+
+-- 2026-07-22  (4 bull flips) --
+   ECK.MI    -1->1    rbo_20        ECOSUNTEK Utilities NaN
+   ECK.MI    0->1    rtt_5020      ECOSUNTEK Utilities NaN
+   IEG.MI    -1->1    rbo_50        ITALIAN EXHIBITION GROUP Commercial Services NaN
+   IEG.MI    0->1    rtt_5020      ITALIAN EXHIBITION GROUP Commercial Services NaN
+
+-- 2026-07-21  (2 bull flips) --
+   IEG.MI    -1->1    rbo_20        ITALIAN EXHIBITION GROUP Commercial Services NaN
+   IEG.MI    -1->0    rtt_5020      ITALIAN EXHIBITION GROUP Commercial Services NaN
+
+-- 2026-07-20  (6 bull flips) --
+   FCT.MI    -1->1    rbo_50        FINCANTIERI Producer Manufacturing si
+   FCT.MI    0->1    rtt_5020      FINCANTIERI Producer Manufacturing si
+   FM.MI     -1->1    rema_50100150 FIERA MILANO Commercial Services NaN
+   FM.MI     -1->1    rsma_50100150 FIERA MILANO Commercial Services NaN
+   PQ.MI     -1->1    rbo_50        PIQUADRO Consumer Durables NaN
+   PQ.MI     0->1    rtt_5020      PIQUADRO Consumer Durables NaN
+
+-- 2026-07-17  (8 bull flips) --
+   ENEL.MI   -1->1    rbo_20        ENEL Utilities si
+   ENEL.MI   -1->0    rtt_5020      ENEL Utilities si
+   ENI.MI    -1->1    rbo_20        ENI Energy Minerals si
+   ENI.MI    -1->0    rtt_5020      ENI Energy Minerals si
+   IG.MI     -1->1    rbo_20        ITALGAS Utilities si
+   IG.MI     -1->0    rtt_5020      ITALGAS Utilities si
+   SERI.MI   -1->1    rsma_100150   SERI INDUSTRIAL Utilities NaN
+   SERI.MI   -1->1    rsma_50100150 SERI INDUSTRIAL Utilities NaN
+
+-- 2026-07-16  (1 bull flips) --
+   BRE.MI    -1->1    rema_50100150 BREMBO Producer Manufacturing si
+
+-- 2026-07-13  (2 bull flips) --
+   CE.MI     -1->1    rema_100150   CREDEM Finance NaN
+   CE.MI     -1->1    rema_50100150 CREDEM Finance NaN
+
+-- 2026-07-10  (6 bull flips) --
+   BDB.MI    -1->1    rsma_100150   BCO DESIO BRIANZA Finance NaN
+   BDB.MI    -1->1    rsma_50100150 BCO DESIO BRIANZA Finance NaN
+   CY4.MI    -1->1    rsma_100150   CY4GATE Technology Services NaN
+   CY4.MI    -1->1    rsma_50100150 CY4GATE Technology Services NaN
+   SSL.MI    -1->1    rbo_20        S.S. LAZIO Consumer Services NaN
+   SSL.MI    0->1    rtt_5020      S.S. LAZIO Consumer Services NaN
+
+-- 2026-07-09  (2 bull flips) --
+   CE.MI     -1->1    rbo_150       CREDEM Finance NaN
+   CE.MI     -1->1    rema_50100    CREDEM Finance NaN
+
+-- 2026-07-08  (5 bull flips) --
+   CDG.MI    -1->1    rbo_20        CASTA DIVA GROUP Commercial Services NaN
+   CDG.MI    -1->0    rtt_5020      CASTA DIVA GROUP Commercial Services NaN
+   TWL.MI    -1->1    rema_100150   TRAWELL CO Transportation NaN
+   TWL.MI    -1->1    rema_50100150 TRAWELL CO Transportation NaN
+   TWL.MI    -1->1    rsma_50100    TRAWELL CO Transportation NaN
+
+-- 2026-07-07  (11 bull flips) --
+   ARBS.MI   -1->1    rbo_50        ARTERRA BIOSCIENCE Health Technology NaN
+   ARBS.MI   0->1    rtt_5020      ARTERRA BIOSCIENCE Health Technology NaN
+   IG.MI     -1->1    rema_50100150 ITALGAS Utilities si
+   LDO.MI    -1->1    rbo_20        LEONARDO Electronic Technology si
+   LDO.MI    -1->0    rtt_5020      LEONARDO Electronic Technology si
+   PMT.MI    -1->1    rsma_50100    PROMOTICA Commercial Services NaN
+   PMT.MI    -1->1    rsma_50100150 PROMOTICA Commercial Services NaN
+   TGYM.MI   -1->1    rsma_50100150 TECHNOGYM Consumer Durables si
+   TWL.MI    -1->1    rema_50100    TRAWELL CO Transportation NaN
+   WIIT.MI   -1->1    rbo_20        WIIT Technology Services NaN
+   WIIT.MI   0->1    rtt_5020      WIIT Technology Services NaN
+
+-- 2026-07-06  (11 bull flips) --
+   B.MI      -1->1    rbo_20        BASTOGI SPA Finance NaN
+   B.MI      -1->0    rtt_5020      BASTOGI SPA Finance NaN
+   FCT.MI    -1->1    rbo_20        FINCANTIERI Producer Manufacturing si
+   FCT.MI    -1->0    rtt_5020      FINCANTIERI Producer Manufacturing si
+   SFER.MI   -1->1    rsma_100150   SALVATORE FERRAGAMO Consumer Non-Durables si
+   SFER.MI   -1->1    rsma_50100150 SALVATORE FERRAGAMO Consumer Non-Durables si
+   SFER.MI   -1->1    rtt_5020      SALVATORE FERRAGAMO Consumer Non-Durables si
+   TWL.MI    -1->1    rbo_150       TRAWELL CO Transportation NaN
+   TWL.MI    -1->1    rbo_20        TRAWELL CO Transportation NaN
+   TWL.MI    -1->1    rbo_50        TRAWELL CO Transportation NaN
+   TWL.MI    -1->1    rtt_5020      TRAWELL CO Transportation NaN
+
+-- 2026-07-03  (1 bull flips) --
+   FM.MI     -1->1    rsma_100150   FIERA MILANO Commercial Services NaN
+
+-- 2026-07-02  (4 bull flips) --
+   CIRC.MI   -1->1    rbo_20        CIRCLE Commercial Services NaN
+   CIRC.MI   0->1    rtt_5020      CIRCLE Commercial Services NaN
+   FARM.MI   -1->1    rsma_50100    H-FARM Commercial Services NaN
+   UCG.MI    -1->1    rsma_50100    UNICREDIT Finance si
+
+-- 2026-07-01  (8 bull flips) --
+   ARBS.MI   -1->1    rbo_20        ARTERRA BIOSCIENCE Health Technology NaN
+   ARBS.MI   -1->0    rtt_5020      ARTERRA BIOSCIENCE Health Technology NaN
+   MAIRE.MI  -1->1    rema_50100150 MAIRE Industrial Services si
+   UCG.MI    -1->1    rema_100150   UNICREDIT Finance si
+   UCG.MI    -1->1    rema_50100150 UNICREDIT Finance si
+   UNI.MI    -1->1    rbo_150       UNIPOL Finance si
+   UNI.MI    -1->1    rbo_50        UNIPOL Finance si
+   UNI.MI    0->1    rtt_5020      UNIPOL Finance si
+
+-- 2026-06-30  (6 bull flips) --
+   ILP.MI    -1->1    rbo_20        ILPRA Producer Manufacturing NaN
+   ILP.MI    0->1    rtt_5020      ILPRA Producer Manufacturing NaN
+   MAIRE.MI  -1->1    rsma_50100150 MAIRE Industrial Services si
+   SRG.MI    -1->1    rema_50100150 SNAM Utilities si
+   TGYM.MI   -1->1    rema_50100150 TECHNOGYM Consumer Durables si
+   UCG.MI    -1->1    rema_50100    UNICREDIT Finance si
+
+-- 2026-06-29  (1 bull flips) --
+   FARM.MI   -1->1    rsma_50100150 H-FARM Commercial Services NaN
+
+-- 2026-06-26  (3 bull flips) --
+   ENEL.MI   -1->1    rbo_20        ENEL Utilities si
+   ENEL.MI   -1->0    rtt_5020      ENEL Utilities si
+   LDO.MI    -1->1    rsma_50100150 LEONARDO Electronic Technology si
+
+-- 2026-06-25  (2 bull flips) --
+   BDB.MI    -1->1    rsma_50100    BCO DESIO BRIANZA Finance NaN
+   IG.MI     -1->1    rsma_50100150 ITALGAS Utilities si
+
+Most frequent flippers: TWL.MIx8, IG.MIx6, PRO.MIx6, ENEL.MIx4, ILP.MIx4, UCG.MIx4, ARBS.MIx4, FCT.MIx4, CE.MIx4, IEG.MIx4
