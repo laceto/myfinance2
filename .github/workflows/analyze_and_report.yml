@@ -86,14 +86,14 @@ jobs:
           echo "failed to push after retries"
           exit 1
 
-  # Refresh the rolling bull-flip history AFTER analyze has committed today's
-  # daily_brief.txt. Kept as a SEPARATE job (not a step in `analyze`) on purpose:
-  # bull_flips_history.py walks the git history of daily_brief.txt, which needs a
-  # FULL-history + blobless checkout. Doing that inline would force changing the
-  # analyze job's (shallow, default) checkout — a needless risk to the core
-  # pipeline. This job is self-contained and, if it ever breaks, the analyze
-  # results are already safely committed by the job above.
-  refresh-bull-flips:
+  # Refresh the rolling bull + bear flip history AFTER analyze has committed
+  # today's daily_brief.txt. Kept as a SEPARATE job (not a step in `analyze`) on
+  # purpose: signal_flips_history.py walks the git history of daily_brief.txt,
+  # which needs a FULL-history + blobless checkout. Doing that inline would force
+  # changing the analyze job's (shallow, default) checkout — a needless risk to
+  # the core pipeline. This job is self-contained and, if it ever breaks, the
+  # analyze results are already safely committed by the job above.
+  refresh-signal-flips:
     needs: analyze
     runs-on: ubuntu-latest
     steps:
@@ -111,7 +111,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-        # No pip install: bull_flips_history.py uses only the Python standard
+        # No pip install: signal_flips_history.py uses only the Python standard
         # library (re, subprocess, argparse, dataclasses, ...).
 
       - name: Sync to the brief the analyze job just pushed
@@ -122,23 +122,24 @@ jobs:
           git fetch origin "${{ github.ref_name }}"
           git reset --hard "origin/${{ github.ref_name }}"
 
-      - name: Regenerate bull-flip history (last month)
+      - name: Regenerate signal-flip history (bull + bear, last month)
         run: |
-          python bull_flips_history.py \
+          python signal_flips_history.py \
+            --direction both \
             --revision HEAD \
-            --since "1 month ago" \
-            --output data/results/it/bull_flips_last_month.txt
+            --since "1 month ago"
 
-      - name: Commit bull-flip history
+      - name: Commit signal-flip history
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/results/it/bull_flips_last_month.txt
+          git add data/results/it/bull_flips_last_month.txt \
+                  data/results/it/bear_flips_last_month.txt
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
-          git commit -m "chore: refresh bull-flip history [skip ci]"
+          git commit -m "chore: refresh signal-flip history (bull+bear) [skip ci]"
           # Concurrent pushers (download legs, analyze, etf_returns) may touch the
           # branch around now; rebase-retry with --autostash (disjoint file, so
           # the rebase never conflicts) — same CI concurrency invariant as the
