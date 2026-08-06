@@ -138,4 +138,4 @@ bull_flip LDO.MI      LEONARDO Electronic Technology          si  0 → 1
   Full detail -> data/results/it/daily_brief.xlsx
 ====================================================================================================
 
-2026-08-05 22:14:46,845 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
+2026-08-06 07:11:41,472 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
