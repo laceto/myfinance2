@@ -159,8 +159,15 @@ I/O (`iter_brief_versions`, injectable) and unit-tested in
 `tests/test_bull_flips_history.py`. Run `python bull_flips_history.py --since "1 month ago"`
 (`--full-only` keeps just `after==1` flips; `--output data/results/it/bull_flips_last_month.txt`
 to save). A "bull flip" is any row the brief labels `bull_flip` (includes soft
-`-1→0` flips); the before/after state is preserved for filtering. Not wired into
-any workflow.
+`-1→0` flips); the before/after state is preserved for filtering. **CI refreshes
+`bull_flips_last_month.txt` daily**: `analyze_and_report.yml` has a dedicated
+`refresh-bull-flips` job (`needs: analyze`) that, after the analyze job commits
+today's `daily_brief.txt`, checks out with `fetch-depth: 0` + `filter: blob:none`
+(full commit history without the large parquet blobs — the history walk needs
+every commit, `git show` fetches only the tiny brief blobs), regenerates from
+`HEAD`, and commits via the same rebase-retry `--autostash` loop. It's a separate
+job (not a step in `analyze`) so the core pipeline's shallow checkout is
+untouched and a bull-flips failure can't block the analyze results.
 
 **ETF sector rotation (on-demand, not in CI):** `etf_sector_rotation.py` is a
 read-only companion that groups the liquid universe into sectors (keyword
@@ -184,9 +191,10 @@ The two download matrix legs (`it`, `etf`) likewise push in parallel.
 
 **Invariant:** any workflow that commits and pushes to the shared branch **and
 can run concurrently with another pusher** must use the rebase-retry loop, never
-a plain `git push`. Concretely that is the three scheduled/`workflow_run`
-pushers: the **download** legs, **analyze_and_report**, and **etf_returns**. The
-pattern is:
+a plain `git push`. Concretely that is the scheduled/`workflow_run` pushers: the
+**download** legs, **analyze_and_report** (its `analyze` job **and** its
+`refresh-bull-flips` job — two separate pushers in the same workflow), and
+**etf_returns**. The pattern is:
 
 ```
 git add <only this workflow's own files>
