@@ -1,6 +1,51 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 2026-06-25   events: 115
+window: 1 month ago   events: 123
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-05  (11 bull flips) --
+   BFF.MI    -1->1    rbo_20        BFF BANK Finance NaN
+   BFF.MI    0->1    rtt_5020      BFF BANK Finance NaN
+   BPE.MI    -1->1    rsma_100150   BPER BANCA Finance si
+   BPE.MI    -1->1    rsma_50100150 BPER BANCA Finance si
+   CLE.MI    -1->1    rbo_20        CLASS EDITORI Consumer Services NaN
+   CLE.MI    -1->0    rtt_5020      CLASS EDITORI Consumer Services NaN
+   CY4.MI    -1->1    rbo_50        CY4GATE Technology Services NaN
+   CY4.MI    0->1    rtt_5020      CY4GATE Technology Services NaN
+   LDO.MI    -1->1    rbo_50        LEONARDO Electronic Technology si
+   LDO.MI    0->1    rtt_5020      LEONARDO Electronic Technology si
+   PQ.MI     -1->1    rsma_50100    PIQUADRO Consumer Durables NaN
+
+-- 2026-08-04  (5 bull flips) --
+   BAMI.MI   -1->1    rbo_20        BANCO BPM Finance si
+   BAMI.MI   0->1    rtt_5020      BANCO BPM Finance si
+   BGN.MI    -1->1    rsma_100150   BANCA GENERALI Finance si
+   BGN.MI    -1->1    rsma_50100150 BANCA GENERALI Finance si
+   DIS.MI    -1->1    rsma_50100150 D'AMICO Transportation NaN
+
+-- 2026-07-31  (3 bull flips) --
+   B.MI      -1->1    rbo_20        BASTOGI SPA Finance NaN
+   B.MI      -1->0    rtt_5020      BASTOGI SPA Finance NaN
+   BO.MI     -1->1    rsma_50100150 BORGOSESIA Finance NaN
+
+-- 2026-07-30  (1 bull flips) --
+   PQ.MI     -1->1    rema_50100    PIQUADRO Consumer Durables NaN
+
+-- 2026-07-29  (8 bull flips) --
+   BRE.MI    -1->1    rbo_20        BREMBO Producer Manufacturing si
+   BRE.MI    -1->0    rtt_5020      BREMBO Producer Manufacturing si
+   CY4.MI    -1->1    rbo_20        CY4GATE Technology Services NaN
+   CY4.MI    -1->0    rtt_5020      CY4GATE Technology Services NaN
+   ELN.MI    -1->1    rsma_100150   EL.EN Health Technology NaN
+   ELN.MI    -1->1    rsma_50100150 EL.EN Health Technology NaN
+   OVS.MI    -1->1    rbo_20        OVS Retail Trade si
+   OVS.MI    0->1    rtt_5020      OVS Retail Trade si
+
+-- 2026-07-28  (5 bull flips) --
+   FM.MI     -1->1    rbo_20        FIERA MILANO Commercial Services NaN
+   FM.MI     -1->0    rtt_5020      FIERA MILANO Commercial Services NaN
+   PRO.MI    -1->1    rsma_100150   BCA PROFILO Finance NaN
+   PRO.MI    -1->1    rsma_50100150 BCA PROFILO Finance NaN
+   VIM.MI    -1->1    rema_50100150 VIMI FASTENERS Producer Manufacturing NaN
 
 -- 2026-07-27  (13 bull flips) --
    ILP.MI    -1->1    rbo_20        ILPRA Producer Manufacturing NaN
@@ -120,43 +165,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TWL.MI    -1->1    rbo_50        TRAWELL CO Transportation NaN
    TWL.MI    -1->1    rtt_5020      TRAWELL CO Transportation NaN
 
--- 2026-07-03  (1 bull flips) --
-   FM.MI     -1->1    rsma_100150   FIERA MILANO Commercial Services NaN
-
--- 2026-07-02  (4 bull flips) --
-   CIRC.MI   -1->1    rbo_20        CIRCLE Commercial Services NaN
-   CIRC.MI   0->1    rtt_5020      CIRCLE Commercial Services NaN
-   FARM.MI   -1->1    rsma_50100    H-FARM Commercial Services NaN
-   UCG.MI    -1->1    rsma_50100    UNICREDIT Finance si
-
--- 2026-07-01  (8 bull flips) --
-   ARBS.MI   -1->1    rbo_20        ARTERRA BIOSCIENCE Health Technology NaN
-   ARBS.MI   -1->0    rtt_5020      ARTERRA BIOSCIENCE Health Technology NaN
-   MAIRE.MI  -1->1    rema_50100150 MAIRE Industrial Services si
-   UCG.MI    -1->1    rema_100150   UNICREDIT Finance si
-   UCG.MI    -1->1    rema_50100150 UNICREDIT Finance si
-   UNI.MI    -1->1    rbo_150       UNIPOL Finance si
-   UNI.MI    -1->1    rbo_50        UNIPOL Finance si
-   UNI.MI    0->1    rtt_5020      UNIPOL Finance si
-
--- 2026-06-30  (6 bull flips) --
-   ILP.MI    -1->1    rbo_20        ILPRA Producer Manufacturing NaN
-   ILP.MI    0->1    rtt_5020      ILPRA Producer Manufacturing NaN
-   MAIRE.MI  -1->1    rsma_50100150 MAIRE Industrial Services si
-   SRG.MI    -1->1    rema_50100150 SNAM Utilities si
-   TGYM.MI   -1->1    rema_50100150 TECHNOGYM Consumer Durables si
-   UCG.MI    -1->1    rema_50100    UNICREDIT Finance si
-
--- 2026-06-29  (1 bull flips) --
-   FARM.MI   -1->1    rsma_50100150 H-FARM Commercial Services NaN
-
--- 2026-06-26  (3 bull flips) --
-   ENEL.MI   -1->1    rbo_20        ENEL Utilities si
-   ENEL.MI   -1->0    rtt_5020      ENEL Utilities si
-   LDO.MI    -1->1    rsma_50100150 LEONARDO Electronic Technology si
-
--- 2026-06-25  (2 bull flips) --
-   BDB.MI    -1->1    rsma_50100    BCO DESIO BRIANZA Finance NaN
-   IG.MI     -1->1    rsma_50100150 ITALGAS Utilities si
-
-Most frequent flippers: TWL.MIx8, IG.MIx6, PRO.MIx6, ENEL.MIx4, ILP.MIx4, UCG.MIx4, ARBS.MIx4, FCT.MIx4, CE.MIx4, IEG.MIx4
+Most frequent flippers: TWL.MIx8, PRO.MIx8, CY4.MIx6, IG.MIx5, B.MIx4, FCT.MIx4, LDO.MIx4, CE.MIx4, PQ.MIx4, FM.MIx4
