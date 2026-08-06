@@ -85,3 +85,72 @@ jobs:
           done
           echo "failed to push after retries"
           exit 1
+
+  # Refresh the rolling bull-flip history AFTER analyze has committed today's
+  # daily_brief.txt. Kept as a SEPARATE job (not a step in `analyze`) on purpose:
+  # bull_flips_history.py walks the git history of daily_brief.txt, which needs a
+  # FULL-history + blobless checkout. Doing that inline would force changing the
+  # analyze job's (shallow, default) checkout — a needless risk to the core
+  # pipeline. This job is self-contained and, if it ever breaks, the analyze
+  # results are already safely committed by the job above.
+  refresh-bull-flips:
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history, blobless)
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 -> the month-long git-log walk sees every commit.
+          # filter: blob:none -> commit graph + trees only; the small
+          # daily_brief.txt blobs are fetched lazily by `git show`, so we do NOT
+          # download the repo's large historical parquet blobs.
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+        # No pip install: bull_flips_history.py uses only the Python standard
+        # library (re, subprocess, argparse, dataclasses, ...).
+
+      - name: Sync to the brief the analyze job just pushed
+        # workflow_run checks out the triggering SHA (the download commit), not
+        # analyze's freshly-pushed brief commit. Reset to the branch tip so the
+        # history walk includes today's daily_brief.txt.
+        run: |
+          git fetch origin "${{ github.ref_name }}"
+          git reset --hard "origin/${{ github.ref_name }}"
+
+      - name: Regenerate bull-flip history (last month)
+        run: |
+          python bull_flips_history.py \
+            --revision HEAD \
+            --since "1 month ago" \
+            --output data/results/it/bull_flips_last_month.txt
+
+      - name: Commit bull-flip history
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/results/it/bull_flips_last_month.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: refresh bull-flip history [skip ci]"
+          # Concurrent pushers (download legs, analyze, etf_returns) may touch the
+          # branch around now; rebase-retry with --autostash (disjoint file, so
+          # the rebase never conflicts) — same CI concurrency invariant as the
+          # other committing jobs.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push rejected; syncing and retrying (attempt $attempt)"
+            git fetch origin "${{ github.ref_name }}"
+            git rebase --autostash "origin/${{ github.ref_name }}" || { git rebase --abort; exit 1; }
+          done
+          echo "failed to push after retries"
+          exit 1

@@ -10,8 +10,10 @@ WHAT
 
 WHY
     The live brief can't answer "show me the last month of bull flips" — that
-    history exists only across committed snapshots. This is a read-only,
-    on-demand companion (not wired into CI).
+    history exists only across committed snapshots. Runs both on demand and
+    daily in CI: the ``refresh-bull-flips`` job in ``analyze_and_report.yml``
+    regenerates ``data/results/it/bull_flips_last_month.txt`` right after the
+    analyze job commits each day's brief (needs a full-history checkout).
 
 HOW
     1. ``git log`` the brief file over the window -> commit hashes.
