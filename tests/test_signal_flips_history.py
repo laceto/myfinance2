@@ -74,6 +74,33 @@ def test_flips_in_brief_bear_only():
     assert (ace.before, ace.after) == (1, -1)
 
 
+def test_marginabile_is_parsed_and_split_from_description():
+    bull = {f.symbol: f for f in flips_in_brief(SAMPLE, "bull")}
+    # "BPER BANCA Finance si" -> description without the trailing marginabile token.
+    assert bull["BPE.MI"].marginabile == "si"
+    assert bull["BPE.MI"].is_marginable is True
+    assert bull["BPE.MI"].description == "BPER BANCA Finance"
+    # "GENERALI ASS Finance NaN" -> not marginable.
+    assert bull["G.MI"].marginabile == "NaN"
+    assert bull["G.MI"].is_marginable is False
+
+
+def test_marginable_filter_keeps_only_shortable_bear_flips():
+    # Two bear flips: one marginable (si), one not (NaN).
+    text = """
+  DAILY BRIEF — 2026-07-23
+  SIGNAL FLIPS — last bar
+  [rbo_20]
+bear_flip ACE.MI ACEA Utilities si 1 → -1
+bear_flip XYZ.MI SOME NAME Finance NaN 1 → -1
+====================================================================================================
+"""
+    bears = flips_in_brief(text, "bear")
+    assert {f.symbol for f in bears} == {"ACE.MI", "XYZ.MI"}
+    shortable = [f for f in bears if f.is_marginable]
+    assert [f.symbol for f in shortable] == ["ACE.MI"]
+
+
 def test_flips_in_brief_captures_method_and_state():
     bull = {f.symbol: f for f in flips_in_brief(SAMPLE, "bull")}
     assert bull["BPE.MI"].method == "rbo_20"

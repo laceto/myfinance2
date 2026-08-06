@@ -162,7 +162,10 @@ from git I/O (`iter_brief_versions`, injectable) and unit-tested in
 bear `after==-1`; `--output` writes a single direction, `--direction both` writes
 both default paths). A flip is any row the brief labels `bull_flip`/`bear_flip`
 (includes soft `-1→0` / `1→0` flips); the before/after state is preserved for
-filtering. **CI refreshes `bull_flips_last_month.txt` and `bear_flips_last_month.txt`
+filtering. **Bear output defaults to marginable-only** (`marginabile=si`) because
+only marginable names can be short-sold — a bear flip on a non-shortable name
+isn't actionable; bull (a long entry) has no such restriction. Both defaults are
+overridable (`--marginable-only` / `--all-margins`). **CI refreshes `bull_flips_last_month.txt` and `bear_flips_last_month.txt`
 daily**: `analyze_and_report.yml` has a dedicated `refresh-signal-flips` job
 (`needs: analyze`) that, after the analyze job commits today's `daily_brief.txt`,
 checks out with `fetch-depth: 0` + `filter: blob:none` (full commit history

@@ -32,6 +32,10 @@ INVARIANTS & FAILURE MODES
       before/after state is preserved so ``--full-only`` can keep just the flips
       that reached the terminal state for the direction (bull ``after==1``,
       bear ``after==-1``).
+    - Only marginable names (``marginabile == si``) can be short-sold, so a bear
+      flip is only *actionable* if the name is marginable. Bear output therefore
+      defaults to marginable-only; bull (a long entry) has no such restriction.
+      Both defaults are overridable (``--marginable-only`` / ``--all-margins``).
     - De-dup key is ``(date, method, symbol)`` — the same commit appearing
       twice, or a flip persisting in a re-commit, is counted once per day.
     - Depends on committed brief history: days where the brief wasn't committed
@@ -84,13 +88,19 @@ _SIGNAL_BANNER = "SIGNAL FLIPS"
 class SignalFlip:
     """One signal flip from a daily brief's SIGNAL FLIPS section."""
 
-    date: str         # YYYY-MM-DD (the brief's bar date)
-    direction: str    # "bull" or "bear"
-    method: str       # e.g. "rbo_20", "rsma_50100150", "rtt_5020"
-    symbol: str       # e.g. "BPE.MI"
-    description: str  # name + sector + marginabile, whitespace-collapsed
-    before: int       # signal state before the flip (-1 / 0 / 1)
-    after: int        # signal state after the flip
+    date: str          # YYYY-MM-DD (the brief's bar date)
+    direction: str     # "bull" or "bear"
+    method: str        # e.g. "rbo_20", "rsma_50100150", "rtt_5020"
+    symbol: str        # e.g. "BPE.MI"
+    description: str   # name + sector, whitespace-collapsed
+    marginabile: str   # "si" (marginable -> short-sellable) or "NaN"/other
+    before: int        # signal state before the flip (-1 / 0 / 1)
+    after: int         # signal state after the flip
+
+    @property
+    def is_marginable(self) -> bool:
+        """True when the name is marginable (``marginabile == si``) — required to short."""
+        return self.marginabile.strip().lower() == "si"
 
 
 def brief_date(text: str) -> Optional[str]:
@@ -130,13 +140,21 @@ def flips_in_brief(text: str, direction: str) -> List[SignalFlip]:
             continue
         rr = _ROW_RE.match(stripped)
         if rr and rr.group(1) == tag:
+            # group(3) is "<name> <sector> <marginabile>"; marginabile is always
+            # the final column (si / NaN), so split it off the end.
+            body = re.sub(r"\s+", " ", rr.group(3)).strip()
+            if " " in body:
+                description, marginabile = body.rsplit(" ", 1)
+            else:
+                description, marginabile = body, ""
             out.append(
                 SignalFlip(
                     date=date,
                     direction=direction,
                     method=method or "?",
                     symbol=rr.group(2),
-                    description=re.sub(r"\s+", " ", rr.group(3)).strip(),
+                    description=description,
+                    marginabile=marginabile,
                     before=int(rr.group(4)),
                     after=int(rr.group(5)),
                 )
@@ -180,12 +198,20 @@ def iter_brief_versions(
             yield text
 
 
-def build_report(records: Sequence[SignalFlip], *, direction: str, since_label: str) -> str:
+def build_report(
+    records: Sequence[SignalFlip],
+    *,
+    direction: str,
+    since_label: str,
+    marginable_only: bool = False,
+) -> str:
     """Render a newest-first, grouped-by-date flips report for one direction."""
     lines: List[str] = []
     lines.append(f"{direction.upper()} FLIPS from daily_brief.txt (SIGNAL FLIPS section)")
     lines.append(f"window: {since_label}   events: {len(records)}")
     lines.append("change: state before->after  (1=bull, 0=neutral, -1=bear)")
+    if marginable_only:
+        lines.append("filter: marginabile=si only (short-sellable names)")
     lines.append("")
     by_date: Dict[str, List[SignalFlip]] = {}
     for f in records:
@@ -194,8 +220,10 @@ def build_report(records: Sequence[SignalFlip], *, direction: str, since_label: 
         day = sorted(by_date[date], key=lambda f: (f.symbol, f.method))
         lines.append(f"-- {date}  ({len(day)} {direction} flips) --")
         for f in day:
+            marg = "si " if f.is_marginable else f.marginabile or "-"
             lines.append(
-                f"   {f.symbol:<9} {f.before}->{f.after:<4} {f.method:<13} {f.description}"
+                f"   {f.symbol:<9} {f.before}->{f.after:<4} {f.method:<13} "
+                f"marg={marg:<4} {f.description}"
             )
         lines.append("")
     if records:
@@ -220,6 +248,14 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     parser.add_argument("--file", default=BRIEF_FILE)
     parser.add_argument("--full-only", action="store_true",
                         help="keep only flips that reached the terminal state (bull after==1, bear after==-1)")
+    # Marginable filter: only marginabile=si names can be short-sold, so bear
+    # flips default to marginable-only (that's the actionable set). Bull flips
+    # are long entries -> no such restriction. Either default is overridable.
+    parser.add_argument("--marginable-only", dest="marginable_only",
+                        action="store_true", default=None,
+                        help="keep only marginabile=si (short-sellable) names; default ON for bear, OFF for bull")
+    parser.add_argument("--all-margins", dest="marginable_only", action="store_false",
+                        help="include non-marginable names too (overrides the per-direction default)")
     parser.add_argument("--output", type=Path, default=None,
                         help="write report here (single direction only; default paths used for --direction both)")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -241,9 +277,18 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         records = collect_flips(briefs, direction)
         if args.full_only:
             records = [f for f in records if f.after == _TERMINAL[direction]]
-        logger.info("collected %d %s_flip events", len(records), direction)
+        # Resolve the marginable filter: explicit flag wins; otherwise bear
+        # defaults to marginable-only (short-sellable), bull to all names.
+        marginable_only = args.marginable_only
+        if marginable_only is None:
+            marginable_only = direction == "bear"
+        if marginable_only:
+            records = [f for f in records if f.is_marginable]
+        logger.info("collected %d %s_flip events (marginable_only=%s)",
+                    len(records), direction, marginable_only)
 
-        report = build_report(records, direction=direction, since_label=args.since)
+        report = build_report(records, direction=direction, since_label=args.since,
+                              marginable_only=marginable_only)
         print(report, end="")
 
         out = args.output if args.output is not None else DEFAULT_OUTPUTS[direction]
