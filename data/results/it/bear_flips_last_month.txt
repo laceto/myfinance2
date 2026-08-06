@@ -1,298 +1,71 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 251
+window: 1 month ago   events: 39
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+filter: marginabile=si only (short-sellable names)
 
--- 2026-08-05  (4 bear flips) --
-   CALT.MI   1->-1   rsma_50100150 CALTAGIRONE Non-Energy Minerals NaN
-   CFV.MI    1->-1   rsma_100150   CONFINVEST Distribution Services NaN
-   GEL.MI    1->-1   rsma_50100150 GEL Producer Manufacturing NaN
-   PIA.MI    1->-1   rsma_50100150 PIAGGIO Consumer Durables NaN
+-- 2026-08-03  (8 bear flips) --
+   ACE.MI    1->-1   rbo_20        marg=si   ACEA Utilities
+   ACE.MI    0->-1   rtt_5020      marg=si   ACEA Utilities
+   DAL.MI    1->-1   rbo_50        marg=si   DATALOGIC Electronic Technology
+   DAL.MI    0->-1   rtt_5020      marg=si   DATALOGIC Electronic Technology
+   IRE.MI    1->-1   rbo_20        marg=si   IREN Utilities
+   IRE.MI    0->-1   rtt_5020      marg=si   IREN Utilities
+   TNXT.MI   1->-1   rbo_20        marg=si   TINEXTA Technology Services
+   TNXT.MI   0->-1   rtt_5020      marg=si   TINEXTA Technology Services
 
--- 2026-08-04  (19 bear flips) --
-   CIR.MI    1->-1   rsma_50100150 CIR Producer Manufacturing NaN
-   CLF.MI    1->-1   rbo_20        CALEFFI Consumer Durables NaN
-   CLF.MI    1->0    rtt_5020      CALEFFI Consumer Durables NaN
-   DHH.MI    1->-1   rbo_20        DHH Technology Services NaN
-   DHH.MI    1->-1   rbo_50        DHH Technology Services NaN
-   DHH.MI    1->-1   rtt_5020      DHH Technology Services NaN
-   FIC.MI    1->-1   rbo_20        FIRST CAPITAL Finance NaN
-   FIC.MI    0->-1   rtt_5020      FIRST CAPITAL Finance NaN
-   PINF.MI   1->-1   rbo_20        PININFARINA SPA Consumer Durables NaN
-   PINF.MI   0->-1   rtt_5020      PININFARINA SPA Consumer Durables NaN
-   PLN.MI    1->-1   rbo_20        PLANETEL Communications NaN
-   PLN.MI    0->-1   rtt_5020      PLANETEL Communications NaN
-   REC.MI    1->-1   rbo_20        RECORDATI ORD Health Technology NaN
-   REC.MI    0->-1   rtt_5020      RECORDATI ORD Health Technology NaN
-   SGC.MI    1->-1   rbo_20        SG COMPANY Communications NaN
-   SGC.MI    1->-1   rema_50100    SG COMPANY Communications NaN
-   SGC.MI    1->0    rtt_5020      SG COMPANY Communications NaN
-   SOL.MI    1->-1   rema_50100    SOL Process Industries NaN
-   SOL.MI    1->-1   rema_50100150 SOL Process Industries NaN
+-- 2026-07-31  (1 bear flips) --
+   NEXI.MI   1->-1   rema_50100150 marg=si   NEXI Finance
 
--- 2026-08-03  (34 bear flips) --
-   ABT.MI    1->-1   rbo_20        ABITARE IN Finance NaN
-   ABT.MI    0->-1   rtt_5020      ABITARE IN Finance NaN
-   ACE.MI    1->-1   rbo_20        ACEA Utilities si
-   ACE.MI    0->-1   rtt_5020      ACEA Utilities si
-   BFG.MI    1->-1   rsma_100150   B.F Process Industries NaN
-   BFG.MI    1->-1   rtt_5020      B.F Process Industries NaN
-   BO.MI     1->-1   rbo_20        BORGOSESIA Finance NaN
-   BO.MI     0->-1   rtt_5020      BORGOSESIA Finance NaN
-   DAL.MI    1->-1   rbo_50        DATALOGIC Electronic Technology si
-   DAL.MI    0->-1   rtt_5020      DATALOGIC Electronic Technology si
-   ETH.MI    1->-1   rbo_20        EUROTECH Electronic Technology NaN
-   ETH.MI    1->0    rtt_5020      EUROTECH Electronic Technology NaN
-   FNM.MI    1->-1   rbo_20        FNM Transportation NaN
-   FNM.MI    0->-1   rtt_5020      FNM Transportation NaN
-   GRAL.MI   1->-1   rbo_20        GRIFAL Process Industries NaN
-   GRAL.MI   0->-1   rtt_5020      GRIFAL Process Industries NaN
-   GVS.MI    1->-1   rbo_20        GVS Electronic Technology NaN
-   GVS.MI    1->0    rtt_5020      GVS Electronic Technology NaN
-   IF.MI     1->-1   rbo_20        BANCA IFIS Finance NaN
-   IF.MI     0->-1   rtt_5020      BANCA IFIS Finance NaN
-   IRE.MI    1->-1   rbo_20        IREN Utilities si
-   IRE.MI    0->-1   rtt_5020      IREN Utilities si
-   LON.MI    1->-1   rbo_50        LONGINO&CARDENAL Consumer Services NaN
-   LON.MI    0->-1   rtt_5020      LONGINO&CARDENAL Consumer Services NaN
-   MAPS.MI   1->-1   rbo_20        MAPS Technology Services NaN
-   MAPS.MI   1->0    rtt_5020      MAPS Technology Services NaN
-   MARP.MI   1->-1   rbo_20        MARZOCCHI POMPE Producer Manufacturing NaN
-   MARP.MI   0->-1   rtt_5020      MARZOCCHI POMPE Producer Manufacturing NaN
-   SL.MI     1->-1   rbo_20        SANLORENZO Consumer Durables NaN
-   SL.MI     1->0    rtt_5020      SANLORENZO Consumer Durables NaN
-   TNXT.MI   1->-1   rbo_20        TINEXTA Technology Services si
-   TNXT.MI   0->-1   rtt_5020      TINEXTA Technology Services si
-   UD.MI     1->-1   rbo_20        UNIDATA Communications NaN
-   UD.MI     0->-1   rtt_5020      UNIDATA Communications NaN
+-- 2026-07-30  (6 bear flips) --
+   A2A.MI    1->-1   rbo_20        marg=si   A2A Utilities
+   A2A.MI    0->-1   rtt_5020      marg=si   A2A Utilities
+   HER.MI    1->-1   rbo_20        marg=si   HERA Utilities
+   HER.MI    0->-1   rtt_5020      marg=si   HERA Utilities
+   TRN.MI    1->-1   rbo_20        marg=si   TERNA Utilities
+   TRN.MI    0->-1   rtt_5020      marg=si   TERNA Utilities
 
--- 2026-07-31  (10 bear flips) --
-   AEDES.MI  1->-1   rbo_20        AEDES Finance NaN
-   AEDES.MI  1->-1   rbo_50        AEDES Finance NaN
-   AEDES.MI  1->-1   rtt_5020      AEDES Finance NaN
-   ESAU.MI   1->-1   rbo_20        ESAUTOMOTION Producer Manufacturing NaN
-   ESAU.MI   1->0    rtt_5020      ESAUTOMOTION Producer Manufacturing NaN
-   GEL.MI    1->-1   rema_50100150 GEL Producer Manufacturing NaN
-   LNDR.MI   1->-1   rbo_20        LANDI RENZO Producer Manufacturing NaN
-   LNDR.MI   0->-1   rtt_5020      LANDI RENZO Producer Manufacturing NaN
-   NEXI.MI   1->-1   rema_50100150 NEXI Finance si
-   SES.MI    1->-1   rsma_50100150 SESA Distribution Services NaN
+-- 2026-07-28  (2 bear flips) --
+   ANIM.MI   1->-1   rbo_20        marg=si   ANIMA HOLDING Finance
+   ANIM.MI   0->-1   rtt_5020      marg=si   ANIMA HOLDING Finance
 
--- 2026-07-30  (35 bear flips) --
-   A2A.MI    1->-1   rbo_20        A2A Utilities si
-   A2A.MI    0->-1   rtt_5020      A2A Utilities si
-   ADB.MI    1->-1   rbo_20        AEROPORTO GUGLIELMO MARCONI DI BOLOGNA Transportation NaN
-   ADB.MI    1->0    rtt_5020      AEROPORTO GUGLIELMO MARCONI DI BOLOGNA Transportation NaN
-   ARN.MI    1->-1   rbo_150       ALERION Utilities NaN
-   ARN.MI    1->-1   rbo_20        ALERION Utilities NaN
-   ARN.MI    0->-1   rtt_5020      ALERION Utilities NaN
-   CLF.MI    1->-1   rbo_20        CALEFFI Consumer Durables NaN
-   CLF.MI    1->0    rtt_5020      CALEFFI Consumer Durables NaN
-   CRL.MI    1->-1   rsma_50100    CAREL INDUSTRIES Producer Manufacturing NaN
-   CRL.MI    1->-1   rsma_50100150 CAREL INDUSTRIES Producer Manufacturing NaN
-   DGT.MI    1->-1   rbo_20        DIGITOUCH Commercial Services NaN
-   DGT.MI    0->-1   rtt_5020      DIGITOUCH Commercial Services NaN
-   EDNR.MI   1->-1   rbo_20        EDISON R Utilities NaN
-   EDNR.MI   0->-1   rtt_5020      EDISON R Utilities NaN
-   ELC.MI    1->-1   rbo_20        ELICA Consumer Durables NaN
-   ELC.MI    0->-1   rtt_5020      ELICA Consumer Durables NaN
-   ESAU.MI   1->-1   rema_50100150 ESAUTOMOTION Producer Manufacturing NaN
-   GE.MI     1->-1   rbo_20        GEFRAN Electronic Technology NaN
-   GE.MI     0->-1   rtt_5020      GEFRAN Electronic Technology NaN
-   HER.MI    1->-1   rbo_20        HERA Utilities si
-   HER.MI    0->-1   rtt_5020      HERA Utilities si
-   ITM.MI    1->-1   rbo_20        ITALMOBILIARE Consumer Non-Durables NaN
-   ITM.MI    0->-1   rtt_5020      ITALMOBILIARE Consumer Non-Durables NaN
-   SEIF.MI   1->-1   rbo_20        SOCIETA' EDITORIALE IL FATTO Consumer Services NaN
-   SEIF.MI   1->0    rtt_5020      SOCIETA' EDITORIALE IL FATTO Consumer Services NaN
-   SGC.MI    1->-1   rema_50100150 SG COMPANY Communications NaN
-   SOL.MI    1->-1   rbo_20        SOL Process Industries NaN
-   SOL.MI    0->-1   rtt_5020      SOL Process Industries NaN
-   STLAM.MI  1->-1   rbo_20        STELLANTIS Consumer Durables NaN
-   STLAM.MI  0->-1   rtt_5020      STELLANTIS Consumer Durables NaN
-   TRN.MI    1->-1   rbo_20        TERNA Utilities si
-   TRN.MI    0->-1   rtt_5020      TERNA Utilities si
-   VNT.MI    1->-1   rbo_20        VANTEA SMART Technology Services NaN
-   VNT.MI    0->-1   rtt_5020      VANTEA SMART Technology Services NaN
+-- 2026-07-24  (3 bear flips) --
+   RACE.MI   1->-1   rsma_50100150 marg=si   FERRARI Consumer Durables
+   UCG.MI    1->-1   rbo_20        marg=si   UNICREDIT Finance
+   UCG.MI    1->0    rtt_5020      marg=si   UNICREDIT Finance
 
--- 2026-07-29  (3 bear flips) --
-   FDA.MI    1->-1   rbo_20        FIDIA Producer Manufacturing NaN
-   FDA.MI    0->-1   rtt_5020      FIDIA Producer Manufacturing NaN
-   SES.MI    1->-1   rsma_50100    SESA Distribution Services NaN
+-- 2026-07-23  (2 bear flips) --
+   MONC.MI   1->-1   rbo_20        marg=si   MONCLER Consumer Non-Durables
+   MONC.MI   0->-1   rtt_5020      marg=si   MONCLER Consumer Non-Durables
 
--- 2026-07-28  (15 bear flips) --
-   ANIM.MI   1->-1   rbo_20        ANIMA HOLDING Finance si
-   ANIM.MI   0->-1   rtt_5020      ANIMA HOLDING Finance si
-   CRL.MI    1->-1   rema_50100    CAREL INDUSTRIES Producer Manufacturing NaN
-   CRL.MI    1->-1   rema_50100150 CAREL INDUSTRIES Producer Manufacturing NaN
-   DBA.MI    1->-1   rbo_50        DBA GROUP Industrial Services NaN
-   DBA.MI    0->-1   rtt_5020      DBA GROUP Industrial Services NaN
-   FBK.MI    1->-1   rsma_50100150 FINECOBANK Finance NaN
-   GSP.MI    1->-1   rbo_20        GAS PLUS Utilities NaN
-   GSP.MI    0->-1   rtt_5020      GAS PLUS Utilities NaN
-   PTR.MI    1->-1   rbo_20        PATTERN Consumer Non-Durables NaN
-   PTR.MI    0->-1   rtt_5020      PATTERN Consumer Non-Durables NaN
-   SFT.MI    1->-1   rbo_50        SOFTLAB Technology Services NaN
-   SFT.MI    0->-1   rtt_5020      SOFTLAB Technology Services NaN
-   SGF.MI    1->-1   rbo_20        SOGEFI Producer Manufacturing NaN
-   SGF.MI    0->-1   rtt_5020      SOGEFI Producer Manufacturing NaN
+-- 2026-07-22  (4 bear flips) --
+   NEXI.MI   1->-1   rsma_50100150 marg=si   NEXI Finance
+   RACE.MI   1->-1   rbo_20        marg=si   FERRARI Consumer Durables
+   RACE.MI   1->0    rtt_5020      marg=si   FERRARI Consumer Durables
+   REY.MI    1->-1   rsma_50100    marg=si   REPLY Commercial Services
 
--- 2026-07-27  (6 bear flips) --
-   CIR.MI    1->-1   rbo_20        CIR Producer Manufacturing NaN
-   CIR.MI    1->0    rtt_5020      CIR Producer Manufacturing NaN
-   ITW.MI    1->-1   rbo_20        IT WAY Technology Services NaN
-   ITW.MI    0->-1   rtt_5020      IT WAY Technology Services NaN
-   SAB.MI    1->-1   rbo_20        SABAF Consumer Durables NaN
-   SAB.MI    0->-1   rtt_5020      SABAF Consumer Durables NaN
+-- 2026-07-21  (1 bear flips) --
+   DIA.MI    1->-1   rsma_50100150 marg=si   DIASORIN Health Technology
 
--- 2026-07-24  (12 bear flips) --
-   FBK.MI    1->-1   rema_50100150 FINECOBANK Finance NaN
-   GEO.MI    1->-1   rbo_20        GEOX Consumer Non-Durables NaN
-   GEO.MI    1->0    rtt_5020      GEOX Consumer Non-Durables NaN
-   MARP.MI   1->-1   rbo_20        MARZOCCHI POMPE Producer Manufacturing NaN
-   MARP.MI   0->-1   rtt_5020      MARZOCCHI POMPE Producer Manufacturing NaN
-   OLI.MI    1->-1   rsma_50100150 OLIDATA Electronic Technology NaN
-   PHIL.MI   1->-1   rsma_50100150 PHILOGEN Health Technology NaN
-   RACE.MI   1->-1   rsma_50100150 FERRARI Consumer Durables si
-   RCS.MI    1->-1   rbo_20        RCS MEDIAGROUP Consumer Services NaN
-   RCS.MI    0->-1   rtt_5020      RCS MEDIAGROUP Consumer Services NaN
-   UCG.MI    1->-1   rbo_20        UNICREDIT Finance si
-   UCG.MI    1->0    rtt_5020      UNICREDIT Finance si
+-- 2026-07-20  (6 bear flips) --
+   BRE.MI    1->-1   rbo_50        marg=si   BREMBO Producer Manufacturing
+   BRE.MI    0->-1   rtt_5020      marg=si   BREMBO Producer Manufacturing
+   JUVE.MI   1->-1   rbo_20        marg=si   JUVENTUS FC Consumer Services
+   JUVE.MI   0->-1   rtt_5020      marg=si   JUVENTUS FC Consumer Services
+   MARR.MI   1->-1   rbo_20        marg=si   MARR Distribution Services
+   MARR.MI   0->-1   rtt_5020      marg=si   MARR Distribution Services
 
--- 2026-07-23  (7 bear flips) --
-   MONC.MI   1->-1   rbo_20        MONCLER Consumer Non-Durables si
-   MONC.MI   0->-1   rtt_5020      MONCLER Consumer Non-Durables si
-   NWL.MI    1->-1   rbo_20        NEWLAT FOOD Consumer Non-Durables NaN
-   NWL.MI    0->-1   rtt_5020      NEWLAT FOOD Consumer Non-Durables NaN
-   ORS.MI    1->-1   rbo_20        ORSERO Distribution Services NaN
-   ORS.MI    1->0    rtt_5020      ORSERO Distribution Services NaN
-   PIRC.MI   1->-1   rsma_50100150 PIRELLI & C Consumer Durables NaN
+-- 2026-07-17  (1 bear flips) --
+   AMP.MI    1->-1   rsma_50100    marg=si   AMPLIFON Distribution Services
 
--- 2026-07-22  (36 bear flips) --
-   ASC.MI    1->-1   rbo_20        ASCOPIAVE Utilities NaN
-   ASC.MI    0->-1   rtt_5020      ASCOPIAVE Utilities NaN
-   AZM.MI    1->-1   rbo_20        AZIMUT Finance NaN
-   AZM.MI    0->-1   rtt_5020      AZIMUT Finance NaN
-   CBB.MI    1->-1   rbo_20        CLEANBNB Technology Services NaN
-   CBB.MI    0->-1   rtt_5020      CLEANBNB Technology Services NaN
-   DBA.MI    1->-1   rbo_20        DBA GROUP Industrial Services NaN
-   DBA.MI    1->0    rtt_5020      DBA GROUP Industrial Services NaN
-   DHH.MI    1->-1   rbo_20        DHH Technology Services NaN
-   DHH.MI    1->0    rtt_5020      DHH Technology Services NaN
-   DIB.MI    1->-1   rbo_20        DIGITAL BROS Technology Services NaN
-   DIB.MI    1->0    rtt_5020      DIGITAL BROS Technology Services NaN
-   GEO.MI    1->-1   rbo_20        GEOX Consumer Non-Durables NaN
-   GEO.MI    0->-1   rtt_5020      GEOX Consumer Non-Durables NaN
-   MAPS.MI   1->-1   rsma_50100150 MAPS Technology Services NaN
-   MASI.MI   1->-1   rsma_50100    MASI AGRICOLA Consumer Non-Durables NaN
-   MET.MI    1->-1   rbo_20        MET.EXTRA GROUP Finance NaN
-   MET.MI    1->0    rtt_5020      MET.EXTRA GROUP Finance NaN
-   MFT.MI    1->-1   rbo_20        MATICA FINTEC Electronic Technology NaN
-   MFT.MI    0->-1   rtt_5020      MATICA FINTEC Electronic Technology NaN
-   MN.MI     1->-1   rbo_20        MONDADORI EDIT Consumer Services NaN
-   MN.MI     0->-1   rtt_5020      MONDADORI EDIT Consumer Services NaN
-   NEXI.MI   1->-1   rsma_50100150 NEXI Finance si
-   RACE.MI   1->-1   rbo_20        FERRARI Consumer Durables si
-   RACE.MI   1->0    rtt_5020      FERRARI Consumer Durables si
-   REY.MI    1->-1   rsma_50100    REPLY Commercial Services si
-   SGC.MI    1->-1   rsma_100150   SG COMPANY Communications NaN
-   SGC.MI    1->-1   rsma_50100150 SG COMPANY Communications NaN
-   SIT.MI    1->-1   rbo_20        SIT Producer Manufacturing NaN
-   SIT.MI    0->-1   rtt_5020      SIT Producer Manufacturing NaN
-   TIP.MI    1->-1   rbo_20        TAMBURI Finance NaN
-   TIP.MI    1->0    rtt_5020      TAMBURI Finance NaN
-   WBS.MI    1->-1   rbo_20        WEBSOLUTE Commercial Services NaN
-   WBS.MI    0->-1   rtt_5020      WEBSOLUTE Commercial Services NaN
-   ZEST.MI   1->-1   rbo_20        ZEST Finance NaN
-   ZEST.MI   0->-1   rtt_5020      ZEST Finance NaN
+-- 2026-07-16  (3 bear flips) --
+   ACE.MI    1->-1   rbo_20        marg=si   ACEA Utilities
+   ACE.MI    0->-1   rtt_5020      marg=si   ACEA Utilities
+   TRN.MI    1->-1   rsma_100150   marg=si   TERNA Utilities
 
--- 2026-07-21  (10 bear flips) --
-   CYB.MI    1->-1   rbo_50        CYBEROO Technology Services NaN
-   CYB.MI    0->-1   rtt_5020      CYBEROO Technology Services NaN
-   DIA.MI    1->-1   rsma_50100150 DIASORIN Health Technology si
-   GVS.MI    1->-1   rsma_50100    GVS Electronic Technology NaN
-   ITD.MI    1->-1   rbo_20        INTRED Communications NaN
-   ITD.MI    0->-1   rtt_5020      INTRED Communications NaN
-   SOS.MI    1->-1   rbo_20        SOSTRAVEL.COM Technology Services NaN
-   SOS.MI    0->-1   rtt_5020      SOSTRAVEL.COM Technology Services NaN
-   TYA.MI    1->-1   rbo_20        TOSCANA AEROPORTI Transportation NaN
-   TYA.MI    0->-1   rtt_5020      TOSCANA AEROPORTI Transportation NaN
+-- 2026-07-10  (1 bear flips) --
+   ENAV.MI   1->-1   rsma_100150   marg=si   ENAV Transportation
 
--- 2026-07-20  (14 bear flips) --
-   AEF.MI    1->-1   rbo_20        AEFFE Consumer Non-Durables NaN
-   AEF.MI    0->-1   rtt_5020      AEFFE Consumer Non-Durables NaN
-   BRE.MI    1->-1   rbo_50        BREMBO Producer Manufacturing si
-   BRE.MI    0->-1   rtt_5020      BREMBO Producer Manufacturing si
-   JUVE.MI   1->-1   rbo_20        JUVENTUS FC Consumer Services si
-   JUVE.MI   0->-1   rtt_5020      JUVENTUS FC Consumer Services si
-   MARR.MI   1->-1   rbo_20        MARR Distribution Services si
-   MARR.MI   0->-1   rtt_5020      MARR Distribution Services si
-   PHIL.MI   1->-1   rbo_20        PHILOGEN Health Technology NaN
-   PHIL.MI   1->0    rtt_5020      PHILOGEN Health Technology NaN
-   PIRC.MI   1->-1   rbo_20        PIRELLI & C Consumer Durables NaN
-   PIRC.MI   1->0    rtt_5020      PIRELLI & C Consumer Durables NaN
-   PTR.MI    1->-1   rbo_20        PATTERN Consumer Non-Durables NaN
-   PTR.MI    0->-1   rtt_5020      PATTERN Consumer Non-Durables NaN
+-- 2026-07-08  (1 bear flips) --
+   NEXI.MI   1->-1   rsma_50100    marg=si   NEXI Finance
 
--- 2026-07-17  (5 bear flips) --
-   AMP.MI    1->-1   rsma_50100    AMPLIFON Distribution Services si
-   DLG.MI    1->-1   rema_50100150 DE'LONGHI Consumer Durables NaN
-   LFG.MI    1->-1   rsma_50100    LEONE FILM GROUP Consumer Services NaN
-   MOL.MI    1->-1   rbo_20        MUTUIONLINE Commercial Services NaN
-   MOL.MI    0->-1   rtt_5020      MUTUIONLINE Commercial Services NaN
-
--- 2026-07-16  (11 bear flips) --
-   ACE.MI    1->-1   rbo_20        ACEA Utilities si
-   ACE.MI    0->-1   rtt_5020      ACEA Utilities si
-   ARN.MI    1->-1   rema_100150   ALERION Utilities NaN
-   BO.MI     1->-1   rema_100150   BORGOSESIA Finance NaN
-   CFV.MI    1->-1   rsma_50100    CONFINVEST Distribution Services NaN
-   CFV.MI    1->-1   rsma_50100150 CONFINVEST Distribution Services NaN
-   DOX.MI    1->-1   rema_100150   DOXEE Technology Services NaN
-   IOT.MI    1->-1   rsma_50100150 SECO Electronic Technology NaN
-   LFG.MI    1->-1   rsma_50100    LEONE FILM GROUP Consumer Services NaN
-   POPR.MI   1->-1   rema_100150   POLIGRAFICI PRINTING Consumer Services NaN
-   TRN.MI    1->-1   rsma_100150   TERNA Utilities si
-
--- 2026-07-13  (6 bear flips) --
-   ENV.MI    1->-1   rsma_50100    ENERVIT Health Technology NaN
-   ENV.MI    1->-1   rsma_50100150 ENERVIT Health Technology NaN
-   MNL.MI    1->-1   rbo_20        MONNALISA Consumer Non-Durables NaN
-   MNL.MI    0->-1   rtt_5020      MONNALISA Consumer Non-Durables NaN
-   RETI.MI   1->-1   rbo_20        RETI Technology Services NaN
-   RETI.MI   1->0    rtt_5020      RETI Technology Services NaN
-
--- 2026-07-10  (3 bear flips) --
-   CALT.MI   1->-1   rbo_20        CALTAGIRONE Non-Energy Minerals NaN
-   CALT.MI   0->-1   rtt_5020      CALTAGIRONE Non-Energy Minerals NaN
-   ENAV.MI   1->-1   rsma_100150   ENAV Transportation si
-
--- 2026-07-09  (2 bear flips) --
-   AC5.MI    1->-1   rbo_20        ACINQUE Utilities NaN
-   AC5.MI    0->-1   rtt_5020      ACINQUE Utilities NaN
-
--- 2026-07-08  (3 bear flips) --
-   CEM.MI    1->-1   rbo_20        CEMENTIR HOLDING Non-Energy Minerals NaN
-   CEM.MI    0->-1   rtt_5020      CEMENTIR HOLDING Non-Energy Minerals NaN
-   NEXI.MI   1->-1   rsma_50100    NEXI Finance si
-
--- 2026-07-07  (4 bear flips) --
-   IRC.MI    1->-1   rsma_50100    IRCE Producer Manufacturing NaN
-   MASI.MI   1->-1   rbo_50        MASI AGRICOLA Consumer Non-Durables NaN
-   MASI.MI   0->-1   rtt_5020      MASI AGRICOLA Consumer Non-Durables NaN
-   TPS.MI    1->-1   rsma_100150   TPS Commercial Services NaN
-
--- 2026-07-06  (12 bear flips) --
-   AVIO.MI   1->-1   rsma_100150   AVIO Electronic Technology NaN
-   AVIO.MI   1->-1   rtt_5020      AVIO Electronic Technology NaN
-   ENV.MI    1->-1   rbo_50        ENERVIT Health Technology NaN
-   ENV.MI    1->-1   rema_50100    ENERVIT Health Technology NaN
-   ENV.MI    1->-1   rema_50100150 ENERVIT Health Technology NaN
-   ENV.MI    0->-1   rtt_5020      ENERVIT Health Technology NaN
-   PWS.MI    1->-1   rsma_50100    POWERSOFT Electronic Technology NaN
-   PWS.MI    1->-1   rsma_50100150 POWERSOFT Electronic Technology NaN
-   TPS.MI    1->-1   rsma_100150   TPS Commercial Services NaN
-   TPS.MI    1->-1   rtt_5020      TPS Commercial Services NaN
-   U24.MI    1->-1   rbo_20        UCAPITAL24 Technology Services NaN
-   U24.MI    0->-1   rtt_5020      UCAPITAL24 Technology Services NaN
-
-Most frequent flippers: ENV.MIx6, SGC.MIx6, DHH.MIx5, ARN.MIx4, ACE.MIx4, PTR.MIx4, DBA.MIx4, GEO.MIx4, MARP.MIx4, CRL.MIx4
+Most frequent flippers: ACE.MIx4, NEXI.MIx3, TRN.MIx3, RACE.MIx3, JUVE.MIx2, MARR.MIx2, BRE.MIx2, MONC.MIx2, UCG.MIx2, ANIM.MIx2
