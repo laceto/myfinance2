@@ -1,7 +1,10 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 39
+window: 1 month ago   events: 40
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-08-07  (1 bear flips) --
+   ENI.MI    1->-1   rsma_100150   marg=si   ENI Energy Minerals
 
 -- 2026-08-03  (8 bear flips) --
    ACE.MI    1->-1   rbo_20        marg=si   ACEA Utilities
