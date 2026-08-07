@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 123
+window: 1 month ago   events: 114
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-06  (2 bull flips) --
+   B.MI      -1->1    rsma_50100150 marg=NaN  BASTOGI SPA Finance
+   BPE.MI    -1->1    rbo_150       marg=si   BPER BANCA Finance
 
 -- 2026-08-05  (11 bull flips) --
    BFF.MI    -1->1    rbo_20        marg=NaN  BFF BANK Finance
@@ -152,17 +156,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    WIIT.MI   -1->1    rbo_20        marg=NaN  WIIT Technology Services
    WIIT.MI   0->1    rtt_5020      marg=NaN  WIIT Technology Services
 
--- 2026-07-06  (11 bull flips) --
-   B.MI      -1->1    rbo_20        marg=NaN  BASTOGI SPA Finance
-   B.MI      -1->0    rtt_5020      marg=NaN  BASTOGI SPA Finance
-   FCT.MI    -1->1    rbo_20        marg=si   FINCANTIERI Producer Manufacturing
-   FCT.MI    -1->0    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
-   SFER.MI   -1->1    rsma_100150   marg=si   SALVATORE FERRAGAMO Consumer Non-Durables
-   SFER.MI   -1->1    rsma_50100150 marg=si   SALVATORE FERRAGAMO Consumer Non-Durables
-   SFER.MI   -1->1    rtt_5020      marg=si   SALVATORE FERRAGAMO Consumer Non-Durables
-   TWL.MI    -1->1    rbo_150       marg=NaN  TRAWELL CO Transportation
-   TWL.MI    -1->1    rbo_20        marg=NaN  TRAWELL CO Transportation
-   TWL.MI    -1->1    rbo_50        marg=NaN  TRAWELL CO Transportation
-   TWL.MI    -1->1    rtt_5020      marg=NaN  TRAWELL CO Transportation
-
-Most frequent flippers: TWL.MIx8, PRO.MIx8, CY4.MIx6, IG.MIx5, B.MIx4, FCT.MIx4, LDO.MIx4, CE.MIx4, PQ.MIx4, FM.MIx4
+Most frequent flippers: PRO.MIx8, CY4.MIx6, IG.MIx5, BPE.MIx5, LDO.MIx4, TWL.MIx4, CE.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4
