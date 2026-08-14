@@ -1,6 +1,11 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 109
+window: 1 month ago   events: 110
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-14  (3 bull flips) --
+   GVS.MI    -1->1    rema_50100    marg=NaN  GVS Electronic Technology
+   SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
+   SPM.MI    -1->0    rtt_5020      marg=si   SAIPEM Industrial Services
 
 -- 2026-08-13  (2 bull flips) --
    AZM.MI    -1->1    rbo_50        marg=NaN  AZIMUT Finance
@@ -149,8 +154,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
 -- 2026-07-16  (1 bull flips) --
    BRE.MI    -1->1    rema_50100150 marg=si   BREMBO Producer Manufacturing
 
--- 2026-07-13  (2 bull flips) --
-   CE.MI     -1->1    rema_100150   marg=NaN  CREDEM Finance
-   CE.MI     -1->1    rema_50100150 marg=NaN  CREDEM Finance
-
-Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, CE.MIx4, BRE.MIx4, IG.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4
+Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, GVS.MIx5, BRE.MIx4, IG.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4

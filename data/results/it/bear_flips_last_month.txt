@@ -1,7 +1,12 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 43
+window: 1 month ago   events: 46
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-08-14  (3 bear flips) --
+   ENAV.MI   1->-1   rbo_20        marg=si   ENAV Transportation
+   ENAV.MI   0->-1   rtt_5020      marg=si   ENAV Transportation
+   REY.MI    1->-1   rema_50100150 marg=si   REPLY Commercial Services
 
 -- 2026-08-13  (1 bear flips) --
    REY.MI    1->-1   rsma_50100150 marg=si   REPLY Commercial Services
@@ -76,4 +81,4 @@ filter: marginabile=si only (short-sellable names)
    ACE.MI    0->-1   rtt_5020      marg=si   ACEA Utilities
    TRN.MI    1->-1   rsma_100150   marg=si   TERNA Utilities
 
-Most frequent flippers: ACE.MIx4, TRN.MIx3, RACE.MIx3, JUVE.MIx2, MARR.MIx2, BRE.MIx2, REY.MIx2, NEXI.MIx2, MONC.MIx2, UCG.MIx2
+Most frequent flippers: ACE.MIx4, TRN.MIx3, RACE.MIx3, REY.MIx3, JUVE.MIx2, MARR.MIx2, BRE.MIx2, NEXI.MIx2, MONC.MIx2, UCG.MIx2
