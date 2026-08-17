@@ -2,6 +2,9 @@ BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
 window: 1 month ago   events: 110
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
+-- 2026-08-17  (1 bull flips) --
+   RACE.MI   -1->1    rema_50100    marg=si   FERRARI Consumer Durables
+
 -- 2026-08-14  (3 bull flips) --
    GVS.MI    -1->1    rema_50100    marg=NaN  GVS Electronic Technology
    SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
@@ -151,7 +154,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    SERI.MI   -1->1    rsma_100150   marg=NaN  SERI INDUSTRIAL Utilities
    SERI.MI   -1->1    rsma_50100150 marg=NaN  SERI INDUSTRIAL Utilities
 
--- 2026-07-16  (1 bull flips) --
-   BRE.MI    -1->1    rema_50100150 marg=si   BREMBO Producer Manufacturing
-
-Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, GVS.MIx5, BRE.MIx4, IG.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4
+Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, GVS.MIx5, IG.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4, CY4.MIx4
