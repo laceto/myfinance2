@@ -1,5 +1,5 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 110
+window: 1 month ago   events: 102
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
 -- 2026-08-17  (1 bull flips) --
@@ -144,14 +144,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PQ.MI     -1->1    rbo_50        marg=NaN  PIQUADRO Consumer Durables
    PQ.MI     0->1    rtt_5020      marg=NaN  PIQUADRO Consumer Durables
 
--- 2026-07-17  (8 bull flips) --
-   ENEL.MI   -1->1    rbo_20        marg=si   ENEL Utilities
-   ENEL.MI   -1->0    rtt_5020      marg=si   ENEL Utilities
-   ENI.MI    -1->1    rbo_20        marg=si   ENI Energy Minerals
-   ENI.MI    -1->0    rtt_5020      marg=si   ENI Energy Minerals
-   IG.MI     -1->1    rbo_20        marg=si   ITALGAS Utilities
-   IG.MI     -1->0    rtt_5020      marg=si   ITALGAS Utilities
-   SERI.MI   -1->1    rsma_100150   marg=NaN  SERI INDUSTRIAL Utilities
-   SERI.MI   -1->1    rsma_50100150 marg=NaN  SERI INDUSTRIAL Utilities
-
-Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, GVS.MIx5, IG.MIx4, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4, CY4.MIx4
+Most frequent flippers: PRO.MIx8, BPE.MIx5, VIM.MIx5, GVS.MIx5, PQ.MIx4, FM.MIx4, IEG.MIx4, ISP.MIx4, CY4.MIx4, CLE.MIx4
