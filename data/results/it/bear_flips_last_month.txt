@@ -1,5 +1,5 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 45
+window: 1 month ago   events: 39
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
@@ -70,12 +70,4 @@ filter: marginabile=si only (short-sellable names)
 -- 2026-07-21  (1 bear flips) --
    DIA.MI    1->-1   rsma_50100150 marg=si   DIASORIN Health Technology
 
--- 2026-07-20  (6 bear flips) --
-   BRE.MI    1->-1   rbo_50        marg=si   BREMBO Producer Manufacturing
-   BRE.MI    0->-1   rtt_5020      marg=si   BREMBO Producer Manufacturing
-   JUVE.MI   1->-1   rbo_20        marg=si   JUVENTUS FC Consumer Services
-   JUVE.MI   0->-1   rtt_5020      marg=si   JUVENTUS FC Consumer Services
-   MARR.MI   1->-1   rbo_20        marg=si   MARR Distribution Services
-   MARR.MI   0->-1   rtt_5020      marg=si   MARR Distribution Services
-
-Most frequent flippers: NEXI.MIx4, RACE.MIx3, REY.MIx3, JUVE.MIx2, MARR.MIx2, BRE.MIx2, MONC.MIx2, UCG.MIx2, ANIM.MIx2, A2A.MIx2
+Most frequent flippers: NEXI.MIx4, RACE.MIx3, REY.MIx3, MONC.MIx2, UCG.MIx2, ANIM.MIx2, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2

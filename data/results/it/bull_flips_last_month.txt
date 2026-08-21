@@ -1,6 +1,11 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 119
+window: 1 month ago   events: 116
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-21  (3 bull flips) --
+   CDG.MI    -1->1    rema_50100    marg=NaN  CASTA DIVA GROUP Commercial Services
+   CDG.MI    -1->1    rema_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
+   FCT.MI    -1->1    rsma_50100    marg=si   FINCANTIERI Producer Manufacturing
 
 -- 2026-08-20  (2 bull flips) --
    CDG.MI    -1->1    rbo_20        marg=NaN  CASTA DIVA GROUP Commercial Services
@@ -157,12 +162,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
    IEG.MI    -1->0    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
 
--- 2026-07-20  (6 bull flips) --
-   FCT.MI    -1->1    rbo_50        marg=si   FINCANTIERI Producer Manufacturing
-   FCT.MI    0->1    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
-   FM.MI     -1->1    rema_50100150 marg=NaN  FIERA MILANO Commercial Services
-   FM.MI     -1->1    rsma_50100150 marg=NaN  FIERA MILANO Commercial Services
-   PQ.MI     -1->1    rbo_50        marg=NaN  PIQUADRO Consumer Durables
-   PQ.MI     0->1    rtt_5020      marg=NaN  PIQUADRO Consumer Durables
-
-Most frequent flippers: PRO.MIx8, GVS.MIx7, BPE.MIx5, ISP.MIx5, VIM.MIx5, EVISO.MIx5, PQ.MIx4, FM.MIx4, IEG.MIx4, BRE.MIx4
+Most frequent flippers: PRO.MIx8, GVS.MIx7, BPE.MIx5, ISP.MIx5, VIM.MIx5, EVISO.MIx5, IEG.MIx4, BRE.MIx4, CY4.MIx4, CLE.MIx4
