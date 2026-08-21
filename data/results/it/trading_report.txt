@@ -1,15 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-08-07 to 2026-08-20 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-08-17 to 2026-08-21 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker     price      action  stop_loss  risk_pct
-2026-08-20 rtt_5020 CDG.MI  3.120000  EXIT SHORT   3.215714       NaN
-2026-08-20 rtt_5020 FCT.MI 12.420000   EXIT LONG  11.635000       NaN
-2026-08-20 rtt_5020   G.MI 42.840000   EXIT LONG  41.567141       NaN
-2026-08-20 rtt_5020 REC.MI 53.000000  ENTER LONG  52.135714  1.630729
-2026-08-20 rtt_5020 SES.MI 89.800003 ENTER SHORT  94.828573  5.599744
-2026-08-20 rtt_5020  UD.MI  3.065000  EXIT SHORT   3.118571       NaN
+ last_date   signal  ticker  price     action  stop_loss  risk_pct
+2026-08-21 rtt_5020  CY4.MI  9.210  EXIT LONG   8.524285       NaN
+2026-08-21 rtt_5020  DBA.MI  4.230 EXIT SHORT   4.425715       NaN
+2026-08-21 rtt_5020  EPH.MI  0.066 ENTER LONG   0.058200 11.818181
+2026-08-21 rtt_5020 GROW.MI  1.930 EXIT SHORT   1.992143       NaN
+2026-08-21 rtt_5020  MFT.MI  2.080 EXIT SHORT   2.067143       NaN
+2026-08-21 rtt_5020  MTS.MI  1.540 ENTER LONG   1.381429 10.296843
+2026-08-21 rtt_5020 ZEST.MI  0.124 EXIT SHORT   0.131786       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-08-20)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-08-21)
 ===============================================================================================
