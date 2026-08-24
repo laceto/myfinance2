@@ -1,5 +1,5 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 39
+window: 1 month ago   events: 32
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
@@ -57,17 +57,4 @@ filter: marginabile=si only (short-sellable names)
    UCG.MI    1->-1   rbo_20        marg=si   UNICREDIT Finance
    UCG.MI    1->0    rtt_5020      marg=si   UNICREDIT Finance
 
--- 2026-07-23  (2 bear flips) --
-   MONC.MI   1->-1   rbo_20        marg=si   MONCLER Consumer Non-Durables
-   MONC.MI   0->-1   rtt_5020      marg=si   MONCLER Consumer Non-Durables
-
--- 2026-07-22  (4 bear flips) --
-   NEXI.MI   1->-1   rsma_50100150 marg=si   NEXI Finance
-   RACE.MI   1->-1   rbo_20        marg=si   FERRARI Consumer Durables
-   RACE.MI   1->0    rtt_5020      marg=si   FERRARI Consumer Durables
-   REY.MI    1->-1   rsma_50100    marg=si   REPLY Commercial Services
-
--- 2026-07-21  (1 bear flips) --
-   DIA.MI    1->-1   rsma_50100150 marg=si   DIASORIN Health Technology
-
-Most frequent flippers: NEXI.MIx4, RACE.MIx3, REY.MIx3, MONC.MIx2, UCG.MIx2, ANIM.MIx2, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2
+Most frequent flippers: NEXI.MIx3, UCG.MIx2, ANIM.MIx2, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2

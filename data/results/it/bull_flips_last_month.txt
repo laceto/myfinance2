@@ -1,6 +1,19 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 116
+window: 1 month ago   events: 107
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-24  (11 bull flips) --
+   ABP.MI    -1->1    rbo_50        marg=NaN  A.B.P. NOCIVELLI Industrial Services
+   ABP.MI    0->1    rtt_5020      marg=NaN  A.B.P. NOCIVELLI Industrial Services
+   CDG.MI    -1->1    rema_50100    marg=NaN  CASTA DIVA GROUP Commercial Services
+   CDG.MI    -1->1    rema_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
+   CYB.MI    -1->1    rsma_100150   marg=NaN  CYBEROO Technology Services
+   ECK.MI    -1->1    rbo_20        marg=NaN  ECOSUNTEK Utilities
+   ECK.MI    0->1    rtt_5020      marg=NaN  ECOSUNTEK Utilities
+   PST.MI    -1->1    rbo_20        marg=si   POSTE ITALIANE Finance
+   PST.MI    -1->0    rtt_5020      marg=si   POSTE ITALIANE Finance
+   TIT.MI    -1->1    rbo_20        marg=si   TELECOM ITALIA Communications
+   TIT.MI    0->1    rtt_5020      marg=si   TELECOM ITALIA Communications
 
 -- 2026-08-21  (3 bull flips) --
    CDG.MI    -1->1    rema_50100    marg=NaN  CASTA DIVA GROUP Commercial Services
@@ -136,30 +149,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    DAN.MI    -1->1    rsma_50100150 marg=si   DANIELI & C Producer Manufacturing
    DAN.MI    -1->0    rtt_5020      marg=si   DANIELI & C Producer Manufacturing
 
--- 2026-07-23  (14 bull flips) --
-   BMED.MI   -1->1    rbo_150       marg=si   BANCA MEDIOLANUM Finance
-   BO.MI     -1->1    rbo_20        marg=NaN  BORGOSESIA Finance
-   BO.MI     -1->0    rtt_5020      marg=NaN  BORGOSESIA Finance
-   BPE.MI    -1->1    rbo_20        marg=si   BPER BANCA Finance
-   BPE.MI    0->1    rtt_5020      marg=si   BPER BANCA Finance
-   COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
-   COM.MI    -1->0    rtt_5020      marg=NaN  COMER INDUSTRIES Producer Manufacturing
-   EQUI.MI   -1->1    rbo_50        marg=NaN  EQUITA GROUP Finance
-   EQUI.MI   0->1    rtt_5020      marg=NaN  EQUITA GROUP Finance
-   G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
-   G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
-   IG.MI     -1->1    rbo_20        marg=si   ITALGAS Utilities
-   IG.MI     -1->0    rtt_5020      marg=si   ITALGAS Utilities
-   ISP.MI    -1->1    rema_50100    marg=si   INTESA SANPAOLO Finance
-
--- 2026-07-22  (4 bull flips) --
-   ECK.MI    -1->1    rbo_20        marg=NaN  ECOSUNTEK Utilities
-   ECK.MI    0->1    rtt_5020      marg=NaN  ECOSUNTEK Utilities
-   IEG.MI    -1->1    rbo_50        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-   IEG.MI    0->1    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-
--- 2026-07-21  (2 bull flips) --
-   IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-   IEG.MI    -1->0    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-
-Most frequent flippers: PRO.MIx8, GVS.MIx7, BPE.MIx5, ISP.MIx5, VIM.MIx5, EVISO.MIx5, IEG.MIx4, BRE.MIx4, CY4.MIx4, CLE.MIx4
+Most frequent flippers: PRO.MIx8, GVS.MIx7, CDG.MIx6, VIM.MIx5, EVISO.MIx5, ISP.MIx4, BRE.MIx4, CY4.MIx4, CLE.MIx4, DAN.MIx3
