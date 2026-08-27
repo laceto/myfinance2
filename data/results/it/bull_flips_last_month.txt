@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 105
+window: 1 month ago   events: 107
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-26  (2 bull flips) --
+   PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   -1->0    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
 
 -- 2026-08-25  (3 bull flips) --
    ISP.MI    -1->1    rsma_100150   marg=si   INTESA SANPAOLO Finance
