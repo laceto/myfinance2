@@ -1,13 +1,22 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-08-21 to 2026-08-26 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-08-24 to 2026-08-27 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker  price      action  stop_loss  risk_pct
-2026-08-26 rtt_5020  A2A.MI  2.356  EXIT SHORT   2.361571       NaN
-2026-08-26 rtt_5020  HER.MI  3.916  EXIT SHORT   3.986286       NaN
-2026-08-26 rtt_5020 PIRC.MI  6.805  EXIT SHORT   6.960000       NaN
-2026-08-26 rtt_5020  RAD.MI  0.875 ENTER SHORT   0.908571  3.836734
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-08-27 rtt_5020   BO.MI  0.708000  EXIT SHORT   0.734571       NaN
+2026-08-27 rtt_5020  CFV.MI  2.220000  ENTER LONG   2.145714  3.346200
+2026-08-27 rtt_5020  CMB.MI 85.000000  EXIT SHORT  87.828572       NaN
+2026-08-27 rtt_5020  CYB.MI  1.250000  EXIT SHORT   1.340000       NaN
+2026-08-27 rtt_5020  ELC.MI  1.175000  EXIT SHORT   1.255714       NaN
+2026-08-27 rtt_5020  ENV.MI  5.040000  EXIT SHORT   5.265714       NaN
+2026-08-27 rtt_5020  GPI.MI 13.860000  EXIT SHORT  14.485714       NaN
+2026-08-27 rtt_5020  GSP.MI  6.080000  EXIT SHORT   6.272857       NaN
+2026-08-27 rtt_5020   IB.MI  8.100000  EXIT SHORT   8.285714       NaN
+2026-08-27 rtt_5020  ORS.MI 16.580000  ENTER LONG  15.914286  4.015164
+2026-08-27 rtt_5020 RWAY.MI  4.525000 ENTER SHORT   4.657143  2.920285
+2026-08-27 rtt_5020  VLS.MI 10.350000  EXIT SHORT  10.535714       NaN
+2026-08-27 rtt_5020 WIIT.MI 29.049999  EXIT SHORT  30.314285       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-08-26)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-08-27)
 ===============================================================================================
