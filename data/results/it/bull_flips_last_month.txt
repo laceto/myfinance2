@@ -1,6 +1,17 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 107
+window: 1 month ago   events: 103
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-27  (9 bull flips) --
+   CMB.MI    -1->1    rbo_20        marg=NaN  CEMBRE Electronic Technology
+   CMB.MI    -1->0    rtt_5020      marg=NaN  CEMBRE Electronic Technology
+   CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
+   CYB.MI    -1->0    rtt_5020      marg=NaN  CYBEROO Technology Services
+   ENV.MI    -1->1    rbo_20        marg=NaN  ENERVIT Health Technology
+   ENV.MI    -1->0    rtt_5020      marg=NaN  ENERVIT Health Technology
+   TEN.MI    -1->1    rema_50100150 marg=si   TENARIS Non-Energy Minerals
+   WIIT.MI   -1->1    rbo_20        marg=NaN  WIIT Technology Services
+   WIIT.MI   -1->0    rtt_5020      marg=NaN  WIIT Technology Services
 
 -- 2026-08-26  (2 bull flips) --
    PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
@@ -136,19 +147,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PRO.MI    -1->1    rsma_50100150 marg=NaN  BCA PROFILO Finance
    VIM.MI    -1->1    rema_50100150 marg=NaN  VIMI FASTENERS Producer Manufacturing
 
--- 2026-07-27  (13 bull flips) --
-   ILP.MI    -1->1    rbo_20        marg=NaN  ILPRA Producer Manufacturing
-   ILP.MI    0->1    rtt_5020      marg=NaN  ILPRA Producer Manufacturing
-   ISP.MI    -1->1    rsma_50100    marg=si   INTESA SANPAOLO Finance
-   OS.MI     -1->1    rbo_20        marg=NaN  OFFICINA STELLARE Electronic Technology
-   OS.MI     0->1    rtt_5020      marg=NaN  OFFICINA STELLARE Electronic Technology
-   PRO.MI    -1->1    rbo_150       marg=NaN  BCA PROFILO Finance
-   PRO.MI    -1->1    rbo_50        marg=NaN  BCA PROFILO Finance
-   PRO.MI    -1->1    rema_100150   marg=NaN  BCA PROFILO Finance
-   PRO.MI    -1->1    rema_50100    marg=NaN  BCA PROFILO Finance
-   PRO.MI    -1->1    rsma_50100    marg=NaN  BCA PROFILO Finance
-   PRO.MI    0->1    rtt_5020      marg=NaN  BCA PROFILO Finance
-   PRT.MI    -1->1    rsma_100150   marg=si   ESPRINET Distribution Services
-   PRT.MI    -1->1    rsma_50100150 marg=si   ESPRINET Distribution Services
-
-Most frequent flippers: PRO.MIx8, GVS.MIx7, ISP.MIx6, CDG.MIx6, VIM.MIx5, EVISO.MIx5, BRE.MIx4, CY4.MIx4, CLE.MIx4, B.MIx3
+Most frequent flippers: GVS.MIx7, CDG.MIx6, VIM.MIx5, ISP.MIx5, EVISO.MIx5, BRE.MIx4, CY4.MIx4, CLE.MIx4, CYB.MIx4, B.MIx3
