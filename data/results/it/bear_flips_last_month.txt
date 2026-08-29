@@ -3,6 +3,10 @@ window: 1 month ago   events: 30
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
+-- 2026-08-28  (2 bear flips) --
+   LDO.MI    1->-1   rbo_20        marg=si   LEONARDO Electronic Technology
+   LDO.MI    1->0    rtt_5020      marg=si   LEONARDO Electronic Technology
+
 -- 2026-08-27  (1 bear flips) --
    DIA.MI    1->-1   rema_50100150 marg=si   DIASORIN Health Technology
 
@@ -51,8 +55,4 @@ filter: marginabile=si only (short-sellable names)
    TRN.MI    1->-1   rbo_20        marg=si   TERNA Utilities
    TRN.MI    0->-1   rtt_5020      marg=si   TERNA Utilities
 
--- 2026-07-28  (2 bear flips) --
-   ANIM.MI   1->-1   rbo_20        marg=si   ANIMA HOLDING Finance
-   ANIM.MI   0->-1   rtt_5020      marg=si   ANIMA HOLDING Finance
-
-Most frequent flippers: NEXI.MIx3, ANIM.MIx2, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2
+Most frequent flippers: NEXI.MIx3, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2
