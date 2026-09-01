@@ -1,5 +1,5 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 30
+window: 1 month ago   events: 23
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
@@ -44,15 +44,4 @@ filter: marginabile=si only (short-sellable names)
    TNXT.MI   1->-1   rbo_20        marg=si   TINEXTA Technology Services
    TNXT.MI   0->-1   rtt_5020      marg=si   TINEXTA Technology Services
 
--- 2026-07-31  (1 bear flips) --
-   NEXI.MI   1->-1   rema_50100150 marg=si   NEXI Finance
-
--- 2026-07-30  (6 bear flips) --
-   A2A.MI    1->-1   rbo_20        marg=si   A2A Utilities
-   A2A.MI    0->-1   rtt_5020      marg=si   A2A Utilities
-   HER.MI    1->-1   rbo_20        marg=si   HERA Utilities
-   HER.MI    0->-1   rtt_5020      marg=si   HERA Utilities
-   TRN.MI    1->-1   rbo_20        marg=si   TERNA Utilities
-   TRN.MI    0->-1   rtt_5020      marg=si   TERNA Utilities
-
-Most frequent flippers: NEXI.MIx3, A2A.MIx2, HER.MIx2, TRN.MIx2, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2
+Most frequent flippers: ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2, ENI.MIx1

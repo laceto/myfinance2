@@ -1,6 +1,15 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 102
+window: 1 month ago   events: 97
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-08-31  (7 bull flips) --
+   CDG.MI    -1->1    rsma_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
+   DAN.MI    -1->1    rbo_20        marg=si   DANIELI & C Producer Manufacturing
+   DAN.MI    -1->0    rtt_5020      marg=si   DANIELI & C Producer Manufacturing
+   EVISO.MI  -1->1    rema_100150   marg=NaN  EVISO Utilities
+   EVISO.MI  -1->1    rema_50100150 marg=NaN  EVISO Utilities
+   G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
+   G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
 
 -- 2026-08-28  (4 bull flips) --
    CIRC.MI   -1->1    rbo_20        marg=NaN  CIRCLE Commercial Services
@@ -128,22 +137,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    BGN.MI    -1->1    rsma_50100150 marg=si   BANCA GENERALI Finance
    DIS.MI    -1->1    rsma_50100150 marg=NaN  D'AMICO Transportation
 
--- 2026-07-31  (3 bull flips) --
-   B.MI      -1->1    rbo_20        marg=NaN  BASTOGI SPA Finance
-   B.MI      -1->0    rtt_5020      marg=NaN  BASTOGI SPA Finance
-   BO.MI     -1->1    rsma_50100150 marg=NaN  BORGOSESIA Finance
-
--- 2026-07-30  (1 bull flips) --
-   PQ.MI     -1->1    rema_50100    marg=NaN  PIQUADRO Consumer Durables
-
--- 2026-07-29  (8 bull flips) --
-   BRE.MI    -1->1    rbo_20        marg=si   BREMBO Producer Manufacturing
-   BRE.MI    -1->0    rtt_5020      marg=si   BREMBO Producer Manufacturing
-   CY4.MI    -1->1    rbo_20        marg=NaN  CY4GATE Technology Services
-   CY4.MI    -1->0    rtt_5020      marg=NaN  CY4GATE Technology Services
-   ELN.MI    -1->1    rsma_100150   marg=NaN  EL.EN Health Technology
-   ELN.MI    -1->1    rsma_50100150 marg=NaN  EL.EN Health Technology
-   OVS.MI    -1->1    rbo_20        marg=si   OVS Retail Trade
-   OVS.MI    0->1    rtt_5020      marg=si   OVS Retail Trade
-
-Most frequent flippers: GVS.MIx7, CDG.MIx6, ISP.MIx5, EVISO.MIx5, BRE.MIx4, CY4.MIx4, CLE.MIx4, VIM.MIx4, CYB.MIx4, B.MIx3
+Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ISP.MIx5, CLE.MIx4, VIM.MIx4, CYB.MIx4, BGN.MIx3, BPE.MIx3, BAMI.MIx2
