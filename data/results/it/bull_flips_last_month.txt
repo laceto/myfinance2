@@ -1,6 +1,22 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 97
+window: 1 month ago   events: 111
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-01  (14 bull flips) --
+   ENV.MI    -1->1    rbo_50        marg=NaN  ENERVIT Health Technology
+   ENV.MI    0->1    rtt_5020      marg=NaN  ENERVIT Health Technology
+   EQUI.MI   -1->1    rbo_20        marg=NaN  EQUITA GROUP Finance
+   EQUI.MI   -1->0    rtt_5020      marg=NaN  EQUITA GROUP Finance
+   LUVE.MI   -1->1    rbo_20        marg=NaN  LUVE Producer Manufacturing
+   LUVE.MI   -1->0    rtt_5020      marg=NaN  LUVE Producer Manufacturing
+   MET.MI    -1->1    rbo_20        marg=NaN  MET.EXTRA GROUP Finance
+   MET.MI    -1->0    rtt_5020      marg=NaN  MET.EXTRA GROUP Finance
+   PLC.MI    -1->1    rbo_20        marg=NaN  PLC Industrial Services
+   PLC.MI    -1->0    rtt_5020      marg=NaN  PLC Industrial Services
+   SFT.MI    -1->1    rbo_20        marg=NaN  SOFTLAB Technology Services
+   SFT.MI    -1->0    rtt_5020      marg=NaN  SOFTLAB Technology Services
+   SPM.MI    -1->1    rbo_50        marg=si   SAIPEM Industrial Services
+   SPM.MI    -1->1    rtt_5020      marg=si   SAIPEM Industrial Services
 
 -- 2026-08-31  (7 bull flips) --
    CDG.MI    -1->1    rsma_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
@@ -137,4 +153,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    BGN.MI    -1->1    rsma_50100150 marg=si   BANCA GENERALI Finance
    DIS.MI    -1->1    rsma_50100150 marg=NaN  D'AMICO Transportation
 
-Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ISP.MIx5, CLE.MIx4, VIM.MIx4, CYB.MIx4, BGN.MIx3, BPE.MIx3, BAMI.MIx2
+Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, ENV.MIx4, BGN.MIx3
