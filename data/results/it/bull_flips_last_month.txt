@@ -1,6 +1,14 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 111
+window: 1 month ago   events: 117
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-02  (6 bull flips) --
+   COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   COM.MI    -1->0    rtt_5020      marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   PRT.MI    -1->1    rbo_20        marg=si   ESPRINET Distribution Services
+   PRT.MI    0->1    rtt_5020      marg=si   ESPRINET Distribution Services
+   TEN.MI    -1->1    rbo_20        marg=si   TENARIS Non-Energy Minerals
+   TEN.MI    -1->0    rtt_5020      marg=si   TENARIS Non-Energy Minerals
 
 -- 2026-09-01  (14 bull flips) --
    ENV.MI    -1->1    rbo_50        marg=NaN  ENERVIT Health Technology

@@ -1,7 +1,17 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 23
+window: 1 month ago   events: 31
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-09-02  (8 bear flips) --
+   BC.MI     1->-1   rbo_20        marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   BC.MI     1->0    rtt_5020      marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   BRE.MI    1->-1   rbo_20        marg=si   BREMBO Producer Manufacturing
+   BRE.MI    0->-1   rtt_5020      marg=si   BREMBO Producer Manufacturing
+   SFL.MI    1->-1   rbo_20        marg=si   SAFILO GROUP Health Technology
+   SFL.MI    1->0    rtt_5020      marg=si   SAFILO GROUP Health Technology
+   WBD.MI    1->-1   rbo_20        marg=si   WEBUILD Industrial Services
+   WBD.MI    0->-1   rtt_5020      marg=si   WEBUILD Industrial Services
 
 -- 2026-08-28  (2 bear flips) --
    LDO.MI    1->-1   rbo_20        marg=si   LEONARDO Electronic Technology
@@ -44,4 +54,4 @@ filter: marginabile=si only (short-sellable names)
    TNXT.MI   1->-1   rbo_20        marg=si   TINEXTA Technology Services
    TNXT.MI   0->-1   rtt_5020      marg=si   TINEXTA Technology Services
 
-Most frequent flippers: ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2, ENI.MIx1
+Most frequent flippers: SFL.MIx3, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2
