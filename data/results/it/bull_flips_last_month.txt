@@ -1,6 +1,12 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 117
+window: 1 month ago   events: 121
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-03  (4 bull flips) --
+   DIS.MI    -1->1    rbo_20        marg=NaN  D'AMICO Transportation
+   DIS.MI    -1->0    rtt_5020      marg=NaN  D'AMICO Transportation
+   ENV.MI    -1->1    rema_50100    marg=NaN  ENERVIT Health Technology
+   ENV.MI    -1->1    rema_50100150 marg=NaN  ENERVIT Health Technology
 
 -- 2026-09-02  (6 bull flips) --
    COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
@@ -161,4 +167,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    BGN.MI    -1->1    rsma_50100150 marg=si   BANCA GENERALI Finance
    DIS.MI    -1->1    rsma_50100150 marg=NaN  D'AMICO Transportation
 
-Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, ENV.MIx4, BGN.MIx3
+Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ENV.MIx6, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, BGN.MIx3

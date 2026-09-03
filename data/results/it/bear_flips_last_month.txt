@@ -1,7 +1,11 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 31
+window: 1 month ago   events: 25
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-09-03  (2 bear flips) --
+   HER.MI    1->-1   rbo_20        marg=si   HERA Utilities
+   HER.MI    0->-1   rtt_5020      marg=si   HERA Utilities
 
 -- 2026-09-02  (8 bear flips) --
    BC.MI     1->-1   rbo_20        marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
@@ -44,14 +48,4 @@ filter: marginabile=si only (short-sellable names)
 -- 2026-08-07  (1 bear flips) --
    ENI.MI    1->-1   rsma_100150   marg=si   ENI Energy Minerals
 
--- 2026-08-03  (8 bear flips) --
-   ACE.MI    1->-1   rbo_20        marg=si   ACEA Utilities
-   ACE.MI    0->-1   rtt_5020      marg=si   ACEA Utilities
-   DAL.MI    1->-1   rbo_50        marg=si   DATALOGIC Electronic Technology
-   DAL.MI    0->-1   rtt_5020      marg=si   DATALOGIC Electronic Technology
-   IRE.MI    1->-1   rbo_20        marg=si   IREN Utilities
-   IRE.MI    0->-1   rtt_5020      marg=si   IREN Utilities
-   TNXT.MI   1->-1   rbo_20        marg=si   TINEXTA Technology Services
-   TNXT.MI   0->-1   rtt_5020      marg=si   TINEXTA Technology Services
-
-Most frequent flippers: SFL.MIx3, ACE.MIx2, IRE.MIx2, TNXT.MIx2, DAL.MIx2, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2
+Most frequent flippers: SFL.MIx3, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2, BC.MIx2, BRE.MIx2, WBD.MIx2, HER.MIx2
