@@ -1,24 +1,15 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-08-31 to 2026-09-03 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-01 to 2026-09-04 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-09-03 rtt_5020 AEDES.MI  0.860000  ENTER LONG   0.808000  6.046510
-2026-09-03 rtt_5020  ARBS.MI  3.120000  EXIT SHORT   3.171428       NaN
-2026-09-03 rtt_5020   BFF.MI  3.046000   EXIT LONG   2.885714       NaN
-2026-09-03 rtt_5020   CLF.MI  0.832000  ENTER LONG   0.798286  4.052199
-2026-09-03 rtt_5020   CPR.MI  5.700000   EXIT LONG   5.583143       NaN
-2026-09-03 rtt_5020   DAN.MI 58.799999 ENTER SHORT  62.964284  7.082117
-2026-09-03 rtt_5020   DIS.MI  7.565000  EXIT SHORT   7.940000       NaN
-2026-09-03 rtt_5020   FBK.MI 23.420000   EXIT LONG  22.275715       NaN
-2026-09-03 rtt_5020   GPI.MI 13.460000 ENTER SHORT  13.894286  3.226493
-2026-09-03 rtt_5020   HER.MI  3.668000 ENTER SHORT   3.792286  3.388381
-2026-09-03 rtt_5020   IOT.MI  3.235000   EXIT LONG   3.272143       NaN
-2026-09-03 rtt_5020   IWB.MI 18.080000 ENTER SHORT  18.685714  3.350191
-2026-09-03 rtt_5020   LFG.MI  1.330000  EXIT SHORT   1.324286       NaN
-2026-09-03 rtt_5020   SGC.MI  0.310000  ENTER LONG   0.291857  5.852529
-2026-09-03 rtt_5020   TPS.MI  8.000000  EXIT SHORT   8.092857       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-09-04 rtt_5020   EM.MI  0.845000  EXIT SHORT   0.874714       NaN
+2026-09-04 rtt_5020  IRE.MI  2.516000  EXIT SHORT   2.500571       NaN
+2026-09-04 rtt_5020 MASI.MI  4.160000 ENTER SHORT   4.394286  5.631873
+2026-09-04 rtt_5020 POPR.MI  0.510000  ENTER LONG   0.486857  4.537815
+2026-09-04 rtt_5020   SL.MI 38.919998  ENTER LONG  37.059999  4.779033
+2026-09-04 rtt_5020  WBS.MI  0.995000  EXIT SHORT   0.969286       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-03)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-04)
 ===============================================================================================
