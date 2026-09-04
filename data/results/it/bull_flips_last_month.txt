@@ -1,6 +1,14 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 121
+window: 1 month ago   events: 122
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-04  (6 bull flips) --
+   FARM.MI   -1->1    rsma_100150   marg=NaN  H-FARM Commercial Services
+   FARM.MI   -1->1    rsma_50100150 marg=NaN  H-FARM Commercial Services
+   POPR.MI   -1->1    rbo_50        marg=NaN  POLIGRAFICI PRINTING Consumer Services
+   POPR.MI   -1->1    rsma_50100150 marg=NaN  POLIGRAFICI PRINTING Consumer Services
+   POPR.MI   0->1    rtt_5020      marg=NaN  POLIGRAFICI PRINTING Consumer Services
+   SFT.MI    -1->1    rema_100150   marg=NaN  SOFTLAB Technology Services
 
 -- 2026-09-03  (4 bull flips) --
    DIS.MI    -1->1    rbo_20        marg=NaN  D'AMICO Transportation
@@ -160,11 +168,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    LDO.MI    0->1    rtt_5020      marg=si   LEONARDO Electronic Technology
    PQ.MI     -1->1    rsma_50100    marg=NaN  PIQUADRO Consumer Durables
 
--- 2026-08-04  (5 bull flips) --
-   BAMI.MI   -1->1    rbo_20        marg=si   BANCO BPM Finance
-   BAMI.MI   0->1    rtt_5020      marg=si   BANCO BPM Finance
-   BGN.MI    -1->1    rsma_100150   marg=si   BANCA GENERALI Finance
-   BGN.MI    -1->1    rsma_50100150 marg=si   BANCA GENERALI Finance
-   DIS.MI    -1->1    rsma_50100150 marg=NaN  D'AMICO Transportation
-
-Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ENV.MIx6, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, BGN.MIx3
+Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ENV.MIx6, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, SFT.MIx4
