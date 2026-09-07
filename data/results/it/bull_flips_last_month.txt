@@ -1,6 +1,16 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 122
+window: 1 month ago   events: 114
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-07  (8 bull flips) --
+   BFF.MI    -1->1    rsma_100150   marg=NaN  BFF BANK Finance
+   BFF.MI    -1->1    rsma_50100150 marg=NaN  BFF BANK Finance
+   LUVE.MI   -1->1    rbo_50        marg=NaN  LUVE Producer Manufacturing
+   LUVE.MI   0->1    rtt_5020      marg=NaN  LUVE Producer Manufacturing
+   SFT.MI    -1->1    rema_50100    marg=NaN  SOFTLAB Technology Services
+   SFT.MI    -1->1    rema_50100150 marg=NaN  SOFTLAB Technology Services
+   SSL.MI    -1->1    rbo_20        marg=NaN  S.S. LAZIO Consumer Services
+   SSL.MI    0->1    rtt_5020      marg=NaN  S.S. LAZIO Consumer Services
 
 -- 2026-09-04  (6 bull flips) --
    FARM.MI   -1->1    rsma_100150   marg=NaN  H-FARM Commercial Services
@@ -146,26 +156,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    VIM.MI    -1->1    rbo_50        marg=NaN  VIMI FASTENERS Producer Manufacturing
    VIM.MI    -1->1    rtt_5020      marg=NaN  VIMI FASTENERS Producer Manufacturing
 
--- 2026-08-07  (3 bull flips) --
-   GVS.MI    -1->1    rbo_20        marg=NaN  GVS Electronic Technology
-   GVS.MI    -1->1    rsma_100150   marg=NaN  GVS Electronic Technology
-   GVS.MI    0->1    rtt_5020      marg=NaN  GVS Electronic Technology
-
--- 2026-08-06  (2 bull flips) --
-   B.MI      -1->1    rsma_50100150 marg=NaN  BASTOGI SPA Finance
-   BPE.MI    -1->1    rbo_150       marg=si   BPER BANCA Finance
-
--- 2026-08-05  (11 bull flips) --
-   BFF.MI    -1->1    rbo_20        marg=NaN  BFF BANK Finance
-   BFF.MI    0->1    rtt_5020      marg=NaN  BFF BANK Finance
-   BPE.MI    -1->1    rsma_100150   marg=si   BPER BANCA Finance
-   BPE.MI    -1->1    rsma_50100150 marg=si   BPER BANCA Finance
-   CLE.MI    -1->1    rbo_20        marg=NaN  CLASS EDITORI Consumer Services
-   CLE.MI    -1->0    rtt_5020      marg=NaN  CLASS EDITORI Consumer Services
-   CY4.MI    -1->1    rbo_50        marg=NaN  CY4GATE Technology Services
-   CY4.MI    0->1    rtt_5020      marg=NaN  CY4GATE Technology Services
-   LDO.MI    -1->1    rbo_50        marg=si   LEONARDO Electronic Technology
-   LDO.MI    0->1    rtt_5020      marg=si   LEONARDO Electronic Technology
-   PQ.MI     -1->1    rsma_50100    marg=NaN  PIQUADRO Consumer Durables
-
-Most frequent flippers: GVS.MIx7, EVISO.MIx7, CDG.MIx7, ENV.MIx6, ISP.MIx5, CLE.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, SFT.MIx4
+Most frequent flippers: EVISO.MIx7, CDG.MIx7, SFT.MIx6, ENV.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, LUVE.MIx4
