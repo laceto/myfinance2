@@ -1,6 +1,17 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 114
+window: 1 month ago   events: 123
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-08  (9 bull flips) --
+   CPR.MI    -1->1    rsma_50100    marg=si   CAMPARI Consumer Non-Durables
+   FPE.MI    -1->1    rbo_20        marg=NaN  FOPE Consumer Durables
+   FPE.MI    -1->0    rtt_5020      marg=NaN  FOPE Consumer Durables
+   LUVE.MI   -1->1    rema_50100    marg=NaN  LUVE Producer Manufacturing
+   LUVE.MI   -1->1    rema_50100150 marg=NaN  LUVE Producer Manufacturing
+   MAIRE.MI  -1->1    rbo_20        marg=si   MAIRE Industrial Services
+   MAIRE.MI  -1->0    rtt_5020      marg=si   MAIRE Industrial Services
+   SOM.MI    -1->1    rbo_20        marg=NaN  SOMEC Consumer Durables
+   SOM.MI    -1->0    rtt_5020      marg=NaN  SOMEC Consumer Durables
 
 -- 2026-09-07  (8 bull flips) --
    BFF.MI    -1->1    rsma_100150   marg=NaN  BFF BANK Finance
@@ -156,4 +167,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    VIM.MI    -1->1    rbo_50        marg=NaN  VIMI FASTENERS Producer Manufacturing
    VIM.MI    -1->1    rtt_5020      marg=NaN  VIMI FASTENERS Producer Manufacturing
 
-Most frequent flippers: EVISO.MIx7, CDG.MIx7, SFT.MIx6, ENV.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4, LUVE.MIx4
+Most frequent flippers: EVISO.MIx7, CDG.MIx7, SFT.MIx6, ENV.MIx6, LUVE.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4
