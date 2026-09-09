@@ -1,6 +1,17 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 123
+window: 1 month ago   events: 132
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-09  (9 bull flips) --
+   CIRC.MI   -1->1    rbo_50        marg=NaN  CIRCLE Commercial Services
+   CIRC.MI   0->1    rtt_5020      marg=NaN  CIRCLE Commercial Services
+   ENV.MI    -1->1    rsma_50100150 marg=NaN  ENERVIT Health Technology
+   FARM.MI   -1->1    rbo_20        marg=NaN  H-FARM Commercial Services
+   FARM.MI   -1->0    rtt_5020      marg=NaN  H-FARM Commercial Services
+   IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
+   IEG.MI    0->1    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
+   PRY.MI    -1->1    rbo_20        marg=si   PRYSMIAN Producer Manufacturing
+   PRY.MI    -1->0    rtt_5020      marg=si   PRYSMIAN Producer Manufacturing
 
 -- 2026-09-08  (9 bull flips) --
    CPR.MI    -1->1    rsma_50100    marg=si   CAMPARI Consumer Non-Durables
@@ -167,4 +178,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    VIM.MI    -1->1    rbo_50        marg=NaN  VIMI FASTENERS Producer Manufacturing
    VIM.MI    -1->1    rtt_5020      marg=NaN  VIMI FASTENERS Producer Manufacturing
 
-Most frequent flippers: EVISO.MIx7, CDG.MIx7, SFT.MIx6, ENV.MIx6, LUVE.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4
+Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4

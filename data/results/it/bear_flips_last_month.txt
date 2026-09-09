@@ -1,7 +1,19 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 26
+window: 1 month ago   events: 36
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-09-09  (10 bear flips) --
+   AMP.MI    1->-1   rbo_20        marg=si   AMPLIFON Distribution Services
+   AMP.MI    1->0    rtt_5020      marg=si   AMPLIFON Distribution Services
+   BC.MI     1->-1   rbo_50        marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   BC.MI     0->-1   rtt_5020      marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   IP.MI     1->-1   rsma_50100150 marg=si   INTERPUMP GROUP Producer Manufacturing
+   JUVE.MI   1->-1   rbo_20        marg=si   JUVENTUS FC Consumer Services
+   JUVE.MI   0->-1   rtt_5020      marg=si   JUVENTUS FC Consumer Services
+   LDO.MI    1->-1   rsma_50100150 marg=si   LEONARDO Electronic Technology
+   REY.MI    1->-1   rbo_20        marg=si   REPLY Commercial Services
+   REY.MI    1->0    rtt_5020      marg=si   REPLY Commercial Services
 
 -- 2026-09-07  (2 bear flips) --
    SRG.MI    1->-1   rbo_20        marg=si   SNAM Utilities
@@ -49,4 +61,4 @@ filter: marginabile=si only (short-sellable names)
    BSS.MI    1->-1   rbo_20        marg=si   BIESSE Producer Manufacturing
    BSS.MI    0->-1   rtt_5020      marg=si   BIESSE Producer Manufacturing
 
-Most frequent flippers: SFL.MIx3, BSS.MIx2, REY.MIx2, ENAV.MIx2, NEXI.MIx2, LDO.MIx2, BC.MIx2, BRE.MIx2, WBD.MIx2, HER.MIx2
+Most frequent flippers: REY.MIx4, BC.MIx4, SFL.MIx3, AMP.MIx3, LDO.MIx3, BSS.MIx2, ENAV.MIx2, NEXI.MIx2, BRE.MIx2, WBD.MIx2
