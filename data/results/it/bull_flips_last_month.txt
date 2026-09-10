@@ -1,6 +1,11 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 132
+window: 1 month ago   events: 127
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-10  (3 bull flips) --
+   DAN.MI    -1->1    rema_50100150 marg=si   DANIELI & C Producer Manufacturing
+   TIP.MI    -1->1    rsma_100150   marg=NaN  TAMBURI Finance
+   TIP.MI    -1->1    rsma_50100150 marg=NaN  TAMBURI Finance
 
 -- 2026-09-09  (9 bull flips) --
    CIRC.MI   -1->1    rbo_50        marg=NaN  CIRCLE Commercial Services
@@ -168,14 +173,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    CLE.MI    0->1    rtt_5020      marg=NaN  CLASS EDITORI Consumer Services
    VIM.MI    -1->1    rbo_150       marg=NaN  VIMI FASTENERS Producer Manufacturing
 
--- 2026-08-10  (8 bull flips) --
-   CE.MI     -1->1    rsma_100150   marg=NaN  CREDEM Finance
-   CE.MI     -1->1    rsma_50100150 marg=NaN  CREDEM Finance
-   GVS.MI    -1->1    rbo_150       marg=NaN  GVS Electronic Technology
-   ISP.MI    -1->1    rema_100150   marg=si   INTESA SANPAOLO Finance
-   ISP.MI    -1->1    rema_50100150 marg=si   INTESA SANPAOLO Finance
-   VIM.MI    -1->1    rbo_20        marg=NaN  VIMI FASTENERS Producer Manufacturing
-   VIM.MI    -1->1    rbo_50        marg=NaN  VIMI FASTENERS Producer Manufacturing
-   VIM.MI    -1->1    rtt_5020      marg=NaN  VIMI FASTENERS Producer Manufacturing
-
-Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, GVS.MIx4, VIM.MIx4, SPM.MIx4, CYB.MIx4
+Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, SPM.MIx4, CYB.MIx4, CIRC.MIx4, FARM.MIx4, GVS.MIx3
