@@ -2,6 +2,11 @@ BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
 window: 1 month ago   events: 127
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
+-- 2026-09-11  (3 bull flips) --
+   ELN.MI    -1->1    rbo_20        marg=NaN  EL.EN Health Technology
+   ELN.MI    -1->0    rtt_5020      marg=NaN  EL.EN Health Technology
+   SPM.MI    -1->1    rsma_50100150 marg=si   SAIPEM Industrial Services
+
 -- 2026-09-10  (3 bull flips) --
    DAN.MI    -1->1    rema_50100150 marg=si   DANIELI & C Producer Manufacturing
    TIP.MI    -1->1    rsma_100150   marg=NaN  TAMBURI Finance
@@ -168,9 +173,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PMT.MI    -1->1    rbo_20        marg=NaN  PROMOTICA Commercial Services
    PMT.MI    0->1    rtt_5020      marg=NaN  PROMOTICA Commercial Services
 
--- 2026-08-11  (3 bull flips) --
-   CLE.MI    -1->1    rbo_50        marg=NaN  CLASS EDITORI Consumer Services
-   CLE.MI    0->1    rtt_5020      marg=NaN  CLASS EDITORI Consumer Services
-   VIM.MI    -1->1    rbo_150       marg=NaN  VIMI FASTENERS Producer Manufacturing
-
-Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, SPM.MIx4, CYB.MIx4, CIRC.MIx4, FARM.MIx4, GVS.MIx3
+Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, SPM.MIx5, CYB.MIx4, CIRC.MIx4, FARM.MIx4, GVS.MIx3
