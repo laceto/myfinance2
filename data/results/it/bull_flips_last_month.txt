@@ -1,6 +1,25 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 127
+window: 1 month ago   events: 136
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-14  (17 bull flips) --
+   BFF.MI    -1->1    rbo_20        marg=NaN  BFF BANK Finance
+   BFF.MI    0->1    rtt_5020      marg=NaN  BFF BANK Finance
+   BMPS.MI   -1->1    rbo_20        marg=NaN  BANCA MONTE PASCHI SIENA Finance
+   BMPS.MI   0->1    rtt_5020      marg=NaN  BANCA MONTE PASCHI SIENA Finance
+   CPR.MI    -1->1    rbo_20        marg=si   CAMPARI Consumer Non-Durables
+   CPR.MI    0->1    rtt_5020      marg=si   CAMPARI Consumer Non-Durables
+   CY4.MI    -1->1    rbo_20        marg=NaN  CY4GATE Technology Services
+   CY4.MI    0->1    rtt_5020      marg=NaN  CY4GATE Technology Services
+   ECK.MI    -1->1    rsma_50100    marg=NaN  ECOSUNTEK Utilities
+   ECK.MI    -1->1    rsma_50100150 marg=NaN  ECOSUNTEK Utilities
+   ENV.MI    -1->1    rsma_50100    marg=NaN  ENERVIT Health Technology
+   GHC.MI    -1->1    rsma_100150   marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    -1->1    rsma_50100150 marg=NaN  GAROFALO HEALTH CARE Health Services
+   ISP.MI    -1->1    rbo_20        marg=si   INTESA SANPAOLO Finance
+   ISP.MI    0->1    rtt_5020      marg=si   INTESA SANPAOLO Finance
+   TXT.MI    -1->1    rbo_20        marg=NaN  TXT E-SOLUTIONS Technology Services
+   TXT.MI    0->1    rtt_5020      marg=NaN  TXT E-SOLUTIONS Technology Services
 
 -- 2026-09-11  (3 bull flips) --
    ELN.MI    -1->1    rbo_20        marg=NaN  EL.EN Health Technology
@@ -159,18 +178,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
 -- 2026-08-17  (1 bull flips) --
    RACE.MI   -1->1    rema_50100    marg=si   FERRARI Consumer Durables
 
--- 2026-08-14  (3 bull flips) --
-   GVS.MI    -1->1    rema_50100    marg=NaN  GVS Electronic Technology
-   SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
-   SPM.MI    -1->0    rtt_5020      marg=si   SAIPEM Industrial Services
-
--- 2026-08-13  (2 bull flips) --
-   AZM.MI    -1->1    rbo_50        marg=NaN  AZIMUT Finance
-   AZM.MI    0->1    rtt_5020      marg=NaN  AZIMUT Finance
-
--- 2026-08-12  (3 bull flips) --
-   BRE.MI    -1->1    rsma_50100150 marg=si   BREMBO Producer Manufacturing
-   PMT.MI    -1->1    rbo_20        marg=NaN  PROMOTICA Commercial Services
-   PMT.MI    0->1    rtt_5020      marg=NaN  PROMOTICA Commercial Services
-
-Most frequent flippers: EVISO.MIx7, CDG.MIx7, ENV.MIx7, SFT.MIx6, LUVE.MIx6, SPM.MIx5, CYB.MIx4, CIRC.MIx4, FARM.MIx4, GVS.MIx3
+Most frequent flippers: ENV.MIx8, EVISO.MIx7, CDG.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, CYB.MIx4, ECK.MIx4, CIRC.MIx4, FARM.MIx4
