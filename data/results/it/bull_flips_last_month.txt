@@ -1,6 +1,13 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 136
+window: 1 month ago   events: 141
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-15  (5 bull flips) --
+   BFG.MI    -1->1    rema_100150   marg=NaN  B.F Process Industries
+   BFG.MI    -1->1    rema_50100150 marg=NaN  B.F Process Industries
+   BFG.MI    -1->1    rsma_50100    marg=NaN  B.F Process Industries
+   MET.MI    -1->1    rbo_20        marg=NaN  MET.EXTRA GROUP Finance
+   MET.MI    -1->0    rtt_5020      marg=NaN  MET.EXTRA GROUP Finance
 
 -- 2026-09-14  (17 bull flips) --
    BFF.MI    -1->1    rbo_20        marg=NaN  BFF BANK Finance
@@ -178,4 +185,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
 -- 2026-08-17  (1 bull flips) --
    RACE.MI   -1->1    rema_50100    marg=si   FERRARI Consumer Durables
 
-Most frequent flippers: ENV.MIx8, EVISO.MIx7, CDG.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, CYB.MIx4, ECK.MIx4, CIRC.MIx4, FARM.MIx4
+Most frequent flippers: ENV.MIx8, EVISO.MIx7, CDG.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, CYB.MIx4, ECK.MIx4, CIRC.MIx4, MET.MIx4
