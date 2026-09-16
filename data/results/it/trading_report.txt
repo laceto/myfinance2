@@ -1,22 +1,20 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-09-10 to 2026-09-15 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-11 to 2026-09-16 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-09-15 rtt_5020  BGN.MI 64.400002   EXIT LONG  62.628569       NaN
-2026-09-15 rtt_5020  CED.MI  2.660000   EXIT LONG   2.562857       NaN
-2026-09-15 rtt_5020  DLG.MI 38.439999   EXIT LONG  37.102857       NaN
-2026-09-15 rtt_5020  DOX.MI  3.720000  EXIT SHORT   3.901429       NaN
-2026-09-15 rtt_5020  FBK.MI 22.870001 ENTER SHORT  23.801430  4.072710
-2026-09-15 rtt_5020  FRE.MI  0.179000  EXIT SHORT   0.185714       NaN
-2026-09-15 rtt_5020  MET.MI  2.560000  EXIT SHORT   2.502857       NaN
-2026-09-15 rtt_5020  MEV.MI  0.090000   EXIT LONG   0.084571       NaN
-2026-09-15 rtt_5020 NRST.MI  0.650000  EXIT SHORT   0.672143       NaN
-2026-09-15 rtt_5020  PTR.MI  2.780000  ENTER LONG   2.625714  5.549846
-2026-09-15 rtt_5020  SOS.MI  0.270000 ENTER SHORT   0.290143  7.460316
-2026-09-15 rtt_5020   TB.MI  0.342000   EXIT LONG   0.333571       NaN
-2026-09-15 rtt_5020  VIM.MI  1.440000   EXIT LONG   1.277143       NaN
+ last_date   signal   ticker   price      action  stop_loss  risk_pct
+2026-09-16 rtt_5020   ABT.MI  2.7800   EXIT LONG   2.678571       NaN
+2026-09-16 rtt_5020   AIM.MI 26.8050 ENTER SHORT  27.942143  4.242277
+2026-09-16 rtt_5020   ASC.MI  2.6600 ENTER SHORT   2.758571  3.705692
+2026-09-16 rtt_5020   ELC.MI  1.1400 ENTER SHORT   1.187143  4.135334
+2026-09-16 rtt_5020   FNM.MI  0.4410 ENTER SHORT   0.452571  2.623908
+2026-09-16 rtt_5020   FRE.MI  0.1770 ENTER SHORT   0.183429  3.631959
+2026-09-16 rtt_5020   ITD.MI  8.9200 ENTER SHORT   9.262858  3.843697
+2026-09-16 rtt_5020  MASI.MI  4.4000  EXIT SHORT   4.491429       NaN
+2026-09-16 rtt_5020  NRST.MI  0.5850 ENTER SHORT   0.614286  5.006103
+2026-09-16 rtt_5020 STLAM.MI  4.3375 ENTER SHORT   4.661643  7.473034
+2026-09-16 rtt_5020   U24.MI  0.1620 ENTER SHORT   0.165000  1.851850
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-15)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-16)
 ===============================================================================================
