@@ -1,5 +1,5 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 146
+window: 1 month ago   events: 126
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
 -- 2026-09-17  (4 bull flips) --
@@ -166,30 +166,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TIT.MI    -1->1    rbo_20        marg=si   TELECOM ITALIA Communications
    TIT.MI    0->1    rtt_5020      marg=si   TELECOM ITALIA Communications
 
--- 2026-08-21  (3 bull flips) --
-   CDG.MI    -1->1    rema_50100    marg=NaN  CASTA DIVA GROUP Commercial Services
-   CDG.MI    -1->1    rema_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
-   FCT.MI    -1->1    rsma_50100    marg=si   FINCANTIERI Producer Manufacturing
-
--- 2026-08-20  (2 bull flips) --
-   CDG.MI    -1->1    rbo_20        marg=NaN  CASTA DIVA GROUP Commercial Services
-   CDG.MI    -1->0    rtt_5020      marg=NaN  CASTA DIVA GROUP Commercial Services
-
--- 2026-08-19  (15 bull flips) --
-   BGN.MI    -1->1    rbo_150       marg=si   BANCA GENERALI Finance
-   BRE.MI    -1->1    rsma_100150   marg=si   BREMBO Producer Manufacturing
-   CYB.MI    -1->1    rsma_50100150 marg=NaN  CYBEROO Technology Services
-   ENI.MI    -1->1    rbo_50        marg=si   ENI Energy Minerals
-   ENI.MI    0->1    rtt_5020      marg=si   ENI Energy Minerals
-   EVISO.MI  -1->1    rbo_20        marg=NaN  EVISO Utilities
-   EVISO.MI  -1->1    rbo_50        marg=NaN  EVISO Utilities
-   EVISO.MI  -1->1    rsma_50100    marg=NaN  EVISO Utilities
-   EVISO.MI  -1->1    rsma_50100150 marg=NaN  EVISO Utilities
-   EVISO.MI  -1->1    rtt_5020      marg=NaN  EVISO Utilities
-   GVS.MI    -1->1    rsma_50100    marg=NaN  GVS Electronic Technology
-   GVS.MI    -1->1    rsma_50100150 marg=NaN  GVS Electronic Technology
-   ISP.MI    -1->1    rbo_150       marg=si   INTESA SANPAOLO Finance
-   TWL.MI    -1->1    rbo_20        marg=NaN  TRAWELL CO Transportation
-   TWL.MI    0->1    rtt_5020      marg=NaN  TRAWELL CO Transportation
-
-Most frequent flippers: ENV.MIx8, EVISO.MIx7, CDG.MIx7, SFT.MIx6, LUVE.MIx6, ISP.MIx5, BFG.MIx5, CYB.MIx4, ECK.MIx4, CIRC.MIx4
+Most frequent flippers: ENV.MIx8, SFT.MIx6, LUVE.MIx6, BFG.MIx5, ECK.MIx4, ISP.MIx4, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4
