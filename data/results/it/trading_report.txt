@@ -1,19 +1,17 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-09-15 to 2026-09-18 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-16 to 2026-09-21 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker  price     action  stop_loss  risk_pct
-2026-09-18 rtt_5020 AUTME.MI  2.680 ENTER LONG   2.562857  4.370998
-2026-09-18 rtt_5020  CALT.MI  9.850 ENTER LONG   9.417143  4.394487
-2026-09-18 rtt_5020   DGT.MI  1.860 ENTER LONG   1.775714  4.531489
-2026-09-18 rtt_5020   DOX.MI  3.850 ENTER LONG   3.561428  7.495364
-2026-09-18 rtt_5020  EXAI.MI  1.596 EXIT SHORT   1.670000       NaN
-2026-09-18 rtt_5020   IMS.MI  0.551 ENTER LONG   0.522857  5.107597
-2026-09-18 rtt_5020   INW.MI  6.515 ENTER LONG   6.173571  5.240654
-2026-09-18 rtt_5020   ITM.MI 25.750 EXIT SHORT  26.785715       NaN
-2026-09-18 rtt_5020  LNDR.MI  0.670 EXIT SHORT   0.723143       NaN
-2026-09-18 rtt_5020   WBS.MI  1.150 ENTER LONG   1.092857  4.968944
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-09-21 rtt_5020  BEC.MI 11.350000   EXIT LONG  10.635714       NaN
+2026-09-21 rtt_5020 ECNL.MI  1.346000   EXIT LONG   1.270571       NaN
+2026-09-21 rtt_5020   IB.MI  8.600000  ENTER LONG   7.885715  8.305649
+2026-09-21 rtt_5020 LNDR.MI  0.650000 ENTER SHORT   0.696571  7.164835
+2026-09-21 rtt_5020  MET.MI  2.400000 ENTER SHORT   2.548572  6.190476
+2026-09-21 rtt_5020  PLN.MI  3.900000   EXIT LONG   3.705714       NaN
+2026-09-21 rtt_5020  UCG.MI 83.720001   EXIT LONG  77.579996       NaN
+2026-09-21 rtt_5020  VNT.MI  0.740000 ENTER SHORT   0.774286  4.633200
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-18)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-21)
 ===============================================================================================
