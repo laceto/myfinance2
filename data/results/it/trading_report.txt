@@ -1,17 +1,19 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-09-16 to 2026-09-21 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-16 to 2026-09-22 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-09-21 rtt_5020  BEC.MI 11.350000   EXIT LONG  10.635714       NaN
-2026-09-21 rtt_5020 ECNL.MI  1.346000   EXIT LONG   1.270571       NaN
-2026-09-21 rtt_5020   IB.MI  8.600000  ENTER LONG   7.885715  8.305649
-2026-09-21 rtt_5020 LNDR.MI  0.650000 ENTER SHORT   0.696571  7.164835
-2026-09-21 rtt_5020  MET.MI  2.400000 ENTER SHORT   2.548572  6.190476
-2026-09-21 rtt_5020  PLN.MI  3.900000   EXIT LONG   3.705714       NaN
-2026-09-21 rtt_5020  UCG.MI 83.720001   EXIT LONG  77.579996       NaN
-2026-09-21 rtt_5020  VNT.MI  0.740000 ENTER SHORT   0.774286  4.633200
+ last_date   signal   ticker     price      action  stop_loss  risk_pct
+2026-09-22 rtt_5020  ANIM.MI  7.050000  EXIT SHORT   7.362857       NaN
+2026-09-22 rtt_5020     B.MI  1.225000  ENTER LONG   1.162143  5.131192
+2026-09-22 rtt_5020  BAMI.MI 16.090000  ENTER LONG  15.444286  4.013142
+2026-09-22 rtt_5020   CFV.MI  2.240000  ENTER LONG   2.140000  4.464281
+2026-09-22 rtt_5020   COM.MI 47.500000 ENTER SHORT  50.400000  6.105264
+2026-09-22 rtt_5020   ELN.MI 16.410000  ENTER LONG  15.464285  5.763037
+2026-09-22 rtt_5020   ERG.MI 23.299999  ENTER LONG  22.377142  3.960760
+2026-09-22 rtt_5020   ICF.MI  6.800000  ENTER LONG   6.507143  4.306725
+2026-09-22 rtt_5020   KME.MI  0.895000   EXIT LONG   0.866429       NaN
+2026-09-22 rtt_5020 STMMI.MI 46.610001  EXIT SHORT  47.904284       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-21)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-22)
 ===============================================================================================
