@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 135
+window: 1 month ago   events: 137
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-23  (2 bull flips) --
+   ELN.MI    -1->1    rema_50100    marg=NaN  EL.EN Health Technology
+   ELN.MI    -1->1    rema_50100150 marg=NaN  EL.EN Health Technology
 
 -- 2026-09-22  (9 bull flips) --
    BAMI.MI   -1->1    rbo_20        marg=si   BANCO BPM Finance
@@ -177,4 +181,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TIT.MI    -1->1    rbo_20        marg=si   TELECOM ITALIA Communications
    TIT.MI    0->1    rtt_5020      marg=si   TELECOM ITALIA Communications
 
-Most frequent flippers: ENV.MIx8, SFT.MIx6, LUVE.MIx6, BFG.MIx5, ECK.MIx4, ISP.MIx4, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4
+Most frequent flippers: ENV.MIx8, SFT.MIx6, LUVE.MIx6, ELN.MIx6, BFG.MIx5, ECK.MIx4, ISP.MIx4, CIRC.MIx4, MET.MIx4, FARM.MIx4
