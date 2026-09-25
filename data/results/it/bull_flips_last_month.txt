@@ -2,6 +2,11 @@ BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
 window: 1 month ago   events: 129
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
+-- 2026-09-25  (3 bull flips) --
+   BO.MI     -1->1    rbo_50        marg=NaN  BORGOSESIA Finance
+   BO.MI     0->1    rtt_5020      marg=NaN  BORGOSESIA Finance
+   GSP.MI    -1->1    rema_50100    marg=NaN  GAS PLUS Utilities
+
 -- 2026-09-24  (3 bull flips) --
    RACE.MI   -1->1    rbo_150       marg=si   FERRARI Consumer Durables
    VIM.MI    -1->1    rsma_50100    marg=NaN  VIMI FASTENERS Producer Manufacturing
@@ -168,9 +173,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
    PIRC.MI   -1->0    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
 
--- 2026-08-25  (3 bull flips) --
-   ISP.MI    -1->1    rsma_100150   marg=si   INTESA SANPAOLO Finance
-   ISP.MI    -1->1    rsma_50100150 marg=si   INTESA SANPAOLO Finance
-   SFT.MI    -1->1    rema_50100150 marg=NaN  SOFTLAB Technology Services
-
-Most frequent flippers: ENV.MIx8, SFT.MIx6, LUVE.MIx6, ELN.MIx6, BFG.MIx5, ISP.MIx4, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4
+Most frequent flippers: ENV.MIx8, LUVE.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4, PIRC.MIx3
