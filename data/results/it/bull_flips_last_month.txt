@@ -1,6 +1,11 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 129
+window: 1 month ago   events: 121
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-09-28  (3 bull flips) --
+   OVS.MI    -1->1    rbo_20        marg=si   OVS Retail Trade
+   OVS.MI    -1->0    rtt_5020      marg=si   OVS Retail Trade
+   PRY.MI    -1->1    rsma_50100150 marg=si   PRYSMIAN Producer Manufacturing
 
 -- 2026-09-25  (3 bull flips) --
    BO.MI     -1->1    rbo_50        marg=NaN  BORGOSESIA Finance
@@ -158,19 +163,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    CLI.MI    -1->1    rbo_20        marg=NaN  CENTRALE DEL LATTE D'ITALIA Consumer Non-Durables
    CLI.MI    -1->0    rtt_5020      marg=NaN  CENTRALE DEL LATTE D'ITALIA Consumer Non-Durables
 
--- 2026-08-27  (9 bull flips) --
-   CMB.MI    -1->1    rbo_20        marg=NaN  CEMBRE Electronic Technology
-   CMB.MI    -1->0    rtt_5020      marg=NaN  CEMBRE Electronic Technology
-   CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
-   CYB.MI    -1->0    rtt_5020      marg=NaN  CYBEROO Technology Services
-   ENV.MI    -1->1    rbo_20        marg=NaN  ENERVIT Health Technology
-   ENV.MI    -1->0    rtt_5020      marg=NaN  ENERVIT Health Technology
-   TEN.MI    -1->1    rema_50100150 marg=si   TENARIS Non-Energy Minerals
-   WIIT.MI   -1->1    rbo_20        marg=NaN  WIIT Technology Services
-   WIIT.MI   -1->0    rtt_5020      marg=NaN  WIIT Technology Services
-
--- 2026-08-26  (2 bull flips) --
-   PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
-   PIRC.MI   -1->0    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
-
-Most frequent flippers: ENV.MIx8, LUVE.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4, PIRC.MIx3
+Most frequent flippers: LUVE.MIx6, ENV.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4, DAN.MIx3
