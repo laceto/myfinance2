@@ -1,7 +1,8 @@
 ETF price artifacts (suspect split / re-denomination — excluded from rankings)
 criterion: |single-day close change| > 50% within the last 1095d
-flagged: 12
+flagged: 13
 
+  1VET.L     1Valour Ethereum Physical Staking
   AADA.AS    21shares Cardano ETP
   ADOT.AS    21shares Polkadot ETP
   AXRP.AS    21shares XRP ETP
