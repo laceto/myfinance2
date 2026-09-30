@@ -2,6 +2,12 @@ BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
 window: 1 month ago   events: 121
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
+-- 2026-09-29  (4 bull flips) --
+   OS.MI     -1->1    rbo_20        marg=NaN  OFFICINA STELLARE Electronic Technology
+   OS.MI     -1->0    rtt_5020      marg=NaN  OFFICINA STELLARE Electronic Technology
+   PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   -1->0    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
+
 -- 2026-09-28  (3 bull flips) --
    OVS.MI    -1->1    rbo_20        marg=si   OVS Retail Trade
    OVS.MI    -1->0    rtt_5020      marg=si   OVS Retail Trade
@@ -157,10 +163,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
    G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
 
--- 2026-08-28  (4 bull flips) --
-   CIRC.MI   -1->1    rbo_20        marg=NaN  CIRCLE Commercial Services
-   CIRC.MI   -1->0    rtt_5020      marg=NaN  CIRCLE Commercial Services
-   CLI.MI    -1->1    rbo_20        marg=NaN  CENTRALE DEL LATTE D'ITALIA Consumer Non-Durables
-   CLI.MI    -1->0    rtt_5020      marg=NaN  CENTRALE DEL LATTE D'ITALIA Consumer Non-Durables
-
-Most frequent flippers: LUVE.MIx6, ENV.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, CIRC.MIx4, MET.MIx4, FARM.MIx4, BFF.MIx4, DAN.MIx3
+Most frequent flippers: LUVE.MIx6, ENV.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, MET.MIx4, FARM.MIx4, BFF.MIx4, DAN.MIx3, PLC.MIx3
