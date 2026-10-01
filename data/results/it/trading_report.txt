@@ -1,13 +1,26 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-09-24 to 2026-09-29 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-25 to 2026-09-30 (Last 4 Days)
 ===============================================================================================
  last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-09-29 rtt_5020 AVIO.MI 29.559999  EXIT SHORT  31.025714       NaN
-2026-09-29 rtt_5020  CYB.MI  1.165000 ENTER SHORT   1.246429  6.989579
-2026-09-29 rtt_5020   OS.MI 45.400002  EXIT SHORT  51.657143       NaN
-2026-09-29 rtt_5020 PIRC.MI  6.595000  EXIT SHORT   6.755357       NaN
+2026-09-30 rtt_5020  ADB.MI  9.560000  EXIT SHORT   9.871429       NaN
+2026-09-30 rtt_5020  GEL.MI  2.500000  ENTER LONG   2.434286  2.628573
+2026-09-30 rtt_5020  SRG.MI  5.590000  EXIT SHORT   5.782286       NaN
+2026-09-30 rtt_5020  SFL.MI  1.801000  ENTER LONG   1.694286  5.925278
+2026-09-30 rtt_5020  PTR.MI  2.440000 ENTER SHORT   2.697143 10.538640
+2026-09-30 rtt_5020 PIRC.MI  6.700000  ENTER LONG   6.466071  3.491472
+2026-09-30 rtt_5020   IP.MI 36.480000  ENTER LONG  34.857142  4.448622
+2026-09-30 rtt_5020   IG.MI  8.408000  EXIT SHORT   8.697714       NaN
+2026-09-30 rtt_5020  EUK.MI  0.545000  EXIT SHORT   0.530143       NaN
+2026-09-30 rtt_5020 ANIM.MI  7.140000  ENTER LONG   6.877143  3.681471
+2026-09-30 rtt_5020 ENAV.MI  4.858000  EXIT SHORT   5.105286       NaN
+2026-09-30 rtt_5020  DLG.MI 40.320000  ENTER LONG  38.851428  3.642290
+2026-09-30 rtt_5020  CIR.MI  0.780000  ENTER LONG   0.738286  5.347987
+2026-09-30 rtt_5020  CBB.MI  0.720000  EXIT SHORT   0.733143       NaN
+2026-09-30 rtt_5020 BMED.MI 23.969999  ENTER LONG  23.040000  3.879849
+2026-09-30 rtt_5020   BC.MI 81.220001  EXIT SHORT  86.819998       NaN
+2026-09-30 rtt_5020  TYA.MI 18.150000  EXIT SHORT  19.157143       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-29)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-09-30)
 ===============================================================================================
