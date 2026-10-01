@@ -1,7 +1,10 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 30
+window: 1 month ago   events: 31
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-09-30  (1 bear flips) --
+   BC.MI     1->-1   rsma_50100150 marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
 
 -- 2026-09-28  (1 bear flips) --
    AMP.MI    1->-1   rema_50100150 marg=si   AMPLIFON Distribution Services
@@ -51,4 +54,4 @@ filter: marginabile=si only (short-sellable names)
    WBD.MI    1->-1   rbo_20        marg=si   WEBUILD Industrial Services
    WBD.MI    0->-1   rtt_5020      marg=si   WEBUILD Industrial Services
 
-Most frequent flippers: BC.MIx4, AMP.MIx3, IP.MIx3, BRE.MIx2, SFL.MIx2, WBD.MIx2, HER.MIx2, SRG.MIx2, JUVE.MIx2, REY.MIx2
+Most frequent flippers: BC.MIx5, AMP.MIx3, IP.MIx3, BRE.MIx2, SFL.MIx2, WBD.MIx2, HER.MIx2, SRG.MIx2, JUVE.MIx2, REY.MIx2
