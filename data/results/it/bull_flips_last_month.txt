@@ -1,6 +1,18 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 128
+window: 1 month ago   events: 117
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-01  (10 bull flips) --
+   CED.MI    -1->1    rbo_20        marg=NaN  CALTAGIRONE EDIT Consumer Services
+   CED.MI    0->1    rtt_5020      marg=NaN  CALTAGIRONE EDIT Consumer Services
+   FCT.MI    -1->1    rbo_20        marg=si   FINCANTIERI Producer Manufacturing
+   FCT.MI    -1->0    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
+   OS.MI     -1->1    rbo_50        marg=NaN  OFFICINA STELLARE Electronic Technology
+   OS.MI     0->1    rtt_5020      marg=NaN  OFFICINA STELLARE Electronic Technology
+   PRY.MI    -1->1    rbo_50        marg=si   PRYSMIAN Producer Manufacturing
+   PRY.MI    0->1    rtt_5020      marg=si   PRYSMIAN Producer Manufacturing
+   SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
+   SPM.MI    0->1    rtt_5020      marg=si   SAIPEM Industrial Services
 
 -- 2026-09-30  (7 bull flips) --
    BMED.MI   -1->1    rbo_20        marg=si   BANCA MEDIOLANUM Finance
@@ -147,29 +159,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TEN.MI    -1->1    rbo_20        marg=si   TENARIS Non-Energy Minerals
    TEN.MI    -1->0    rtt_5020      marg=si   TENARIS Non-Energy Minerals
 
--- 2026-09-01  (14 bull flips) --
-   ENV.MI    -1->1    rbo_50        marg=NaN  ENERVIT Health Technology
-   ENV.MI    0->1    rtt_5020      marg=NaN  ENERVIT Health Technology
-   EQUI.MI   -1->1    rbo_20        marg=NaN  EQUITA GROUP Finance
-   EQUI.MI   -1->0    rtt_5020      marg=NaN  EQUITA GROUP Finance
-   LUVE.MI   -1->1    rbo_20        marg=NaN  LUVE Producer Manufacturing
-   LUVE.MI   -1->0    rtt_5020      marg=NaN  LUVE Producer Manufacturing
-   MET.MI    -1->1    rbo_20        marg=NaN  MET.EXTRA GROUP Finance
-   MET.MI    -1->0    rtt_5020      marg=NaN  MET.EXTRA GROUP Finance
-   PLC.MI    -1->1    rbo_20        marg=NaN  PLC Industrial Services
-   PLC.MI    -1->0    rtt_5020      marg=NaN  PLC Industrial Services
-   SFT.MI    -1->1    rbo_20        marg=NaN  SOFTLAB Technology Services
-   SFT.MI    -1->0    rtt_5020      marg=NaN  SOFTLAB Technology Services
-   SPM.MI    -1->1    rbo_50        marg=si   SAIPEM Industrial Services
-   SPM.MI    -1->1    rtt_5020      marg=si   SAIPEM Industrial Services
-
--- 2026-08-31  (7 bull flips) --
-   CDG.MI    -1->1    rsma_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
-   DAN.MI    -1->1    rbo_20        marg=si   DANIELI & C Producer Manufacturing
-   DAN.MI    -1->0    rtt_5020      marg=si   DANIELI & C Producer Manufacturing
-   EVISO.MI  -1->1    rema_100150   marg=NaN  EVISO Utilities
-   EVISO.MI  -1->1    rema_50100150 marg=NaN  EVISO Utilities
-   G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
-   G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
-
-Most frequent flippers: LUVE.MIx6, ENV.MIx6, ELN.MIx6, SFT.MIx5, BFG.MIx5, PIRC.MIx5, MET.MIx4, FARM.MIx4, BFF.MIx4, CRL.MIx4
+Most frequent flippers: ELN.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, ENV.MIx4, FARM.MIx4, LUVE.MIx4, BFF.MIx4, CRL.MIx4, OS.MIx4
