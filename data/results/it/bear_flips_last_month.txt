@@ -1,7 +1,11 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 31
+window: 1 month ago   events: 25
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-02  (2 bear flips) --
+   LDO.MI    1->-1   rbo_50        marg=si   LEONARDO Electronic Technology
+   LDO.MI    0->-1   rtt_5020      marg=si   LEONARDO Electronic Technology
 
 -- 2026-09-30  (1 bear flips) --
    BC.MI     1->-1   rsma_50100150 marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
@@ -44,14 +48,4 @@ filter: marginabile=si only (short-sellable names)
    HER.MI    1->-1   rbo_20        marg=si   HERA Utilities
    HER.MI    0->-1   rtt_5020      marg=si   HERA Utilities
 
--- 2026-09-02  (8 bear flips) --
-   BC.MI     1->-1   rbo_20        marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
-   BC.MI     1->0    rtt_5020      marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
-   BRE.MI    1->-1   rbo_20        marg=si   BREMBO Producer Manufacturing
-   BRE.MI    0->-1   rtt_5020      marg=si   BREMBO Producer Manufacturing
-   SFL.MI    1->-1   rbo_20        marg=si   SAFILO GROUP Health Technology
-   SFL.MI    1->0    rtt_5020      marg=si   SAFILO GROUP Health Technology
-   WBD.MI    1->-1   rbo_20        marg=si   WEBUILD Industrial Services
-   WBD.MI    0->-1   rtt_5020      marg=si   WEBUILD Industrial Services
-
-Most frequent flippers: BC.MIx5, AMP.MIx3, IP.MIx3, BRE.MIx2, SFL.MIx2, WBD.MIx2, HER.MIx2, SRG.MIx2, JUVE.MIx2, REY.MIx2
+Most frequent flippers: AMP.MIx3, BC.MIx3, IP.MIx3, LDO.MIx3, HER.MIx2, SRG.MIx2, JUVE.MIx2, REY.MIx2, UCG.MIx2, FCT.MIx2

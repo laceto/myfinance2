@@ -1,6 +1,12 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 117
+window: 1 month ago   events: 115
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-02  (4 bull flips) --
+   FM.MI     -1->1    rbo_20        marg=NaN  FIERA MILANO Commercial Services
+   FM.MI     -1->0    rtt_5020      marg=NaN  FIERA MILANO Commercial Services
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-01  (10 bull flips) --
    CED.MI    -1->1    rbo_20        marg=NaN  CALTAGIRONE EDIT Consumer Services
@@ -150,13 +156,5 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    DIS.MI    -1->0    rtt_5020      marg=NaN  D'AMICO Transportation
    ENV.MI    -1->1    rema_50100    marg=NaN  ENERVIT Health Technology
    ENV.MI    -1->1    rema_50100150 marg=NaN  ENERVIT Health Technology
-
--- 2026-09-02  (6 bull flips) --
-   COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
-   COM.MI    -1->0    rtt_5020      marg=NaN  COMER INDUSTRIES Producer Manufacturing
-   PRT.MI    -1->1    rbo_20        marg=si   ESPRINET Distribution Services
-   PRT.MI    0->1    rtt_5020      marg=si   ESPRINET Distribution Services
-   TEN.MI    -1->1    rbo_20        marg=si   TENARIS Non-Energy Minerals
-   TEN.MI    -1->0    rtt_5020      marg=si   TENARIS Non-Energy Minerals
 
 Most frequent flippers: ELN.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, ENV.MIx4, FARM.MIx4, LUVE.MIx4, BFF.MIx4, CRL.MIx4, OS.MIx4
