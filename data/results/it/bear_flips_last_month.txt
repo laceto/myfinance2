@@ -3,6 +3,10 @@ window: 1 month ago   events: 25
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
+-- 2026-10-05  (2 bear flips) --
+   BGN.MI    1->-1   rbo_50        marg=si   BANCA GENERALI Finance
+   BGN.MI    0->-1   rtt_5020      marg=si   BANCA GENERALI Finance
+
 -- 2026-10-02  (2 bear flips) --
    LDO.MI    1->-1   rbo_50        marg=si   LEONARDO Electronic Technology
    LDO.MI    0->-1   rtt_5020      marg=si   LEONARDO Electronic Technology
@@ -44,8 +48,4 @@ filter: marginabile=si only (short-sellable names)
    SRG.MI    1->-1   rbo_20        marg=si   SNAM Utilities
    SRG.MI    0->-1   rtt_5020      marg=si   SNAM Utilities
 
--- 2026-09-03  (2 bear flips) --
-   HER.MI    1->-1   rbo_20        marg=si   HERA Utilities
-   HER.MI    0->-1   rtt_5020      marg=si   HERA Utilities
-
-Most frequent flippers: AMP.MIx3, BC.MIx3, IP.MIx3, LDO.MIx3, HER.MIx2, SRG.MIx2, JUVE.MIx2, REY.MIx2, UCG.MIx2, FCT.MIx2
+Most frequent flippers: AMP.MIx3, BC.MIx3, IP.MIx3, LDO.MIx3, SRG.MIx2, JUVE.MIx2, REY.MIx2, UCG.MIx2, FCT.MIx2, BGN.MIx2

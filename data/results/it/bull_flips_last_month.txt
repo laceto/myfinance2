@@ -1,6 +1,14 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 115
+window: 1 month ago   events: 111
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-05  (6 bull flips) --
+   BO.MI     -1->1    rema_50100    marg=NaN  BORGOSESIA Finance
+   TEN.MI    -1->1    rbo_50        marg=si   TENARIS Non-Energy Minerals
+   TEN.MI    -1->1    rema_100150   marg=si   TENARIS Non-Energy Minerals
+   TEN.MI    0->1    rtt_5020      marg=si   TENARIS Non-Energy Minerals
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-02  (4 bull flips) --
    FM.MI     -1->1    rbo_20        marg=NaN  FIERA MILANO Commercial Services
@@ -143,18 +151,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    SSL.MI    -1->1    rbo_20        marg=NaN  S.S. LAZIO Consumer Services
    SSL.MI    0->1    rtt_5020      marg=NaN  S.S. LAZIO Consumer Services
 
--- 2026-09-04  (6 bull flips) --
-   FARM.MI   -1->1    rsma_100150   marg=NaN  H-FARM Commercial Services
-   FARM.MI   -1->1    rsma_50100150 marg=NaN  H-FARM Commercial Services
-   POPR.MI   -1->1    rbo_50        marg=NaN  POLIGRAFICI PRINTING Consumer Services
-   POPR.MI   -1->1    rsma_50100150 marg=NaN  POLIGRAFICI PRINTING Consumer Services
-   POPR.MI   0->1    rtt_5020      marg=NaN  POLIGRAFICI PRINTING Consumer Services
-   SFT.MI    -1->1    rema_100150   marg=NaN  SOFTLAB Technology Services
-
--- 2026-09-03  (4 bull flips) --
-   DIS.MI    -1->1    rbo_20        marg=NaN  D'AMICO Transportation
-   DIS.MI    -1->0    rtt_5020      marg=NaN  D'AMICO Transportation
-   ENV.MI    -1->1    rema_50100    marg=NaN  ENERVIT Health Technology
-   ENV.MI    -1->1    rema_50100150 marg=NaN  ENERVIT Health Technology
-
-Most frequent flippers: ELN.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, ENV.MIx4, FARM.MIx4, LUVE.MIx4, BFF.MIx4, CRL.MIx4, OS.MIx4
+Most frequent flippers: ELN.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, LUVE.MIx4, BFF.MIx4, CRL.MIx4, OS.MIx4, TLS.MIx4, CPR.MIx3
