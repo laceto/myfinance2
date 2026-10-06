@@ -1,22 +1,21 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-09-28 to 2026-10-02 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-09-30 to 2026-10-05 (Last 4 Days)
 ===============================================================================================
  last_date   signal   ticker     price      action  stop_loss  risk_pct
-2026-10-02 rtt_5020 AEDES.MI  0.858000  ENTER LONG   0.788000  8.158506
-2026-10-02 rtt_5020  BAMI.MI 15.225000   EXIT LONG  14.530714       NaN
-2026-10-02 rtt_5020   BDB.MI 16.799999   EXIT LONG  15.045714       NaN
-2026-10-02 rtt_5020   BPE.MI 13.502000   EXIT LONG  13.020286       NaN
-2026-10-02 rtt_5020   CFV.MI  2.060000   EXIT LONG   1.934286       NaN
-2026-10-02 rtt_5020   CVG.MI  1.640000  ENTER LONG   1.511429  7.839719
-2026-10-02 rtt_5020    FM.MI  7.120000  EXIT SHORT   7.707143       NaN
-2026-10-02 rtt_5020   GEO.MI  0.267000   EXIT LONG   0.261000       NaN
-2026-10-02 rtt_5020   ISP.MI  6.328000   EXIT LONG   6.114286       NaN
-2026-10-02 rtt_5020   LDO.MI 47.389999 ENTER SHORT  49.777143  5.037231
-2026-10-02 rtt_5020   MTV.MI  0.027500  EXIT SHORT   0.033871       NaN
-2026-10-02 rtt_5020   PLN.MI  3.940000  ENTER LONG   3.782857  3.988401
+2026-10-05 rtt_5020  ARBS.MI  2.880000   EXIT LONG   2.814286       NaN
+2026-10-05 rtt_5020   BGN.MI 61.549999 ENTER SHORT  63.985711  3.957290
+2026-10-05 rtt_5020  BMPS.MI 11.368000   EXIT LONG  10.800286       NaN
+2026-10-05 rtt_5020  CELL.MI  2.540000   EXIT LONG   2.394286       NaN
+2026-10-05 rtt_5020   DBA.MI  4.440000   EXIT LONG   4.378571       NaN
+2026-10-05 rtt_5020   DOV.MI  1.830000  EXIT SHORT   1.798429       NaN
+2026-10-05 rtt_5020 EVISO.MI  8.500000 ENTER SHORT   9.475714 11.478987
+2026-10-05 rtt_5020   GEO.MI  0.262500 ENTER SHORT   0.275214  4.843537
+2026-10-05 rtt_5020   IGD.MI  3.650000  EXIT SHORT   3.955714       NaN
+2026-10-05 rtt_5020   TEN.MI 26.040001  ENTER LONG  24.908572  4.344965
+2026-10-05 rtt_5020    UD.MI  3.125000   EXIT LONG   2.895714       NaN
 2026-10-02 rtt_5020   TLS.MI  3.640000  EXIT SHORT   3.820000       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-02)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-05)
 ===============================================================================================
