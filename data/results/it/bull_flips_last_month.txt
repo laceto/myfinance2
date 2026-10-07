@@ -1,6 +1,19 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 111
+window: 1 month ago   events: 122
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-06  (11 bull flips) --
+   CMB.MI    -1->1    rbo_50        marg=NaN  CEMBRE Electronic Technology
+   CMB.MI    0->1    rtt_5020      marg=NaN  CEMBRE Electronic Technology
+   GVS.MI    -1->1    rema_100150   marg=NaN  GVS Electronic Technology
+   GVS.MI    -1->1    rema_50100150 marg=NaN  GVS Electronic Technology
+   SFER.MI   -1->1    rema_50100150 marg=si   SALVATORE FERRAGAMO Consumer Non-Durables
+   SFT.MI    -1->1    rbo_50        marg=NaN  SOFTLAB Technology Services
+   SFT.MI    0->1    rtt_5020      marg=NaN  SOFTLAB Technology Services
+   SOM.MI    -1->1    rbo_50        marg=NaN  SOMEC Consumer Durables
+   SOM.MI    0->1    rtt_5020      marg=NaN  SOMEC Consumer Durables
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-05  (6 bull flips) --
    BO.MI     -1->1    rema_50100    marg=NaN  BORGOSESIA Finance
@@ -151,4 +164,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    SSL.MI    -1->1    rbo_20        marg=NaN  S.S. LAZIO Consumer Services
    SSL.MI    0->1    rtt_5020      marg=NaN  S.S. LAZIO Consumer Services
 
-Most frequent flippers: ELN.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, LUVE.MIx4, BFF.MIx4, CRL.MIx4, OS.MIx4, TLS.MIx4, CPR.MIx3
+Most frequent flippers: ELN.MIx6, TLS.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, LUVE.MIx4, SFT.MIx4, BFF.MIx4, SOM.MIx4, CRL.MIx4
