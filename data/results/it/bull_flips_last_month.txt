@@ -1,6 +1,15 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 122
+window: 1 month ago   events: 121
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-07  (7 bull flips) --
+   CMB.MI    -1->1    rema_50100    marg=NaN  CEMBRE Electronic Technology
+   CMB.MI    -1->1    rema_50100150 marg=NaN  CEMBRE Electronic Technology
+   GHC.MI    -1->1    rbo_20        marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    -1->1    rbo_50        marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    -1->1    rtt_5020      marg=NaN  GAROFALO HEALTH CARE Health Services
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-06  (11 bull flips) --
    CMB.MI    -1->1    rbo_50        marg=NaN  CEMBRE Electronic Technology
@@ -154,14 +163,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    SOM.MI    -1->1    rbo_20        marg=NaN  SOMEC Consumer Durables
    SOM.MI    -1->0    rtt_5020      marg=NaN  SOMEC Consumer Durables
 
--- 2026-09-07  (8 bull flips) --
-   BFF.MI    -1->1    rsma_100150   marg=NaN  BFF BANK Finance
-   BFF.MI    -1->1    rsma_50100150 marg=NaN  BFF BANK Finance
-   LUVE.MI   -1->1    rbo_50        marg=NaN  LUVE Producer Manufacturing
-   LUVE.MI   0->1    rtt_5020      marg=NaN  LUVE Producer Manufacturing
-   SFT.MI    -1->1    rema_50100    marg=NaN  SOFTLAB Technology Services
-   SFT.MI    -1->1    rema_50100150 marg=NaN  SOFTLAB Technology Services
-   SSL.MI    -1->1    rbo_20        marg=NaN  S.S. LAZIO Consumer Services
-   SSL.MI    0->1    rtt_5020      marg=NaN  S.S. LAZIO Consumer Services
-
-Most frequent flippers: ELN.MIx6, TLS.MIx6, PRY.MIx5, BFG.MIx5, PIRC.MIx5, LUVE.MIx4, SFT.MIx4, BFF.MIx4, SOM.MIx4, CRL.MIx4
+Most frequent flippers: TLS.MIx8, ELN.MIx6, PRY.MIx5, GHC.MIx5, BFG.MIx5, PIRC.MIx5, SOM.MIx4, CRL.MIx4, OS.MIx4, CMB.MIx4
