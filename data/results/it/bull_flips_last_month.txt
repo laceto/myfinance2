@@ -1,6 +1,20 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 121
+window: 1 month ago   events: 124
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-08  (12 bull flips) --
+   CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
+   CYB.MI    -1->1    rbo_50        marg=NaN  CYBEROO Technology Services
+   CYB.MI    -1->1    rtt_5020      marg=NaN  CYBEROO Technology Services
+   FARM.MI   -1->1    rbo_50        marg=NaN  H-FARM Commercial Services
+   FARM.MI   0->1    rtt_5020      marg=NaN  H-FARM Commercial Services
+   MAIRE.MI  -1->1    rbo_50        marg=si   MAIRE Industrial Services
+   MAIRE.MI  0->1    rtt_5020      marg=si   MAIRE Industrial Services
+   PIRC.MI   -1->1    rsma_100150   marg=NaN  PIRELLI & C Consumer Durables
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
+   WIIT.MI   -1->1    rbo_50        marg=NaN  WIIT Technology Services
+   WIIT.MI   0->1    rtt_5020      marg=NaN  WIIT Technology Services
 
 -- 2026-10-07  (7 bull flips) --
    CMB.MI    -1->1    rema_50100    marg=NaN  CEMBRE Electronic Technology
@@ -152,15 +166,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PRY.MI    -1->1    rbo_20        marg=si   PRYSMIAN Producer Manufacturing
    PRY.MI    -1->0    rtt_5020      marg=si   PRYSMIAN Producer Manufacturing
 
--- 2026-09-08  (9 bull flips) --
-   CPR.MI    -1->1    rsma_50100    marg=si   CAMPARI Consumer Non-Durables
-   FPE.MI    -1->1    rbo_20        marg=NaN  FOPE Consumer Durables
-   FPE.MI    -1->0    rtt_5020      marg=NaN  FOPE Consumer Durables
-   LUVE.MI   -1->1    rema_50100    marg=NaN  LUVE Producer Manufacturing
-   LUVE.MI   -1->1    rema_50100150 marg=NaN  LUVE Producer Manufacturing
-   MAIRE.MI  -1->1    rbo_20        marg=si   MAIRE Industrial Services
-   MAIRE.MI  -1->0    rtt_5020      marg=si   MAIRE Industrial Services
-   SOM.MI    -1->1    rbo_20        marg=NaN  SOMEC Consumer Durables
-   SOM.MI    -1->0    rtt_5020      marg=NaN  SOMEC Consumer Durables
-
-Most frequent flippers: TLS.MIx8, ELN.MIx6, PRY.MIx5, GHC.MIx5, BFG.MIx5, PIRC.MIx5, SOM.MIx4, CRL.MIx4, OS.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx10, ELN.MIx6, PIRC.MIx6, PRY.MIx5, GHC.MIx5, BFG.MIx5, FARM.MIx4, CRL.MIx4, OS.MIx4, CMB.MIx4

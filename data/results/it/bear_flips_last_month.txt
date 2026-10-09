@@ -1,7 +1,11 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 23
+window: 1 month ago   events: 25
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-08  (2 bear flips) --
+   UCG.MI    1->-1   rbo_50        marg=si   UNICREDIT Finance
+   UCG.MI    0->-1   rtt_5020      marg=si   UNICREDIT Finance
 
 -- 2026-10-05  (2 bear flips) --
    BGN.MI    1->-1   rbo_50        marg=si   BANCA GENERALI Finance
@@ -44,4 +48,4 @@ filter: marginabile=si only (short-sellable names)
    REY.MI    1->-1   rbo_20        marg=si   REPLY Commercial Services
    REY.MI    1->0    rtt_5020      marg=si   REPLY Commercial Services
 
-Most frequent flippers: AMP.MIx3, BC.MIx3, IP.MIx3, LDO.MIx3, JUVE.MIx2, REY.MIx2, UCG.MIx2, FCT.MIx2, BGN.MIx2, ENI.MIx1
+Most frequent flippers: UCG.MIx4, AMP.MIx3, BC.MIx3, IP.MIx3, LDO.MIx3, JUVE.MIx2, REY.MIx2, FCT.MIx2, BGN.MIx2, ENI.MIx1
