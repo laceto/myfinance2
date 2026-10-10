@@ -1,6 +1,21 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 124
+window: 1 month ago   events: 128
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-09  (13 bull flips) --
+   CYB.MI    -1->1    rbo_150       marg=NaN  CYBEROO Technology Services
+   DLG.MI    -1->1    rbo_150       marg=NaN  DE'LONGHI Consumer Durables
+   ETH.MI    -1->1    rsma_50100    marg=NaN  EUROTECH Electronic Technology
+   ETH.MI    -1->1    rsma_50100150 marg=NaN  EUROTECH Electronic Technology
+   FPE.MI    -1->1    rbo_50        marg=NaN  FOPE Consumer Durables
+   FPE.MI    0->1    rtt_5020      marg=NaN  FOPE Consumer Durables
+   OVS.MI    -1->1    rema_50100    marg=si   OVS Retail Trade
+   OVS.MI    -1->1    rema_50100150 marg=si   OVS Retail Trade
+   PIRC.MI   -1->1    rema_50100    marg=NaN  PIRELLI & C Consumer Durables
+   SFL.MI    -1->1    rema_50100    marg=si   SAFILO GROUP Health Technology
+   SPM.MI    -1->1    rsma_50100    marg=si   SAIPEM Industrial Services
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-08  (12 bull flips) --
    CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
@@ -155,15 +170,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TIP.MI    -1->1    rsma_100150   marg=NaN  TAMBURI Finance
    TIP.MI    -1->1    rsma_50100150 marg=NaN  TAMBURI Finance
 
--- 2026-09-09  (9 bull flips) --
-   CIRC.MI   -1->1    rbo_50        marg=NaN  CIRCLE Commercial Services
-   CIRC.MI   0->1    rtt_5020      marg=NaN  CIRCLE Commercial Services
-   ENV.MI    -1->1    rsma_50100150 marg=NaN  ENERVIT Health Technology
-   FARM.MI   -1->1    rbo_20        marg=NaN  H-FARM Commercial Services
-   FARM.MI   -1->0    rtt_5020      marg=NaN  H-FARM Commercial Services
-   IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-   IEG.MI    0->1    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
-   PRY.MI    -1->1    rbo_20        marg=si   PRYSMIAN Producer Manufacturing
-   PRY.MI    -1->0    rtt_5020      marg=si   PRYSMIAN Producer Manufacturing
-
-Most frequent flippers: TLS.MIx10, ELN.MIx6, PIRC.MIx6, PRY.MIx5, GHC.MIx5, BFG.MIx5, FARM.MIx4, CRL.MIx4, OS.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx12, PIRC.MIx7, ELN.MIx6, GHC.MIx5, BFG.MIx5, SPM.MIx4, CRL.MIx4, OVS.MIx4, OS.MIx4, CMB.MIx4
