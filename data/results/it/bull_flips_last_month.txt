@@ -1,6 +1,19 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 128
+window: 1 month ago   events: 133
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-12  (11 bull flips) --
+   BO.MI     -1->1    rema_100150   marg=NaN  BORGOSESIA Finance
+   BO.MI     -1->1    rema_50100150 marg=NaN  BORGOSESIA Finance
+   BO.MI     -1->1    rsma_50100    marg=NaN  BORGOSESIA Finance
+   PMT.MI    -1->1    rbo_20        marg=NaN  PROMOTICA Commercial Services
+   PMT.MI    0->1    rtt_5020      marg=NaN  PROMOTICA Commercial Services
+   SFL.MI    -1->1    rsma_100150   marg=si   SAFILO GROUP Health Technology
+   SFL.MI    -1->1    rsma_50100150 marg=si   SAFILO GROUP Health Technology
+   SGC.MI    -1->1    rema_100150   marg=NaN  SG COMPANY Communications
+   SGC.MI    -1->1    rema_50100150 marg=NaN  SG COMPANY Communications
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-09  (13 bull flips) --
    CYB.MI    -1->1    rbo_150       marg=NaN  CYBEROO Technology Services
@@ -160,14 +173,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TXT.MI    -1->1    rbo_20        marg=NaN  TXT E-SOLUTIONS Technology Services
    TXT.MI    0->1    rtt_5020      marg=NaN  TXT E-SOLUTIONS Technology Services
 
--- 2026-09-11  (3 bull flips) --
-   ELN.MI    -1->1    rbo_20        marg=NaN  EL.EN Health Technology
-   ELN.MI    -1->0    rtt_5020      marg=NaN  EL.EN Health Technology
-   SPM.MI    -1->1    rsma_50100150 marg=si   SAIPEM Industrial Services
-
--- 2026-09-10  (3 bull flips) --
-   DAN.MI    -1->1    rema_50100150 marg=si   DANIELI & C Producer Manufacturing
-   TIP.MI    -1->1    rsma_100150   marg=NaN  TAMBURI Finance
-   TIP.MI    -1->1    rsma_50100150 marg=NaN  TAMBURI Finance
-
-Most frequent flippers: TLS.MIx12, PIRC.MIx7, ELN.MIx6, GHC.MIx5, BFG.MIx5, SPM.MIx4, CRL.MIx4, OVS.MIx4, OS.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx14, PIRC.MIx7, BO.MIx6, GHC.MIx5, BFG.MIx5, CRL.MIx4, ELN.MIx4, OVS.MIx4, OS.MIx4, CMB.MIx4
