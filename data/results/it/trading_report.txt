@@ -1,14 +1,15 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-10-07 to 2026-10-12 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-10-08 to 2026-10-13 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker  price      action  stop_loss  risk_pct
-2026-10-12 rtt_5020 DIB.MI 11.160 ENTER SHORT  12.185714  9.190991
-2026-10-12 rtt_5020  FF.MI  6.620 ENTER SHORT   7.077143  6.905483
-2026-10-12 rtt_5020 IGV.MI  1.874  ENTER LONG   1.764857  5.824060
-2026-10-12 rtt_5020 PMT.MI  2.940  ENTER LONG   2.737143  6.899902
-2026-10-12 rtt_5020 SGF.MI  1.930   EXIT LONG   1.882857       NaN
+ last_date   signal ticker     price      action  stop_loss  risk_pct
+2026-10-13 rtt_5020 ACE.MI 20.320000  ENTER LONG  19.592857  3.578458
+2026-10-13 rtt_5020 AZM.MI 35.639999   EXIT LONG  34.542855       NaN
+2026-10-13 rtt_5020 CLI.MI  3.800000 ENTER SHORT   3.890000  2.368418
+2026-10-13 rtt_5020 PLN.MI  3.700000   EXIT LONG   3.537143       NaN
+2026-10-13 rtt_5020 POR.MI  0.890000 ENTER SHORT   0.949714  6.709471
+2026-10-13 rtt_5020 TXT.MI 50.500000   EXIT LONG  47.457145       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-12)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-13)
 ===============================================================================================
