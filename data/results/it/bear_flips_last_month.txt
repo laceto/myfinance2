@@ -1,7 +1,11 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 16
+window: 1 month ago   events: 18
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-13  (2 bear flips) --
+   ANIM.MI   1->-1   rsma_50100150 marg=si   ANIMA HOLDING Finance
+   INW.MI    1->-1   rsma_50100150 marg=si   INWIT Communications
 
 -- 2026-10-09  (3 bear flips) --
    ANIM.MI   1->-1   rema_50100150 marg=si   ANIMA HOLDING Finance
@@ -37,4 +41,4 @@ filter: marginabile=si only (short-sellable names)
 -- 2026-09-14  (1 bear flips) --
    ENI.MI    1->-1   rsma_50100150 marg=si   ENI Energy Minerals
 
-Most frequent flippers: UCG.MIx4, FCT.MIx2, BC.MIx2, LDO.MIx2, BGN.MIx2, ENI.MIx1, AMP.MIx1, ANIM.MIx1, CPR.MIx1
+Most frequent flippers: UCG.MIx4, FCT.MIx2, BC.MIx2, LDO.MIx2, BGN.MIx2, ANIM.MIx2, ENI.MIx1, AMP.MIx1, CPR.MIx1, INW.MIx1

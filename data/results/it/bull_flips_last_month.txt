@@ -1,6 +1,12 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 133
+window: 1 month ago   events: 137
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-13  (4 bull flips) --
+   TEN.MI    -1->1    rema_50100    marg=si   TENARIS Non-Energy Minerals
+   TEN.MI    -1->1    rema_50100150 marg=si   TENARIS Non-Energy Minerals
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-12  (11 bull flips) --
    BO.MI     -1->1    rema_100150   marg=NaN  BORGOSESIA Finance
@@ -173,4 +179,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TXT.MI    -1->1    rbo_20        marg=NaN  TXT E-SOLUTIONS Technology Services
    TXT.MI    0->1    rtt_5020      marg=NaN  TXT E-SOLUTIONS Technology Services
 
-Most frequent flippers: TLS.MIx14, PIRC.MIx7, BO.MIx6, GHC.MIx5, BFG.MIx5, CRL.MIx4, ELN.MIx4, OVS.MIx4, OS.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx16, PIRC.MIx7, BO.MIx6, GHC.MIx5, BFG.MIx5, TEN.MIx5, CRL.MIx4, ELN.MIx4, OVS.MIx4, OS.MIx4
