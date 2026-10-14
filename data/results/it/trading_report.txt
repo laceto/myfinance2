@@ -1,15 +1,19 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-10-08 to 2026-10-13 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-10-09 to 2026-10-14 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker     price      action  stop_loss  risk_pct
-2026-10-13 rtt_5020 ACE.MI 20.320000  ENTER LONG  19.592857  3.578458
-2026-10-13 rtt_5020 AZM.MI 35.639999   EXIT LONG  34.542855       NaN
-2026-10-13 rtt_5020 CLI.MI  3.800000 ENTER SHORT   3.890000  2.368418
-2026-10-13 rtt_5020 PLN.MI  3.700000   EXIT LONG   3.537143       NaN
-2026-10-13 rtt_5020 POR.MI  0.890000 ENTER SHORT   0.949714  6.709471
-2026-10-13 rtt_5020 TXT.MI 50.500000   EXIT LONG  47.457145       NaN
+ last_date   signal  ticker      price     action  stop_loss  risk_pct
+2026-10-14 rtt_5020 ECNL.MI   1.330000 EXIT SHORT   1.373143       NaN
+2026-10-14 rtt_5020  EPH.MI   1.230000  EXIT LONG   1.116286       NaN
+2026-10-14 rtt_5020  IRE.MI   2.432000 ENTER LONG   2.346000  3.536183
+2026-10-14 rtt_5020  LMG.MI   1.060000 ENTER LONG   1.017143  4.043131
+2026-10-14 rtt_5020  PRY.MI 113.150002  EXIT LONG 110.757142       NaN
+2026-10-14 rtt_5020 SEIF.MI   0.238000 EXIT SHORT   0.248857       NaN
+2026-10-14 rtt_5020  SRG.MI   5.708000 ENTER LONG   5.540572  2.933226
+2026-10-14 rtt_5020   TB.MI   0.341000 ENTER LONG   0.321571  5.697529
+2026-10-14 rtt_5020  TIP.MI   9.230000 EXIT SHORT   9.121429       NaN
+2026-10-14 rtt_5020  VIM.MI   1.480000 ENTER LONG   1.391429  5.984558
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-13)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-14)
 ===============================================================================================
