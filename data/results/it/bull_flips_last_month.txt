@@ -1,6 +1,16 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 128
+window: 1 month ago   events: 131
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-15  (8 bull flips) --
+   BEC.MI    -1->1    rbo_20        marg=NaN  B&C SPEAKERS Consumer Durables
+   BEC.MI    0->1    rtt_5020      marg=NaN  B&C SPEAKERS Consumer Durables
+   CRL.MI    -1->1    rema_50100150 marg=NaN  CAREL INDUSTRIES Producer Manufacturing
+   OVS.MI    -1->1    rbo_50        marg=si   OVS Retail Trade
+   OVS.MI    0->1    rtt_5020      marg=si   OVS Retail Trade
+   PIRC.MI   -1->1    rbo_150       marg=NaN  PIRELLI & C Consumer Durables
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-14  (8 bull flips) --
    A2A.MI    -1->1    rsma_50100    marg=si   A2A Utilities
@@ -163,11 +173,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    RACE.MI   -1->1    rsma_100150   marg=si   FERRARI Consumer Durables
    RACE.MI   -1->1    rsma_50100150 marg=si   FERRARI Consumer Durables
 
--- 2026-09-15  (5 bull flips) --
-   BFG.MI    -1->1    rema_100150   marg=NaN  B.F Process Industries
-   BFG.MI    -1->1    rema_50100150 marg=NaN  B.F Process Industries
-   BFG.MI    -1->1    rsma_50100    marg=NaN  B.F Process Industries
-   MET.MI    -1->1    rbo_20        marg=NaN  MET.EXTRA GROUP Finance
-   MET.MI    -1->0    rtt_5020      marg=NaN  MET.EXTRA GROUP Finance
-
-Most frequent flippers: TLS.MIx18, PIRC.MIx7, BO.MIx6, BFG.MIx5, CRL.MIx5, TEN.MIx5, ELN.MIx4, VIM.MIx4, OVS.MIx4, OS.MIx4
+Most frequent flippers: TLS.MIx20, PIRC.MIx8, CRL.MIx6, BO.MIx6, OVS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4, OS.MIx4, CMB.MIx4
