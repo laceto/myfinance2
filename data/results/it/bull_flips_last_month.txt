@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 131
+window: 1 month ago   events: 133
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-16  (2 bull flips) --
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-15  (8 bull flips) --
    BEC.MI    -1->1    rbo_20        marg=NaN  B&C SPEAKERS Consumer Durables
@@ -173,4 +177,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    RACE.MI   -1->1    rsma_100150   marg=si   FERRARI Consumer Durables
    RACE.MI   -1->1    rsma_50100150 marg=si   FERRARI Consumer Durables
 
-Most frequent flippers: TLS.MIx20, PIRC.MIx8, CRL.MIx6, BO.MIx6, OVS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4, OS.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx22, PIRC.MIx8, CRL.MIx6, BO.MIx6, OVS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4, OS.MIx4, CMB.MIx4
