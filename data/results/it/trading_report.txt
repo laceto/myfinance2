@@ -1,24 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-10-12 to 2026-10-15 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-10-13 to 2026-10-16 (Last 4 Days)
 ===============================================================================================
- last_date   signal   ticker      price      action  stop_loss  risk_pct
-2026-10-15 rtt_5020   AZM.MI  34.680000 ENTER SHORT  36.504287  5.260341
-2026-10-15 rtt_5020   BEC.MI  11.450000  ENTER LONG  10.992857  3.992516
-2026-10-15 rtt_5020   DOV.MI   1.500000 ENTER SHORT   1.692429 12.828569
-2026-10-15 rtt_5020   HER.MI   3.520000  EXIT SHORT   3.615429       NaN
-2026-10-15 rtt_5020    IG.MI   8.520000  ENTER LONG   8.228286  3.423879
-2026-10-15 rtt_5020   KME.MI   0.895000  ENTER LONG   0.842857  5.826022
-2026-10-15 rtt_5020   OVS.MI   6.105000  ENTER LONG   5.800000  4.995906
-2026-10-15 rtt_5020   PHN.MI  72.900002  EXIT SHORT  76.742852       NaN
-2026-10-15 rtt_5020    PQ.MI   2.410000  EXIT SHORT   2.495714       NaN
-2026-10-15 rtt_5020   PRY.MI 109.800003 ENTER SHORT 120.178575  9.452251
-2026-10-15 rtt_5020  RWAY.MI   4.210000 ENTER SHORT   4.377143  3.970138
-2026-10-15 rtt_5020 STMMI.MI  41.400002   EXIT LONG  39.126427       NaN
-2026-10-15 rtt_5020   TRN.MI   9.372000  ENTER LONG   9.075714  3.161393
-2026-10-15 rtt_5020   VNT.MI   0.665000  EXIT SHORT   0.736429       NaN
-2026-10-15 rtt_5020    ZV.MI   6.420000  EXIT SHORT   6.628571       NaN
+ last_date   signal ticker     price      action  stop_loss  risk_pct
+2026-10-16 rtt_5020  BC.MI 87.279999  ENTER LONG  83.271426  4.592774
+2026-10-16 rtt_5020 BZU.MI 38.070000  EXIT SHORT  38.275715       NaN
+2026-10-16 rtt_5020 DOX.MI  3.600000   EXIT LONG   3.480000       NaN
+2026-10-16 rtt_5020 GHC.MI  5.300000   EXIT LONG   4.985714       NaN
+2026-10-16 rtt_5020 LDO.MI 50.419998  EXIT SHORT  50.682859       NaN
+2026-10-16 rtt_5020 MEV.MI  0.089000 ENTER SHORT   0.105071 18.057782
+2026-10-16 rtt_5020 MOL.MI 34.250000  EXIT SHORT  35.699999       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-15)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-16)
 ===============================================================================================
