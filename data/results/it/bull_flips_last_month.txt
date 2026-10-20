@@ -1,6 +1,12 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 131
+window: 1 month ago   events: 135
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-20  (4 bull flips) --
+   PIRC.MI   -1->1    rsma_50100    marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   -1->1    rsma_50100150 marg=NaN  PIRELLI & C Consumer Durables
+   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
+   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
 -- 2026-10-19  (4 bull flips) --
    OS.MI     -1->1    rsma_50100    marg=NaN  OFFICINA STELLARE Electronic Technology
@@ -173,4 +179,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PLC.MI    -1->1    rsma_50100150 marg=NaN  PLC Industrial Services
    WIIT.MI   -1->1    rsma_50100150 marg=NaN  WIIT Technology Services
 
-Most frequent flippers: TLS.MIx24, PIRC.MIx7, CRL.MIx6, BO.MIx6, OVS.MIx6, OS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx26, PIRC.MIx9, CRL.MIx6, BO.MIx6, OVS.MIx6, OS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4, CMB.MIx4
