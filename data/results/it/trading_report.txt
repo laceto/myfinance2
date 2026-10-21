@@ -1,20 +1,16 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-10-15 to 2026-10-20 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-10-15 to 2026-10-21 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-10-20 rtt_5020  BPE.MI 13.066000 ENTER SHORT  13.814286  5.726968
-2026-10-20 rtt_5020  BZU.MI 39.070000  ENTER LONG  37.137143  4.947163
-2026-10-20 rtt_5020   CE.MI 19.809999   EXIT LONG  18.575714       NaN
-2026-10-20 rtt_5020  CMB.MI 79.300003   EXIT LONG  75.228572       NaN
-2026-10-20 rtt_5020 ENAV.MI  4.872000  ENTER LONG   4.660286  4.345531
-2026-10-20 rtt_5020  ETH.MI  1.202000   EXIT LONG   1.127143       NaN
-2026-10-20 rtt_5020 GRAL.MI  0.540000 ENTER SHORT   0.567857  5.158728
-2026-10-20 rtt_5020  KME.MI  0.860000   EXIT LONG   0.821429       NaN
-2026-10-20 rtt_5020 LUVE.MI 62.200001   EXIT LONG  58.428573       NaN
-2026-10-20 rtt_5020 SEIF.MI  0.224000 ENTER SHORT   0.238000  6.250000
-2026-10-20 rtt_5020  TSL.MI  0.072800 ENTER SHORT   0.078043  7.201726
+ last_date   signal  ticker  price      action  stop_loss  risk_pct
+2026-10-21 rtt_5020  AC5.MI   2.08  ENTER LONG   2.017143  3.021977
+2026-10-21 rtt_5020  CLF.MI   0.77   EXIT LONG   0.745143       NaN
+2026-10-21 rtt_5020  CRL.MI  26.50   EXIT LONG  23.971428       NaN
+2026-10-21 rtt_5020  KME.MI   0.85 ENTER SHORT   0.912857  7.394959
+2026-10-21 rtt_5020   PQ.MI   2.38 ENTER SHORT   2.494286  4.801923
+2026-10-21 rtt_5020  SAB.MI  10.65 ENTER SHORT  11.064285  3.890008
+2026-10-21 rtt_5020 SERI.MI   2.26 ENTER SHORT   2.320714  2.686470
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-20)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-10-21)
 ===============================================================================================
