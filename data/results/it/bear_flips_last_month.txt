@@ -1,7 +1,10 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 20
+window: 1 month ago   events: 19
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-21  (1 bear flips) --
+   LDO.MI    1->-1   rsma_50100    marg=si   LEONARDO Electronic Technology
 
 -- 2026-10-20  (1 bear flips) --
    TEN.MI    1->-1   rsma_50100150 marg=si   TENARIS Non-Energy Minerals
@@ -41,8 +44,4 @@ filter: marginabile=si only (short-sellable names)
    FCT.MI    1->-1   rbo_50        marg=si   FINCANTIERI Producer Manufacturing
    FCT.MI    0->-1   rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
 
--- 2026-09-21  (2 bear flips) --
-   UCG.MI    1->-1   rbo_20        marg=si   UNICREDIT Finance
-   UCG.MI    1->0    rtt_5020      marg=si   UNICREDIT Finance
-
-Most frequent flippers: UCG.MIx4, FCT.MIx2, BC.MIx2, LDO.MIx2, BGN.MIx2, ANIM.MIx2, BRE.MIx2, AMP.MIx1, CPR.MIx1, INW.MIx1
+Most frequent flippers: LDO.MIx3, FCT.MIx2, BC.MIx2, BGN.MIx2, UCG.MIx2, ANIM.MIx2, BRE.MIx2, AMP.MIx1, CPR.MIx1, INW.MIx1
