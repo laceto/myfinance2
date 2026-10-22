@@ -1,6 +1,24 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 140
+window: 1 month ago   events: 147
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-22  (16 bull flips) --
+   COM.MI    -1->1    rsma_50100    marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   ERG.MI    -1->1    rsma_50100    marg=si   ERG Utilities
+   FCT.MI    -1->1    rbo_50        marg=si   FINCANTIERI Producer Manufacturing
+   FCT.MI    0->1    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
+   G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
+   G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
+   GHC.MI    -1->1    rbo_150       marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    -1->1    rbo_20        marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    -1->1    rema_50100    marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    0->1    rtt_5020      marg=NaN  GAROFALO HEALTH CARE Health Services
+   ICF.MI    -1->1    rbo_20        marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
+   ICF.MI    0->1    rtt_5020      marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
+   PRO.MI    -1->1    rbo_20        marg=NaN  BCA PROFILO Finance
+   PRO.MI    0->1    rtt_5020      marg=NaN  BCA PROFILO Finance
+   PST.MI    -1->1    rbo_20        marg=si   POSTE ITALIANE Finance
+   PST.MI    -1->0    rtt_5020      marg=si   POSTE ITALIANE Finance
 
 -- 2026-10-21  (5 bull flips) --
    CYB.MI    -1->1    rema_50100    marg=NaN  CYBEROO Technology Services
@@ -175,15 +193,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    ELN.MI    -1->1    rema_50100    marg=NaN  EL.EN Health Technology
    ELN.MI    -1->1    rema_50100150 marg=NaN  EL.EN Health Technology
 
--- 2026-09-22  (9 bull flips) --
-   BAMI.MI   -1->1    rbo_20        marg=si   BANCO BPM Finance
-   BAMI.MI   0->1    rtt_5020      marg=si   BANCO BPM Finance
-   CRL.MI    -1->1    rbo_20        marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   CRL.MI    -1->1    rbo_50        marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   CRL.MI    -1->1    rtt_5020      marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   ELN.MI    -1->1    rbo_50        marg=NaN  EL.EN Health Technology
-   ELN.MI    0->1    rtt_5020      marg=NaN  EL.EN Health Technology
-   PLC.MI    -1->1    rsma_50100150 marg=NaN  PLC Industrial Services
-   WIIT.MI   -1->1    rsma_50100150 marg=NaN  WIIT Technology Services
-
-Most frequent flippers: TLS.MIx28, PIRC.MIx9, CYB.MIx7, CRL.MIx6, BO.MIx6, OVS.MIx6, OS.MIx6, TEN.MIx5, ELN.MIx4, VIM.MIx4
+Most frequent flippers: TLS.MIx28, PIRC.MIx9, GHC.MIx7, CYB.MIx7, BO.MIx6, OVS.MIx6, OS.MIx6, TEN.MIx5, VIM.MIx4, FCT.MIx4
