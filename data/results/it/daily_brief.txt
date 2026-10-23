@@ -1,148 +1,134 @@
 
 ====================================================================================================
-  DAILY BRIEF — 2026-10-22   (min_score=3  max_days=60  top_n=30  LM=on)
+  DAILY BRIEF — 2026-10-23   (min_score=3  max_days=60  top_n=30  LM=on)
 ====================================================================================================
 
-  BULL CANDIDATES  (11 stocks)  — ranked by conviction (score + momentum + trend - staleness)
+  BULL CANDIDATES  (10 stocks)  — ranked by conviction (score + momentum + trend - staleness)
 ------------------------------------------------------------
 conviction score score_delta  symbol             name                sector days_since_change     rl3 daily_return
-    10.170    10       0.000  PRT.MI         ESPRINET Distribution Services                50   2.671       -0.040
-     9.630    10       0.000 BMED.MI BANCA MEDIOLANUM               Finance                22   7.920       -0.028
-     6.880     6       0.000  OVS.MI              OVS          Retail Trade                 7   2.120       -0.029
-     6.530     6       0.000 RACE.MI          FERRARI     Consumer Durables                28 125.219        0.002
-     6.370     6       0.000  ENI.MI              ENI       Energy Minerals                38   7.858       -0.010
-     5.950     6       0.000 NEXI.MI             NEXI               Finance                 3   1.664       -0.007
-     4.830     4       0.000  SFL.MI     SAFILO GROUP     Health Technology                10   0.637        0.001
-     3.970     4       0.000  BPE.MI       BPER BANCA               Finance                 2   4.753       -0.033
-     3.780     4       0.000  UNI.MI           UNIPOL               Finance                13  10.132       -0.027
-     3.770     4       0.000  ISP.MI  INTESA SANPAOLO               Finance                14   2.238       -0.038
-     3.720     4       0.000   MB.MI       MEDIOBANCA               Finance                17   7.055       -0.025
+    10.150    10       0.000  PRT.MI         ESPRINET Distribution Services                51   2.671        0.007
+    10.000     8       4.000  SFL.MI     SAFILO GROUP     Health Technology                 0   0.637       -0.010
+     9.620    10       0.000 BMED.MI BANCA MEDIOLANUM               Finance                23   7.920       -0.011
+     6.870     6       0.000  OVS.MI              OVS          Retail Trade                 8   2.120       -0.019
+     6.520     6       0.000 RACE.MI          FERRARI     Consumer Durables                29 125.219       -0.013
+     6.350     6       0.000  ENI.MI              ENI       Energy Minerals                39   7.858        0.058
+     5.930     6       0.000 NEXI.MI             NEXI               Finance                 4   1.664       -0.009
+     3.950     4       0.000  BPE.MI       BPER BANCA               Finance                 3   4.753       -0.007
+     3.770     4       0.000  UNI.MI           UNIPOL               Finance                14  10.132       -0.010
+     3.700     4       0.000   MB.MI       MEDIOBANCA               Finance                18   7.055        0.006
 
-  BEAR CANDIDATES  (14 stocks, marginabile only)
+  BEAR CANDIDATES  (17 stocks, marginabile only)
 ------------------------------------------------------------
-conviction score score_delta  symbol        name                sector days_since_change    rh3 daily_return
-    -5.720    -6       0.000 JUVE.MI JUVENTUS FC     Consumer Services                43  1.386       -0.001
-    -3.850    -3       0.000 TNXT.MI     TINEXTA   Technology Services                51  7.255        0.001
-    -2.230    -3       0.000 MONC.MI     MONCLER Consumer Non-Durables                14 23.663        0.026
-    -2.120    -3       0.000  HER.MI        HERA             Utilities                 7  1.989        0.000
-    -2.020    -3       0.000  LDO.MI    LEONARDO Electronic Technology                 1 23.627        0.003
-    -0.500    -3       3.000  WBD.MI     WEBUILD   Industrial Services                 0  0.914       -0.034
-     3.880     4       0.000 BAMI.MI   BANCO BPM               Finance                 7  6.740       -0.042
-     4.770     4       0.000  UCG.MI   UNICREDIT               Finance                14 34.441       -0.047
-     5.530     6       0.000  DIA.MI    DIASORIN     Health Technology                28 34.373        0.019
-     5.650     6       0.000  AMP.MI    AMPLIFON Distribution Services                21  4.774        0.009
-     5.780     6       0.000  SPM.MI      SAIPEM   Industrial Services                13  1.977       -0.060
-     5.970     6       0.000  TEN.MI     TENARIS   Non-Energy Minerals                 2 11.278       -0.051
-     7.150     7       0.000  DAL.MI   DATALOGIC Electronic Technology                51  2.437        0.000
-     9.830    10       0.000  REY.MI       REPLY   Commercial Services                10 45.404       -0.010
+conviction score score_delta  symbol                name                sector days_since_change    rh3 daily_return
+    -6.000    -6       0.000 SFER.MI SALVATORE FERRAGAMO Consumer Non-Durables                 0  4.543       -0.069
+    -5.730    -6       0.000 JUVE.MI         JUVENTUS FC     Consumer Services                44  1.386       -0.027
+    -3.870    -3       0.000 TNXT.MI             TINEXTA   Technology Services                52  7.255        0.001
+    -2.480    -3       0.000 TGYM.MI           TECHNOGYM     Consumer Durables                29  4.785       -0.012
+    -2.250    -3       0.000 MONC.MI             MONCLER Consumer Non-Durables                15 23.663       -0.032
+    -2.130    -3       0.000  HER.MI                HERA             Utilities                 8  1.989        0.005
+    -2.030    -3       0.000  LDO.MI            LEONARDO Electronic Technology                 2 23.627        0.003
+    -2.020    -3       0.000  WBD.MI             WEBUILD   Industrial Services                 1  0.914        0.009
+     4.000     4       0.000  ISP.MI     INTESA SANPAOLO               Finance                 0  2.745        0.004
+     4.750     4       0.000  UCG.MI           UNICREDIT               Finance                15 34.441        0.005
+     4.870     4       0.000 BAMI.MI           BANCO BPM               Finance                 8  6.740        0.011
+     5.520     6       0.000  DIA.MI            DIASORIN     Health Technology                29 30.495        0.001
+     5.630     6       0.000  AMP.MI            AMPLIFON Distribution Services                22  5.550       -0.015
+     5.770     6       0.000  SPM.MI              SAIPEM   Industrial Services                14  1.977        0.042
+     5.950     6       0.000  TEN.MI             TENARIS   Non-Energy Minerals                 3 11.278        0.045
+     7.130     7       0.000  DAL.MI           DATALOGIC Electronic Technology                52  2.437        0.000
+     9.820    10       0.000  REY.MI               REPLY   Commercial Services                11 45.404        0.008
 
   REGIME FLIPS — last 30 days  (19 events)
 ------------------------------------------------------------
 date_regime_change  symbol                         name  rrg
+        2026-10-23  ISP.MI              INTESA SANPAOLO -1.0
+        2026-10-23 SFER.MI          SALVATORE FERRAGAMO -1.0
         2026-10-22   IG.MI                      ITALGAS -1.0
         2026-10-20   SL.MI                   SANLORENZO  1.0
-        2026-10-19 NEXI.MI                         NEXI  1.0
         2026-10-19  TEN.MI                      TENARIS -1.0
-        2026-10-15  SRG.MI                         SNAM  1.0
+        2026-10-19 NEXI.MI                         NEXI  1.0
         2026-10-15  TIP.MI                      TAMBURI  1.0
-        2026-10-15 CALT.MI                  CALTAGIRONE  1.0
+        2026-10-15  SRG.MI                         SNAM  1.0
         2026-10-15 BAMI.MI                    BANCO BPM -1.0
+        2026-10-15 CALT.MI                  CALTAGIRONE  1.0
         2026-10-13  ERG.MI                          ERG  1.0
-        2026-10-12  CED.MI             CALTAGIRONE EDIT  1.0
         2026-10-12  SGC.MI                   SG COMPANY  1.0
-        2026-10-09  SFL.MI                 SAFILO GROUP  1.0
+        2026-10-12  CED.MI             CALTAGIRONE EDIT  1.0
         2026-10-09  CYB.MI                      CYBEROO  1.0
-        2026-10-09  DLG.MI                    DE'LONGHI  1.0
+        2026-10-09  SFL.MI                 SAFILO GROUP  1.0
         2026-10-07 LUVE.MI                         LUVE  1.0
         2026-10-05  BGN.MI               BANCA GENERALI -1.0
         2026-10-01  ENV.MI                      ENERVIT  1.0
         2026-09-28  ICF.MI INDUSTRIE CHIMICHE FORESTALI  1.0
-        2026-09-25 TGYM.MI                    TECHNOGYM  1.0
 
-  VOLUME MOVERS — 2026-10-22  (top 15)
+  VOLUME MOVERS — 2026-10-23  (top 15)
 ------------------------------------------------------------
   symbol                     name                 sector     volume
-  ISP.MI          INTESA SANPAOLO                Finance 58121258.0
-STLAM.MI               STELLANTIS      Consumer Durables 44215200.0
-  FDA.MI                    FIDIA Producer Manufacturing 32097336.0
-  SPM.MI                   SAIPEM    Industrial Services 20543618.0
- ENEL.MI                     ENEL              Utilities 13192280.0
- BMPS.MI BANCA MONTE PASCHI SIENA                Finance 12857934.0
-  ENI.MI                      ENI        Energy Minerals  8619214.0
- BAMI.MI                BANCO BPM                Finance  6729844.0
-  HER.MI                     HERA              Utilities  6463578.0
-  BPE.MI               BPER BANCA                Finance  6065554.0
- NEXI.MI                     NEXI                Finance  5875134.0
-  CPR.MI                  CAMPARI  Consumer Non-Durables  5472031.0
-  SRG.MI                     SNAM              Utilities  5024179.0
-  UCG.MI                UNICREDIT                Finance  4756102.0
-  A2A.MI                      A2A              Utilities  4155760.0
+STLAM.MI               STELLANTIS      Consumer Durables 73172503.0
+  ISP.MI          INTESA SANPAOLO                Finance 49018359.0
+  FDA.MI                    FIDIA Producer Manufacturing 34160125.0
+  SPM.MI                   SAIPEM    Industrial Services 17690897.0
+  ENI.MI                      ENI        Energy Minerals 15995032.0
+ ENEL.MI                     ENEL              Utilities 13490532.0
+  A2A.MI                      A2A              Utilities  8904150.0
+ BMPS.MI BANCA MONTE PASCHI SIENA                Finance  8176287.0
+  BPE.MI               BPER BANCA                Finance  5157885.0
+  CPR.MI                  CAMPARI  Consumer Non-Durables  5116765.0
+  SRG.MI                     SNAM              Utilities  4981881.0
+ NEXI.MI                     NEXI                Finance  4879261.0
+ BAMI.MI                BANCO BPM                Finance  4550351.0
+  UCG.MI                UNICREDIT                Finance  4136999.0
+STMMI.MI                      NaN                    NaN  3491488.0
 
-  SIGNAL FLIPS — last bar  (21 flips across 8 methods)
+  SIGNAL FLIPS — last bar  (17 flips across 7 methods)
 ------------------------------------------------------------
   [rbo_150]
-direction symbol                 name          sector marginabile change
-bull_flip GHC.MI GAROFALO HEALTH CARE Health Services         NaN -1 → 1
+direction symbol     name    sector marginabile change
+bull_flip GSP.MI GAS PLUS Utilities         NaN -1 → 1
 
   [rbo_20]
-direction symbol                         name             sector marginabile change
-bull_flip   G.MI                 GENERALI ASS            Finance         NaN -1 → 1
-bull_flip GHC.MI         GAROFALO HEALTH CARE    Health Services         NaN -1 → 1
-bull_flip ICF.MI INDUSTRIE CHIMICHE FORESTALI Process Industries         NaN -1 → 1
-bull_flip PRO.MI                  BCA PROFILO            Finance         NaN -1 → 1
-bull_flip PST.MI               POSTE ITALIANE            Finance          si -1 → 1
+direction symbol            name              sector marginabile change
+bear_flip CBB.MI        CLEANBNB Technology Services         NaN 1 → -1
+bear_flip GIS.MI   GISMONDI 1754   Consumer Durables         NaN 1 → -1
+bear_flip VNT.MI    VANTEA SMART Technology Services         NaN 1 → -1
+bull_flip MET.MI MET.EXTRA GROUP             Finance         NaN -1 → 1
 
   [rbo_50]
-direction symbol        name                 sector marginabile change
-bull_flip FCT.MI FINCANTIERI Producer Manufacturing          si -1 → 1
+direction symbol            name  sector marginabile change
+bull_flip MET.MI MET.EXTRA GROUP Finance         NaN -1 → 1
+
+  [rema_100150]
+direction symbol         name            sector marginabile change
+bull_flip SFL.MI SAFILO GROUP Health Technology          si -1 → 1
 
   [rema_50100]
-direction symbol                 name              sector marginabile change
-bear_flip DIB.MI         DIGITAL BROS Technology Services         NaN 1 → -1
-bull_flip GHC.MI GAROFALO HEALTH CARE     Health Services         NaN -1 → 1
+direction symbol                         name             sector marginabile change
+bull_flip ICF.MI INDUSTRIE CHIMICHE FORESTALI Process Industries         NaN -1 → 1
 
   [rema_50100150]
-direction  symbol               name            sector marginabile change
-bear_flip ARBS.MI ARTERRA BIOSCIENCE Health Technology         NaN 1 → -1
-bear_flip  INW.MI              INWIT    Communications          si 1 → -1
-
-  [rsma_50100]
 direction symbol             name                 sector marginabile change
-bear_flip BGN.MI   BANCA GENERALI                Finance          si 1 → -1
-bull_flip COM.MI COMER INDUSTRIES Producer Manufacturing         NaN -1 → 1
-bull_flip ERG.MI              ERG              Utilities          si -1 → 1
-
-  [rsma_50100150]
-direction symbol           name  sector marginabile change
-bear_flip BGN.MI BANCA GENERALI Finance          si 1 → -1
+bear_flip A2A.MI              A2A              Utilities          si 1 → -1
+bear_flip LFG.MI LEONE FILM GROUP      Consumer Services         NaN 1 → -1
+bear_flip VLS.MI          VALSOIA  Consumer Non-Durables         NaN 1 → -1
+bull_flip PRY.MI         PRYSMIAN Producer Manufacturing          si -1 → 1
+bull_flip SFL.MI     SAFILO GROUP      Health Technology          si -1 → 1
 
   [rtt_5020]
-direction symbol                         name                 sector marginabile change
-bull_flip FCT.MI                  FINCANTIERI Producer Manufacturing          si  0 → 1
-bull_flip   G.MI                 GENERALI ASS                Finance         NaN  0 → 1
-bull_flip GHC.MI         GAROFALO HEALTH CARE        Health Services         NaN  0 → 1
-bull_flip ICF.MI INDUSTRIE CHIMICHE FORESTALI     Process Industries         NaN  0 → 1
-bull_flip PRO.MI                  BCA PROFILO                Finance         NaN  0 → 1
-bull_flip PST.MI               POSTE ITALIANE                Finance          si -1 → 0
+direction symbol            name              sector marginabile change
+bear_flip CBB.MI        CLEANBNB Technology Services         NaN  1 → 0
+bear_flip GIS.MI   GISMONDI 1754   Consumer Durables         NaN  1 → 0
+bear_flip VNT.MI    VANTEA SMART Technology Services         NaN 0 → -1
+bull_flip MET.MI MET.EXTRA GROUP             Finance         NaN -1 → 1
 
 ====================================================================================================
   Full detail -> data/results/it/daily_brief.xlsx
 ====================================================================================================
-  [rsma_50100150]
-direction symbol           name  sector marginabile change
-bear_flip BGN.MI BANCA GENERALI Finance          si 1 → -1
-
-  [rtt_5020]
-direction symbol                         name                 sector marginabile change
-bull_flip FCT.MI                  FINCANTIERI Producer Manufacturing          si  0 → 1
-bull_flip   G.MI                 GENERALI ASS                Finance         NaN  0 → 1
-bull_flip GHC.MI         GAROFALO HEALTH CARE        Health Services         NaN  0 → 1
-bull_flip ICF.MI INDUSTRIE CHIMICHE FORESTALI     Process Industries         NaN  0 → 1
-bull_flip PRO.MI                  BCA PROFILO                Finance         NaN  0 → 1
-bull_flip PST.MI               POSTE ITALIANE                Finance          si -1 → 0
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            I   GISMONDI 1754   Consumer Durables         NaN  1 → 0
+bear_flip VNT.MI    VANTEA SMART Technology Services         NaN 0 → -1
+bull_flip MET.MI MET.EXTRA GROUP             Finance         NaN -1 → 1
 
 ====================================================================================================
   Full detail -> data/results/it/daily_brief.xlsx
 ====================================================================================================
 
-2026-10-22 23:56:00,888 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
+2026-10-23 23:48:23,708 [INFO] Morning brief saved -> data/results/it/daily_brief.txt
