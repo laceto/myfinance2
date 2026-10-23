@@ -1,7 +1,10 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 22
+window: 1 month ago   events: 23
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-23  (1 bear flips) --
+   A2A.MI    1->-1   rema_50100150 marg=si   A2A Utilities
 
 -- 2026-10-22  (3 bear flips) --
    BGN.MI    1->-1   rsma_50100    marg=si   BANCA GENERALI Finance
