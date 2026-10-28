@@ -1,11 +1,12 @@
 ETF price artifacts (suspect split / re-denomination — excluded from rankings)
 criterion: |single-day close change| > 50% within the last 1095d
-flagged: 13
+flagged: 15
 
   1VET.L     1Valour Ethereum Physical Staking
   AADA.AS    21shares Cardano ETP
   ADOT.AS    21shares Polkadot ETP
   AXRP.AS    21shares XRP ETP
+  BNKE.PA    Amundi Euro Stoxx Banks UCITS ETF Acc
   ELTC.AS    Bitwise Physical Litecoin ETP
   FXGB.L     First Trust FactorFX UCITS ETF GBP Hedged Acc
   JPXX.L     Amundi MSCI Japan SRI Climate Paris Aligned UCITS ETF DR - GBP Hedged (C)
@@ -14,4 +15,5 @@ flagged: 13
   MIVO.L     Amundi MSCI Europe Minimum Volatility Factor UCITS ETF EUR (C)
   RNDR.AS    21Shares Render ETP
   SDVI.L     First Trust SMID Rising Dividend Achievers UCITS ETF Class B Distribution
+  SP5C.PA    Amundi Core S&P 500 Swap UCITS ETF Acc
   SPEQ.MI    Invesco S&P 500 Equal Weight UCITS ETF Acc
