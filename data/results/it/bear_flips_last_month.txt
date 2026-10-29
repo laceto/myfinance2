@@ -1,7 +1,12 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 31
+window: 1 month ago   events: 34
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-10-28  (3 bear flips) --
+   IP.MI     1->-1   rema_50100150 marg=si   INTERPUMP GROUP Producer Manufacturing
+   MONC.MI   1->-1   rbo_20        marg=si   MONCLER Consumer Non-Durables
+   MONC.MI   0->-1   rtt_5020      marg=si   MONCLER Consumer Non-Durables
 
 -- 2026-10-27  (5 bear flips) --
    BAMI.MI   1->-1   rsma_50100    marg=si   BANCO BPM Finance
@@ -62,4 +67,4 @@ filter: marginabile=si only (short-sellable names)
 -- 2026-09-28  (1 bear flips) --
    AMP.MI    1->-1   rema_50100150 marg=si   AMPLIFON Distribution Services
 
-Most frequent flippers: BAMI.MIx5, BGN.MIx4, BRE.MIx4, BC.MIx3, LDO.MIx3, UCG.MIx2, ANIM.MIx2, INW.MIx2, TGYM.MIx2, AMP.MIx1
+Most frequent flippers: BAMI.MIx5, BGN.MIx4, BRE.MIx4, BC.MIx3, LDO.MIx3, UCG.MIx2, ANIM.MIx2, INW.MIx2, TGYM.MIx2, MONC.MIx2
