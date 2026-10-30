@@ -1,6 +1,17 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 158
+window: 1 month ago   events: 160
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-29  (9 bull flips) --
+   DAN.MI    -1->1    rbo_20        marg=si   DANIELI & C Producer Manufacturing
+   DAN.MI    -1->0    rtt_5020      marg=si   DANIELI & C Producer Manufacturing
+   GSP.MI    -1->1    rsma_100150   marg=NaN  GAS PLUS Utilities
+   GSP.MI    -1->1    rsma_50100150 marg=NaN  GAS PLUS Utilities
+   IOT.MI    -1->1    rbo_20        marg=NaN  SECO Electronic Technology
+   IOT.MI    0->1    rtt_5020      marg=NaN  SECO Electronic Technology
+   POPR.MI   -1->1    rema_50100    marg=NaN  POLIGRAFICI PRINTING Consumer Services
+   SFT.MI    -1->1    rsma_50100    marg=NaN  SOFTLAB Technology Services
+   SFT.MI    -1->1    rsma_50100150 marg=NaN  SOFTLAB Technology Services
 
 -- 2026-10-28  (5 bull flips) --
    FCT.MI    -1->1    rsma_100150   marg=si   FINCANTIERI Producer Manufacturing
@@ -195,15 +206,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    PIRC.MI   -1->1    rbo_50        marg=NaN  PIRELLI & C Consumer Durables
    PIRC.MI   0->1    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
 
--- 2026-09-29  (4 bull flips) --
-   OS.MI     -1->1    rbo_20        marg=NaN  OFFICINA STELLARE Electronic Technology
-   OS.MI     -1->0    rtt_5020      marg=NaN  OFFICINA STELLARE Electronic Technology
-   PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
-   PIRC.MI   -1->0    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
-
--- 2026-09-28  (3 bull flips) --
-   OVS.MI    -1->1    rbo_20        marg=si   OVS Retail Trade
-   OVS.MI    -1->0    rtt_5020      marg=si   OVS Retail Trade
-   PRY.MI    -1->1    rsma_50100150 marg=si   PRYSMIAN Producer Manufacturing
-
-Most frequent flippers: TLS.MIx28, PIRC.MIx9, GHC.MIx7, CYB.MIx7, OVS.MIx6, OS.MIx6, FCT.MIx6, TEN.MIx5, SFL.MIx5, PRY.MIx4
+Most frequent flippers: TLS.MIx28, PIRC.MIx7, GHC.MIx7, CYB.MIx7, FCT.MIx6, TEN.MIx5, SFL.MIx5, GSP.MIx5, OS.MIx4, BO.MIx4
