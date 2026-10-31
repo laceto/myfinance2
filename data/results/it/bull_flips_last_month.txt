@@ -1,6 +1,13 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 160
+window: 1 month ago   events: 158
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-10-30  (5 bull flips) --
+   COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   COM.MI    -1->0    rtt_5020      marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   ELN.MI    -1->1    rsma_50100    marg=NaN  EL.EN Health Technology
+   ELN.MI    -1->1    rsma_50100150 marg=NaN  EL.EN Health Technology
+   POPR.MI   -1->1    rsma_50100    marg=NaN  POLIGRAFICI PRINTING Consumer Services
 
 -- 2026-10-29  (9 bull flips) --
    DAN.MI    -1->1    rbo_20        marg=si   DANIELI & C Producer Manufacturing
@@ -197,13 +204,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
    SPM.MI    0->1    rtt_5020      marg=si   SAIPEM Industrial Services
 
--- 2026-09-30  (7 bull flips) --
-   BMED.MI   -1->1    rbo_20        marg=si   BANCA MEDIOLANUM Finance
-   BMED.MI   0->1    rtt_5020      marg=si   BANCA MEDIOLANUM Finance
-   CRL.MI    -1->1    rsma_50100150 marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   IG.MI     -1->1    rbo_20        marg=si   ITALGAS Utilities
-   IG.MI     -1->0    rtt_5020      marg=si   ITALGAS Utilities
-   PIRC.MI   -1->1    rbo_50        marg=NaN  PIRELLI & C Consumer Durables
-   PIRC.MI   0->1    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
-
-Most frequent flippers: TLS.MIx28, PIRC.MIx7, GHC.MIx7, CYB.MIx7, FCT.MIx6, TEN.MIx5, SFL.MIx5, GSP.MIx5, OS.MIx4, BO.MIx4
+Most frequent flippers: TLS.MIx28, GHC.MIx7, CYB.MIx7, FCT.MIx6, TEN.MIx5, PIRC.MIx5, SFL.MIx5, GSP.MIx5, OS.MIx4, BO.MIx4
