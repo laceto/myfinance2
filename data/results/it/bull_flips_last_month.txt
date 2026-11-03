@@ -1,6 +1,11 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 158
+window: 1 month ago   events: 147
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-02  (3 bull flips) --
+   RACE.MI   -1->1    rema_100150   marg=si   FERRARI Consumer Durables
+   RACE.MI   -1->1    rema_50100150 marg=si   FERRARI Consumer Durables
+   SGF.MI    -1->1    rbo_150       marg=NaN  SOGEFI Producer Manufacturing
 
 -- 2026-10-30  (5 bull flips) --
    COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
@@ -186,22 +191,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
--- 2026-10-02  (4 bull flips) --
-   FM.MI     -1->1    rbo_20        marg=NaN  FIERA MILANO Commercial Services
-   FM.MI     -1->0    rtt_5020      marg=NaN  FIERA MILANO Commercial Services
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-01  (10 bull flips) --
-   CED.MI    -1->1    rbo_20        marg=NaN  CALTAGIRONE EDIT Consumer Services
-   CED.MI    0->1    rtt_5020      marg=NaN  CALTAGIRONE EDIT Consumer Services
-   FCT.MI    -1->1    rbo_20        marg=si   FINCANTIERI Producer Manufacturing
-   FCT.MI    -1->0    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
-   OS.MI     -1->1    rbo_50        marg=NaN  OFFICINA STELLARE Electronic Technology
-   OS.MI     0->1    rtt_5020      marg=NaN  OFFICINA STELLARE Electronic Technology
-   PRY.MI    -1->1    rbo_50        marg=si   PRYSMIAN Producer Manufacturing
-   PRY.MI    0->1    rtt_5020      marg=si   PRYSMIAN Producer Manufacturing
-   SPM.MI    -1->1    rbo_20        marg=si   SAIPEM Industrial Services
-   SPM.MI    0->1    rtt_5020      marg=si   SAIPEM Industrial Services
-
-Most frequent flippers: TLS.MIx28, GHC.MIx7, CYB.MIx7, FCT.MIx6, TEN.MIx5, PIRC.MIx5, SFL.MIx5, GSP.MIx5, OS.MIx4, BO.MIx4
+Most frequent flippers: TLS.MIx26, GHC.MIx7, CYB.MIx7, TEN.MIx5, PIRC.MIx5, SFL.MIx5, GSP.MIx5, BO.MIx4, CMB.MIx4, SFT.MIx4
