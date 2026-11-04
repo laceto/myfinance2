@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 147
+window: 1 month ago   events: 149
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-03  (2 bull flips) --
+   SL.MI     -1->1    rbo_20        marg=NaN  SANLORENZO Consumer Durables
+   SL.MI     -1->0    rtt_5020      marg=NaN  SANLORENZO Consumer Durables
 
 -- 2026-11-02  (3 bull flips) --
    RACE.MI   -1->1    rema_100150   marg=si   FERRARI Consumer Durables
