@@ -1,7 +1,12 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 46
+window: 1 month ago   events: 49
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-04  (3 bear flips) --
+   ENAV.MI   1->-1   rsma_50100150 marg=si   ENAV Transportation
+   IRE.MI    1->-1   rbo_20        marg=si   IREN Utilities
+   IRE.MI    1->0    rtt_5020      marg=si   IREN Utilities
 
 -- 2026-11-03  (7 bear flips) --
    ANIM.MI   1->-1   rbo_20        marg=si   ANIMA HOLDING Finance
