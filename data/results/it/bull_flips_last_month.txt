@@ -1,6 +1,22 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 155
+window: 1 month ago   events: 169
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-05  (14 bull flips) --
+   BMPS.MI   -1->1    rbo_20        marg=NaN  BANCA MONTE PASCHI SIENA Finance
+   BMPS.MI   -1->0    rtt_5020      marg=NaN  BANCA MONTE PASCHI SIENA Finance
+   CDG.MI    -1->1    rsma_100150   marg=NaN  CASTA DIVA GROUP Commercial Services
+   CDG.MI    -1->1    rsma_50100150 marg=NaN  CASTA DIVA GROUP Commercial Services
+   CDG.MI    -1->1    rtt_5020      marg=NaN  CASTA DIVA GROUP Commercial Services
+   CYB.MI    -1->1    rema_50100150 marg=NaN  CYBEROO Technology Services
+   SOL.MI    -1->1    rbo_150       marg=NaN  SOL Process Industries
+   SOL.MI    -1->1    rsma_50100    marg=NaN  SOL Process Industries
+   SOM.MI    -1->1    rsma_50100    marg=NaN  SOMEC Consumer Durables
+   SOM.MI    -1->1    rsma_50100150 marg=NaN  SOMEC Consumer Durables
+   UCG.MI    -1->1    rbo_20        marg=si   UNICREDIT Finance
+   UCG.MI    -1->0    rtt_5020      marg=si   UNICREDIT Finance
+   UNI.MI    -1->1    rbo_20        marg=si   UNIPOL Finance
+   UNI.MI    -1->0    rtt_5020      marg=si   UNIPOL Finance
 
 -- 2026-11-04  (6 bull flips) --
    FARM.MI   -1->1    rsma_50100    marg=NaN  H-FARM Commercial Services
@@ -203,4 +219,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
-Most frequent flippers: TLS.MIx26, GHC.MIx7, CYB.MIx7, TEN.MIx5, PIRC.MIx5, SFL.MIx5, ICF.MIx5, GSP.MIx5, BO.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx26, CYB.MIx8, GHC.MIx7, TEN.MIx5, PIRC.MIx5, SFL.MIx5, ICF.MIx5, GSP.MIx5, BO.MIx4, CMB.MIx4
