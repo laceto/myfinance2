@@ -3,6 +3,10 @@ window: 1 month ago   events: 51
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
 
+-- 2026-11-06  (2 bear flips) --
+   BC.MI     1->-1   rsma_50100    marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   ENAV.MI   1->-1   rema_50100150 marg=si   ENAV Transportation
+
 -- 2026-11-05  (2 bear flips) --
    BRE.MI    1->-1   rbo_20        marg=si   BREMBO Producer Manufacturing
    BRE.MI    1->0    rtt_5020      marg=si   BREMBO Producer Manufacturing
@@ -86,8 +90,4 @@ filter: marginabile=si only (short-sellable names)
    UCG.MI    1->-1   rbo_50        marg=si   UNICREDIT Finance
    UCG.MI    0->-1   rtt_5020      marg=si   UNICREDIT Finance
 
--- 2026-10-05  (2 bear flips) --
-   BGN.MI    1->-1   rbo_50        marg=si   BANCA GENERALI Finance
-   BGN.MI    0->-1   rtt_5020      marg=si   BANCA GENERALI Finance
-
-Most frequent flippers: BGN.MIx6, UCG.MIx6, BRE.MIx6, BAMI.MIx5, ANIM.MIx4, BC.MIx3, INW.MIx2, TGYM.MIx2, MONC.MIx2, ERG.MIx2
+Most frequent flippers: UCG.MIx6, BRE.MIx6, BAMI.MIx5, ANIM.MIx4, BC.MIx4, BGN.MIx4, INW.MIx2, TGYM.MIx2, MONC.MIx2, ERG.MIx2

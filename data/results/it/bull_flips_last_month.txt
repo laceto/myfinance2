@@ -1,6 +1,19 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 169
+window: 1 month ago   events: 163
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-06  (11 bull flips) --
+   ENI.MI    -1->1    rsma_100150   marg=si   ENI Energy Minerals
+   ENI.MI    -1->1    rsma_50100150 marg=si   ENI Energy Minerals
+   PINF.MI   -1->1    rbo_20        marg=NaN  PININFARINA SPA Consumer Durables
+   PINF.MI   0->1    rtt_5020      marg=NaN  PININFARINA SPA Consumer Durables
+   PIRC.MI   -1->1    rbo_20        marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   -1->1    rema_100150   marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   -1->1    rema_50100150 marg=NaN  PIRELLI & C Consumer Durables
+   PIRC.MI   0->1    rtt_5020      marg=NaN  PIRELLI & C Consumer Durables
+   PST.MI    -1->1    rsma_50100150 marg=si   POSTE ITALIANE Finance
+   SOL.MI    -1->1    rema_100150   marg=NaN  SOL Process Industries
+   SOL.MI    -1->1    rema_50100150 marg=NaN  SOL Process Industries
 
 -- 2026-11-05  (14 bull flips) --
    BMPS.MI   -1->1    rbo_20        marg=NaN  BANCA MONTE PASCHI SIENA Finance
@@ -198,25 +211,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
--- 2026-10-06  (11 bull flips) --
-   CMB.MI    -1->1    rbo_50        marg=NaN  CEMBRE Electronic Technology
-   CMB.MI    0->1    rtt_5020      marg=NaN  CEMBRE Electronic Technology
-   GVS.MI    -1->1    rema_100150   marg=NaN  GVS Electronic Technology
-   GVS.MI    -1->1    rema_50100150 marg=NaN  GVS Electronic Technology
-   SFER.MI   -1->1    rema_50100150 marg=si   SALVATORE FERRAGAMO Consumer Non-Durables
-   SFT.MI    -1->1    rbo_50        marg=NaN  SOFTLAB Technology Services
-   SFT.MI    0->1    rtt_5020      marg=NaN  SOFTLAB Technology Services
-   SOM.MI    -1->1    rbo_50        marg=NaN  SOMEC Consumer Durables
-   SOM.MI    0->1    rtt_5020      marg=NaN  SOMEC Consumer Durables
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-05  (6 bull flips) --
-   BO.MI     -1->1    rema_50100    marg=NaN  BORGOSESIA Finance
-   TEN.MI    -1->1    rbo_50        marg=si   TENARIS Non-Energy Minerals
-   TEN.MI    -1->1    rema_100150   marg=si   TENARIS Non-Energy Minerals
-   TEN.MI    0->1    rtt_5020      marg=si   TENARIS Non-Energy Minerals
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
-Most frequent flippers: TLS.MIx26, CYB.MIx8, GHC.MIx7, TEN.MIx5, PIRC.MIx5, SFL.MIx5, ICF.MIx5, GSP.MIx5, BO.MIx4, CMB.MIx4
+Most frequent flippers: TLS.MIx22, PIRC.MIx9, CYB.MIx8, GHC.MIx7, SFL.MIx5, ICF.MIx5, GSP.MIx5, FARM.MIx4, OVS.MIx4, FCT.MIx4
