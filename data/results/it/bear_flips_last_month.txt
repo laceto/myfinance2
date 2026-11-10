@@ -1,7 +1,13 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 51
+window: 1 month ago   events: 50
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-09  (4 bear flips) --
+   INW.MI    1->-1   rbo_20        marg=si   INWIT Communications
+   INW.MI    1->0    rtt_5020      marg=si   INWIT Communications
+   LDO.MI    1->-1   rbo_20        marg=si   LEONARDO Electronic Technology
+   LDO.MI    0->-1   rtt_5020      marg=si   LEONARDO Electronic Technology
 
 -- 2026-11-06  (2 bear flips) --
    BC.MI     1->-1   rsma_50100    marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
@@ -81,13 +87,4 @@ filter: marginabile=si only (short-sellable names)
    ANIM.MI   1->-1   rsma_50100150 marg=si   ANIMA HOLDING Finance
    INW.MI    1->-1   rsma_50100150 marg=si   INWIT Communications
 
--- 2026-10-09  (3 bear flips) --
-   ANIM.MI   1->-1   rema_50100150 marg=si   ANIMA HOLDING Finance
-   BC.MI     1->-1   rsma_50100    marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
-   CPR.MI    1->-1   rema_50100150 marg=si   CAMPARI Consumer Non-Durables
-
--- 2026-10-08  (2 bear flips) --
-   UCG.MI    1->-1   rbo_50        marg=si   UNICREDIT Finance
-   UCG.MI    0->-1   rtt_5020      marg=si   UNICREDIT Finance
-
-Most frequent flippers: UCG.MIx6, BRE.MIx6, BAMI.MIx5, ANIM.MIx4, BC.MIx4, BGN.MIx4, INW.MIx2, TGYM.MIx2, MONC.MIx2, ERG.MIx2
+Most frequent flippers: BRE.MIx6, BAMI.MIx5, INW.MIx4, BGN.MIx4, UCG.MIx4, ANIM.MIx3, LDO.MIx3, BC.MIx3, TGYM.MIx2, MONC.MIx2

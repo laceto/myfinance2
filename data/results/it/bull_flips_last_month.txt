@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 163
+window: 1 month ago   events: 133
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-09  (2 bull flips) --
+   IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
+   IEG.MI    0->1    rtt_5020      marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
 
 -- 2026-11-06  (11 bull flips) --
    ENI.MI    -1->1    rsma_100150   marg=si   ENI Energy Minerals
@@ -173,42 +177,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
--- 2026-10-09  (13 bull flips) --
-   CYB.MI    -1->1    rbo_150       marg=NaN  CYBEROO Technology Services
-   DLG.MI    -1->1    rbo_150       marg=NaN  DE'LONGHI Consumer Durables
-   ETH.MI    -1->1    rsma_50100    marg=NaN  EUROTECH Electronic Technology
-   ETH.MI    -1->1    rsma_50100150 marg=NaN  EUROTECH Electronic Technology
-   FPE.MI    -1->1    rbo_50        marg=NaN  FOPE Consumer Durables
-   FPE.MI    0->1    rtt_5020      marg=NaN  FOPE Consumer Durables
-   OVS.MI    -1->1    rema_50100    marg=si   OVS Retail Trade
-   OVS.MI    -1->1    rema_50100150 marg=si   OVS Retail Trade
-   PIRC.MI   -1->1    rema_50100    marg=NaN  PIRELLI & C Consumer Durables
-   SFL.MI    -1->1    rema_50100    marg=si   SAFILO GROUP Health Technology
-   SPM.MI    -1->1    rsma_50100    marg=si   SAIPEM Industrial Services
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-08  (12 bull flips) --
-   CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
-   CYB.MI    -1->1    rbo_50        marg=NaN  CYBEROO Technology Services
-   CYB.MI    -1->1    rtt_5020      marg=NaN  CYBEROO Technology Services
-   FARM.MI   -1->1    rbo_50        marg=NaN  H-FARM Commercial Services
-   FARM.MI   0->1    rtt_5020      marg=NaN  H-FARM Commercial Services
-   MAIRE.MI  -1->1    rbo_50        marg=si   MAIRE Industrial Services
-   MAIRE.MI  0->1    rtt_5020      marg=si   MAIRE Industrial Services
-   PIRC.MI   -1->1    rsma_100150   marg=NaN  PIRELLI & C Consumer Durables
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-   WIIT.MI   -1->1    rbo_50        marg=NaN  WIIT Technology Services
-   WIIT.MI   0->1    rtt_5020      marg=NaN  WIIT Technology Services
-
--- 2026-10-07  (7 bull flips) --
-   CMB.MI    -1->1    rema_50100    marg=NaN  CEMBRE Electronic Technology
-   CMB.MI    -1->1    rema_50100150 marg=NaN  CEMBRE Electronic Technology
-   GHC.MI    -1->1    rbo_20        marg=NaN  GAROFALO HEALTH CARE Health Services
-   GHC.MI    -1->1    rbo_50        marg=NaN  GAROFALO HEALTH CARE Health Services
-   GHC.MI    -1->1    rtt_5020      marg=NaN  GAROFALO HEALTH CARE Health Services
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
-Most frequent flippers: TLS.MIx22, PIRC.MIx9, CYB.MIx8, GHC.MIx7, SFL.MIx5, ICF.MIx5, GSP.MIx5, FARM.MIx4, OVS.MIx4, FCT.MIx4
+Most frequent flippers: TLS.MIx16, PIRC.MIx7, ICF.MIx5, GSP.MIx5, SFL.MIx4, CYB.MIx4, GHC.MIx4, FCT.MIx4, SOL.MIx4, BO.MIx3
