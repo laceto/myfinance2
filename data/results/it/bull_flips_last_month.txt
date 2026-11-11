@@ -1,6 +1,14 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 133
+window: 1 month ago   events: 139
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-10  (6 bull flips) --
+   BMED.MI   -1->1    rbo_20        marg=si   BANCA MEDIOLANUM Finance
+   BMED.MI   0->1    rtt_5020      marg=si   BANCA MEDIOLANUM Finance
+   PHN.MI    -1->1    rbo_50        marg=NaN  PHARMANUTRA Health Technology
+   PHN.MI    0->1    rtt_5020      marg=NaN  PHARMANUTRA Health Technology
+   SFL.MI    -1->1    rbo_150       marg=si   SAFILO GROUP Health Technology
+   SGF.MI    -1->1    rema_50100    marg=NaN  SOGEFI Producer Manufacturing
 
 -- 2026-11-09  (2 bull flips) --
    IEG.MI    -1->1    rbo_20        marg=NaN  ITALIAN EXHIBITION GROUP Commercial Services
@@ -177,4 +185,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
-Most frequent flippers: TLS.MIx16, PIRC.MIx7, ICF.MIx5, GSP.MIx5, SFL.MIx4, CYB.MIx4, GHC.MIx4, FCT.MIx4, SOL.MIx4, BO.MIx3
+Most frequent flippers: TLS.MIx16, PIRC.MIx7, SFL.MIx5, ICF.MIx5, GSP.MIx5, CYB.MIx4, GHC.MIx4, FCT.MIx4, SGF.MIx4, SOL.MIx4

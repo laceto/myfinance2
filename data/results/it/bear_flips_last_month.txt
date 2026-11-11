@@ -1,7 +1,12 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 50
+window: 1 month ago   events: 53
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-10  (3 bear flips) --
+   IRE.MI    1->-1   rsma_50100150 marg=si   IREN Utilities
+   REY.MI    1->-1   rbo_20        marg=si   REPLY Commercial Services
+   REY.MI    1->0    rtt_5020      marg=si   REPLY Commercial Services
 
 -- 2026-11-09  (4 bear flips) --
    INW.MI    1->-1   rbo_20        marg=si   INWIT Communications
@@ -87,4 +92,4 @@ filter: marginabile=si only (short-sellable names)
    ANIM.MI   1->-1   rsma_50100150 marg=si   ANIMA HOLDING Finance
    INW.MI    1->-1   rsma_50100150 marg=si   INWIT Communications
 
-Most frequent flippers: BRE.MIx6, BAMI.MIx5, INW.MIx4, BGN.MIx4, UCG.MIx4, ANIM.MIx3, LDO.MIx3, BC.MIx3, TGYM.MIx2, MONC.MIx2
+Most frequent flippers: BRE.MIx6, BAMI.MIx5, INW.MIx4, BGN.MIx4, UCG.MIx4, ANIM.MIx3, LDO.MIx3, BC.MIx3, IRE.MIx3, TGYM.MIx2
