@@ -21,10 +21,13 @@ collect_flips:
 
 from __future__ import annotations
 
+import sys
+
 import pytest
 
 from signal_flips_history import (
     SignalFlip,
+    _run,
     brief_date,
     collect_flips,
     flips_in_brief,
@@ -134,3 +137,13 @@ def test_collect_flips_walks_versions_and_dedups():
         ("2026-07-23", "ACE.MI"),
         ("2026-07-24", "ACE.MI"),
     }
+
+
+def test_run_replaces_undecodable_bytes_instead_of_raising():
+    """Historical brief blobs may hold stray non-UTF-8 bytes (CI crash 2026-11-17).
+
+    0x81 is undefined in both UTF-8 and cp1252, so this fails on Linux CI and Windows alike.
+    """
+    code = "import sys; sys.stdout.buffer.write(b'before' + bytes([0x81]) + b'after')"
+    out = _run([sys.executable, "-c", code])
+    assert out == "before" + chr(0xFFFD) + "after"

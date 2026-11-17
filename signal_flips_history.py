@@ -177,7 +177,18 @@ def collect_flips(briefs: Iterable[str], direction: str) -> List[SignalFlip]:
 
 
 def _run(args: Sequence[str]) -> str:
-    return subprocess.run(args, capture_output=True, text=True, check=True).stdout
+    """Run a command and return stdout, decoding leniently.
+
+    Why errors="replace": historical brief blobs can contain stray non-UTF-8 bytes
+    (a past tee/write_text race corrupted two commits). One bad byte in old history
+    must not abort the whole report; we log it and keep going.
+    """
+    raw = subprocess.run(args, capture_output=True, check=True).stdout
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        logger.warning("non-UTF-8 byte at %d in output of %s; replacing", exc.start, args[:3])
+        return raw.decode("utf-8", errors="replace")
 
 
 def iter_brief_versions(

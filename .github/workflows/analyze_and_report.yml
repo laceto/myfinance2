@@ -42,7 +42,9 @@ jobs:
         run: python trading_report.py | tee data/results/it/trading_report.txt
 
       - name: Generate daily insights brief
-        run: python get_insights.py | tee data/results/it/daily_brief.txt
+        # get_insights.py writes daily_brief.txt itself and prints to stdout (visible in the log).
+        # Do NOT tee into that file: two writers on one path corrupted the committed brief.
+        run: python get_insights.py
 
       # analysis_results.parquet is ~500 MB — too large for a git commit.
       # Upload it as a workflow artifact (retained for 30 days) instead.
