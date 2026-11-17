@@ -15,7 +15,7 @@ Usage:
     python run_ta_agents.py --live --symbol UCG.MI --benchmark FTSEMIB.MI
 
     # Mode B — live download: benchmark in EUR, stock quoted in USD → FX conversion
-    python run_ta_agents.py --live --symbol TCEHY --benchmark H4ZX.DE --fx EURUSD=X
+    python run_ta_agents.py --live --symbol TCEHY --benchmark H4ZX.DE --fx EURUSD=X --out TCEHY.md
 
     # Save brief to a file
     python run_ta_agents.py --symbol A2A.MI --out data/results/it/daily_brief.txt

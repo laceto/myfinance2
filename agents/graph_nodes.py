@@ -142,7 +142,7 @@ def prepare_node(state: TechnicalAnalysisState) -> dict:
     else:
         resolved_date, df = load_analysis_data(RESULTS_PATH, symbol, analysis_date)
 
-    log.info("[prepare] symbol=%s resolved_date=%s", symbol, resolved_date)
+    log.info("[prepare] symbol=%s resolved_date=%s rows=%d", symbol, resolved_date, len(df))
 
     breakout_snapshot = bo_build_snapshot(df)
     ma_snapshot       = ma_build_snapshot(df)
