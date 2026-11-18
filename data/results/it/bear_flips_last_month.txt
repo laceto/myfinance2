@@ -1,7 +1,33 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 53
+window: 1 month ago   events: 67
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-17  (3 bear flips) --
+   MONC.MI   1->-1   rbo_50        marg=si   MONCLER Consumer Non-Durables
+   MONC.MI   0->-1   rtt_5020      marg=si   MONCLER Consumer Non-Durables
+   TGYM.MI   1->-1   rsma_50100150 marg=si   TECHNOGYM Consumer Durables
+
+-- 2026-11-16  (4 bear flips) --
+   ACE.MI    1->-1   rbo_20        marg=si   ACEA Utilities
+   ACE.MI    1->0    rtt_5020      marg=si   ACEA Utilities
+   MAIRE.MI  1->-1   rsma_50100150 marg=si   MAIRE Industrial Services
+   PRT.MI    1->-1   rbo_150       marg=si   ESPRINET Distribution Services
+
+-- 2026-11-13  (3 bear flips) --
+   BC.MI     1->-1   rsma_50100150 marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   ISP.MI    1->-1   rsma_50100    marg=si   INTESA SANPAOLO Finance
+   ISP.MI    1->-1   rsma_50100150 marg=si   INTESA SANPAOLO Finance
+
+-- 2026-11-12  (4 bear flips) --
+   BC.MI     1->-1   rbo_20        marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   BC.MI     1->0    rtt_5020      marg=si   BRUNELLO CUCINELLI Consumer Non-Durables
+   MONC.MI   1->-1   rbo_20        marg=si   MONCLER Consumer Non-Durables
+   MONC.MI   1->0    rtt_5020      marg=si   MONCLER Consumer Non-Durables
+
+-- 2026-11-11  (2 bear flips) --
+   TRN.MI    1->-1   rbo_20        marg=si   TERNA Utilities
+   TRN.MI    1->0    rtt_5020      marg=si   TERNA Utilities
 
 -- 2026-11-10  (3 bear flips) --
    IRE.MI    1->-1   rsma_50100150 marg=si   IREN Utilities
@@ -88,8 +114,4 @@ filter: marginabile=si only (short-sellable names)
    BRE.MI    1->-1   rema_50100150 marg=si   BREMBO Producer Manufacturing
    BRE.MI    1->-1   rsma_100150   marg=si   BREMBO Producer Manufacturing
 
--- 2026-10-13  (2 bear flips) --
-   ANIM.MI   1->-1   rsma_50100150 marg=si   ANIMA HOLDING Finance
-   INW.MI    1->-1   rsma_50100150 marg=si   INWIT Communications
-
-Most frequent flippers: BRE.MIx6, BAMI.MIx5, INW.MIx4, BGN.MIx4, UCG.MIx4, ANIM.MIx3, LDO.MIx3, BC.MIx3, IRE.MIx3, TGYM.MIx2
+Most frequent flippers: BRE.MIx6, BC.MIx6, MONC.MIx6, BAMI.MIx5, BGN.MIx4, UCG.MIx4, LDO.MIx3, INW.MIx3, TGYM.MIx3, IRE.MIx3

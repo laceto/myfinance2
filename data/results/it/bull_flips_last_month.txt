@@ -2,6 +2,49 @@ BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
 window: 1 month ago   events: 139
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 
+-- 2026-11-17  (7 bull flips) --
+   BDB.MI    -1->1    rbo_20        marg=NaN  BCO DESIO BRIANZA Finance
+   BDB.MI    -1->0    rtt_5020      marg=NaN  BCO DESIO BRIANZA Finance
+   COM.MI    -1->1    rsma_50100150 marg=NaN  COMER INDUSTRIES Producer Manufacturing
+   CYB.MI    -1->1    rema_50100    marg=NaN  CYBEROO Technology Services
+   PST.MI    -1->1    rema_50100150 marg=si   POSTE ITALIANE Finance
+   SL.MI     -1->1    rema_50100    marg=NaN  SANLORENZO Consumer Durables
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
+
+-- 2026-11-16  (9 bull flips) --
+   CMB.MI    -1->1    rema_50100150 marg=NaN  CEMBRE Electronic Technology
+   CYB.MI    -1->1    rbo_20        marg=NaN  CYBEROO Technology Services
+   CYB.MI    -1->1    rbo_50        marg=NaN  CYBEROO Technology Services
+   CYB.MI    -1->1    rtt_5020      marg=NaN  CYBEROO Technology Services
+   ELN.MI    -1->1    rbo_20        marg=NaN  EL.EN Health Technology
+   ELN.MI    0->1    rtt_5020      marg=NaN  EL.EN Health Technology
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
+   TXT.MI    -1->1    rbo_20        marg=NaN  TXT E-SOLUTIONS Technology Services
+   TXT.MI    -1->0    rtt_5020      marg=NaN  TXT E-SOLUTIONS Technology Services
+
+-- 2026-11-13  (7 bull flips) --
+   DIS.MI    -1->1    rsma_100150   marg=NaN  D'AMICO Transportation
+   DIS.MI    -1->1    rsma_50100150 marg=NaN  D'AMICO Transportation
+   ENAV.MI   -1->1    rbo_150       marg=si   ENAV Transportation
+   FPE.MI    -1->1    rsma_50100    marg=NaN  FOPE Consumer Durables
+   FPE.MI    -1->1    rsma_50100150 marg=NaN  FOPE Consumer Durables
+   SRG.MI    -1->1    rema_50100    marg=si   SNAM Utilities
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
+
+-- 2026-11-12  (2 bull flips) --
+   GHC.MI    -1->1    rema_50100150 marg=NaN  GAROFALO HEALTH CARE Health Services
+   SRG.MI    -1->1    rsma_50100    marg=si   SNAM Utilities
+
+-- 2026-11-11  (8 bull flips) --
+   CPR.MI    -1->1    rema_100150   marg=si   CAMPARI Consumer Non-Durables
+   CPR.MI    -1->1    rema_50100150 marg=si   CAMPARI Consumer Non-Durables
+   FM.MI     -1->1    rbo_50        marg=NaN  FIERA MILANO Commercial Services
+   FM.MI     0->1    rtt_5020      marg=NaN  FIERA MILANO Commercial Services
+   IOT.MI    -1->1    rbo_20        marg=NaN  SECO Electronic Technology
+   IOT.MI    0->1    rtt_5020      marg=NaN  SECO Electronic Technology
+   UCG.MI    -1->1    rema_50100    marg=si   UNICREDIT Finance
+   UCG.MI    -1->1    rema_50100150 marg=si   UNICREDIT Finance
+
 -- 2026-11-10  (6 bull flips) --
    BMED.MI   -1->1    rbo_20        marg=si   BANCA MEDIOLANUM Finance
    BMED.MI   0->1    rtt_5020      marg=si   BANCA MEDIOLANUM Finance
@@ -142,47 +185,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
--- 2026-10-16  (2 bull flips) --
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-15  (8 bull flips) --
-   BEC.MI    -1->1    rbo_20        marg=NaN  B&C SPEAKERS Consumer Durables
-   BEC.MI    0->1    rtt_5020      marg=NaN  B&C SPEAKERS Consumer Durables
-   CRL.MI    -1->1    rema_50100150 marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   OVS.MI    -1->1    rbo_50        marg=si   OVS Retail Trade
-   OVS.MI    0->1    rtt_5020      marg=si   OVS Retail Trade
-   PIRC.MI   -1->1    rbo_150       marg=NaN  PIRELLI & C Consumer Durables
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-14  (8 bull flips) --
-   A2A.MI    -1->1    rsma_50100    marg=si   A2A Utilities
-   CRL.MI    -1->1    rema_50100    marg=NaN  CAREL INDUSTRIES Producer Manufacturing
-   LUVE.MI   -1->1    rsma_50100    marg=NaN  LUVE Producer Manufacturing
-   LUVE.MI   -1->1    rsma_50100150 marg=NaN  LUVE Producer Manufacturing
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-   VIM.MI    -1->1    rbo_20        marg=NaN  VIMI FASTENERS Producer Manufacturing
-   VIM.MI    0->1    rtt_5020      marg=NaN  VIMI FASTENERS Producer Manufacturing
-
--- 2026-10-13  (4 bull flips) --
-   TEN.MI    -1->1    rema_50100    marg=si   TENARIS Non-Energy Minerals
-   TEN.MI    -1->1    rema_50100150 marg=si   TENARIS Non-Energy Minerals
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
--- 2026-10-12  (11 bull flips) --
-   BO.MI     -1->1    rema_100150   marg=NaN  BORGOSESIA Finance
-   BO.MI     -1->1    rema_50100150 marg=NaN  BORGOSESIA Finance
-   BO.MI     -1->1    rsma_50100    marg=NaN  BORGOSESIA Finance
-   PMT.MI    -1->1    rbo_20        marg=NaN  PROMOTICA Commercial Services
-   PMT.MI    0->1    rtt_5020      marg=NaN  PROMOTICA Commercial Services
-   SFL.MI    -1->1    rsma_100150   marg=si   SAFILO GROUP Health Technology
-   SFL.MI    -1->1    rsma_50100150 marg=si   SAFILO GROUP Health Technology
-   SGC.MI    -1->1    rema_100150   marg=NaN  SG COMPANY Communications
-   SGC.MI    -1->1    rema_50100150 marg=NaN  SG COMPANY Communications
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
-Most frequent flippers: TLS.MIx16, PIRC.MIx7, SFL.MIx5, ICF.MIx5, GSP.MIx5, CYB.MIx4, GHC.MIx4, FCT.MIx4, SGF.MIx4, SOL.MIx4
+Most frequent flippers: TLS.MIx9, CYB.MIx8, PIRC.MIx6, GHC.MIx5, ICF.MIx5, GSP.MIx5, PST.MIx4, FCT.MIx4, COM.MIx4, SGF.MIx4
