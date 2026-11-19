@@ -1,6 +1,15 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 139
+window: 1 month ago   events: 146
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-18  (7 bull flips) --
+   AVIO.MI   -1->1    rema_50100    marg=NaN  AVIO Electronic Technology
+   CY4.MI    -1->1    rbo_20        marg=NaN  CY4GATE Technology Services
+   CY4.MI    0->1    rtt_5020      marg=NaN  CY4GATE Technology Services
+   ENV.MI    -1->1    rsma_100150   marg=NaN  ENERVIT Health Technology
+   ENV.MI    -1->1    rsma_50100150 marg=NaN  ENERVIT Health Technology
+   POPR.MI   -1->1    rema_50100150 marg=NaN  POLIGRAFICI PRINTING Consumer Services
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
 
 -- 2026-11-17  (7 bull flips) --
    BDB.MI    -1->1    rbo_20        marg=NaN  BCO DESIO BRIANZA Finance
@@ -185,4 +194,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
    TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
 
-Most frequent flippers: TLS.MIx9, CYB.MIx8, PIRC.MIx6, GHC.MIx5, ICF.MIx5, GSP.MIx5, PST.MIx4, FCT.MIx4, COM.MIx4, SGF.MIx4
+Most frequent flippers: TLS.MIx10, CYB.MIx8, PIRC.MIx6, GHC.MIx5, ICF.MIx5, GSP.MIx5, PST.MIx4, FCT.MIx4, COM.MIx4, SGF.MIx4
