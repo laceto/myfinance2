@@ -1,122 +1,122 @@
 ETF multi-timeframe return analysis — top out-performers
-universe: 254 ETFs   (returns: simple, cumulative, close-to-close)
-liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -> 254 of 535 ETFs; drop |1-day move| > 50% (split/re-denomination)
+universe: 256 ETFs   (returns: simple, cumulative, close-to-close)
+liquidity screen: median daily traded value >= 50,000 & active >= 80% over 90d -> 256 of 535 ETFs; drop |1-day move| > 50% (split/re-denomination)
 
-== 1W  (universe median -1.2%) ==
-   1. XUHC.SW      +5.8%  Xtrackers MSCI USA Health Care UCITS ETF 1D
-   2. INDO.PA      +5.7%  Amundi MSCI Indonesia UCITS ETF Acc
-   3. DSP5.PA      +4.4%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
-   4. SXLE.AS      +4.2%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
-   5. BXX.PA       +3.8%  Amundi EURO STOXX 50 Daily (-2x) Inverse UCITS ETF Acc
-   6. STN.PA       +3.6%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
-   7. XBRMIB.MI    +3.5%  Amundi FTSE MIB Daily (-2x) Inverse UCITS ETF Acc
-   8. NRGW.PA      +3.1%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
-   9. XDWS.MI      +2.5%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
-  10. BSX.PA       +2.1%  Amundi EURO STOXX 50 Daily (-1x) Inverse UCITS ETF Acc
-  11. BERMIB.MI    +1.9%  Amundi FTSE MIB Daily (-1x) Inverse UCITS ETF Acc
-  12. MIDD.SW      +1.8%  iShares FTSE 250 UCITS ETF
-  13. MIVO.L       +1.7%  Amundi MSCI Europe Minimum Volatility Factor UCITS ETF EUR (C)
-  14. SMARTU.MI    +1.3%  Amundi Smart Overnight Return UCITS ETF USD Hedged Acc
-  15. XDWU.MI      +1.2%  Xtrackers MSCI World Utilities UCITS ETF 1C
+== 1W  (universe median -2.9%) ==
+   1. BXX.PA       +7.6%  Amundi EURO STOXX 50 Daily (-2x) Inverse UCITS ETF Acc
+   2. DSP5.PA      +7.1%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
+   3. XBRMIB.MI    +7.0%  Amundi FTSE MIB Daily (-2x) Inverse UCITS ETF Acc
+   4. INDO.PA      +5.7%  Amundi MSCI Indonesia UCITS ETF Acc
+   5. XUHC.SW      +4.3%  Xtrackers MSCI USA Health Care UCITS ETF 1D
+   6. BSX.PA       +4.0%  Amundi EURO STOXX 50 Daily (-1x) Inverse UCITS ETF Acc
+   7. BERMIB.MI    +3.5%  Amundi FTSE MIB Daily (-1x) Inverse UCITS ETF Acc
+   8. SHC.PA       +2.4%  Amundi CAC 40 Daily (-1x) Inverse UCITS ETF Acc
+   9. MIVO.L       +1.7%  Amundi MSCI Europe Minimum Volatility Factor UCITS ETF EUR (C)
+  10. XDWS.MI      +1.7%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
+  11. SMARTU.MI    +1.2%  Amundi Smart Overnight Return UCITS ETF USD Hedged Acc
+  12. FXGB.L       +1.0%  First Trust FactorFX UCITS ETF GBP Hedged Acc
+  13. INR.PA       +0.9%  Amundi MSCI India Swap UCITS ETF EUR Acc
+  14. DHYE.AS      +0.2%  iShares USD High Yield Corporate Bond ESG SRI UCITS ETF USD (Acc)
+  15. IB27.PA      +0.1%  iShares iBonds Dec 2027 Term EUR Corporate UCITS ETF EUR (Acc)
 
-== 1M  (universe median -2.7%) ==
-   1. DSP5.PA     +12.0%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
-   2. INR.PA      +11.6%  Amundi MSCI India Swap UCITS ETF EUR Acc
-   3. INDO.PA     +11.6%  Amundi MSCI Indonesia UCITS ETF Acc
-   4. HLT.PA      +10.0%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
-   5. ESIH.L       +9.3%  iShares MSCI Europe Health Care Sector UCITS ETF EUR (Acc)
-   6. XUHC.SW      +7.8%  Xtrackers MSCI USA Health Care UCITS ETF 1D
-   7. LYINR.SW     +7.6%  Amundi MSCI India Swap UCITS ETF USD Acc
-   8. HLTW.PA      +7.4%  Amundi MSCI World Health Care UCITS ETF EUR Acc
-   9. XDWS.MI      +6.8%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
-  10. MIVO.L       +6.5%  Amundi MSCI Europe Minimum Volatility Factor UCITS ETF EUR (C)
-  11. LYHLTW.SW    +6.0%  Amundi MSCI World Health Care UCITS ETF USD Acc
-  12. XDWU.MI      +5.5%  Xtrackers MSCI World Utilities UCITS ETF 1C
-  13. UTIW.MI      +5.1%  Amundi S&P Global Utilities ESG UCITS ETF DR EUR (A)
-  14. CD8.PA       +5.0%  Amundi MSCI EMU High Dividend UCITS ETF UCITS ETF Acc
-  15. CD9.PA       +4.7%  Amundi MSCI Europe High Dividend Factor UCITS ETF EUR (C)
+== 1M  (universe median -2.9%) ==
+   1. INDO.PA     +16.5%  Amundi MSCI Indonesia UCITS ETF Acc
+   2. DSP5.PA     +12.8%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
+   3. INR.PA      +12.5%  Amundi MSCI India Swap UCITS ETF EUR Acc
+   4. HLT.PA       +9.7%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
+   5. LYINR.SW     +9.0%  Amundi MSCI India Swap UCITS ETF USD Acc
+   6. ESIH.L       +8.8%  iShares MSCI Europe Health Care Sector UCITS ETF EUR (Acc)
+   7. HLTW.PA      +6.9%  Amundi MSCI World Health Care UCITS ETF EUR Acc
+   8. MIVO.L       +6.5%  Amundi MSCI Europe Minimum Volatility Factor UCITS ETF EUR (C)
+   9. XUHC.SW      +6.3%  Xtrackers MSCI USA Health Care UCITS ETF 1D
+  10. XDWU.MI      +6.2%  Xtrackers MSCI World Utilities UCITS ETF 1C
+  11. XDWS.MI      +6.1%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
+  12. UTIW.MI      +5.9%  Amundi S&P Global Utilities ESG UCITS ETF DR EUR (A)
+  13. UTI.PA       +5.5%  Amundi STOXX Europe 600 Utilities UCITS ETF Acc
+  14. STU.PA       +5.5%  State Street SPDR MSCI Europe Utilities UCITS ETF EUR
+  15. IPRP.AS      +5.4%  iShares European Property Yield UCITS ETF
 
-== 3M  (universe median -1.3%) ==
-   1. DSP5.PA     +16.1%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
-   2. XUHC.SW     +14.6%  Xtrackers MSCI USA Health Care UCITS ETF 1D
-   3. XDWS.MI     +14.1%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
-   4. HLTW.PA     +13.6%  Amundi MSCI World Health Care UCITS ETF EUR Acc
-   5. HYPE.SW     +13.5%  21shares Hyperliquid ETP
-   6. HLT.PA      +10.9%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
-   7. LYHLTW.SW   +10.3%  Amundi MSCI World Health Care UCITS ETF USD Acc
-   8. INR.PA      +10.1%  Amundi MSCI India Swap UCITS ETF EUR Acc
-   9. STN.PA       +9.0%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
-  10. XBRMIB.MI    +8.6%  Amundi FTSE MIB Daily (-2x) Inverse UCITS ETF Acc
-  11. ESIH.L       +8.2%  iShares MSCI Europe Health Care Sector UCITS ETF EUR (Acc)
-  12. BXX.PA       +8.1%  Amundi EURO STOXX 50 Daily (-2x) Inverse UCITS ETF Acc
-  13. CD9.PA       +8.0%  Amundi MSCI Europe High Dividend Factor UCITS ETF EUR (C)
-  14. XDEB.MI      +7.8%  Xtrackers MSCI World Minimum Volatility UCITS ETF 1C
-  15. MVEU.MI      +6.8%  iShares Edge MSCI Europe Minimum Volatility UCITS ETF
+== 3M  (universe median -1.9%) ==
+   1. DSP5.PA     +17.0%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
+   2. XDWS.MI     +13.3%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
+   3. XUHC.SW     +11.4%  Xtrackers MSCI USA Health Care UCITS ETF 1D
+   4. HYPE.SW     +10.9%  21shares Hyperliquid ETP
+   5. HLTW.PA     +10.4%  Amundi MSCI World Health Care UCITS ETF EUR Acc
+   6. INR.PA      +10.3%  Amundi MSCI India Swap UCITS ETF EUR Acc
+   7. BXX.PA       +9.8%  Amundi EURO STOXX 50 Daily (-2x) Inverse UCITS ETF Acc
+   8. XBRMIB.MI    +9.7%  Amundi FTSE MIB Daily (-2x) Inverse UCITS ETF Acc
+   9. HLT.PA       +8.5%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
+  10. SMARTU.MI    +7.5%  Amundi Smart Overnight Return UCITS ETF USD Hedged Acc
+  11. XDEB.MI      +7.3%  Xtrackers MSCI World Minimum Volatility UCITS ETF 1C
+  12. CD9.PA       +6.7%  Amundi MSCI Europe High Dividend Factor UCITS ETF EUR (C)
+  13. UTIW.MI      +6.6%  Amundi S&P Global Utilities ESG UCITS ETF DR EUR (A)
+  14. STU.PA       +6.1%  State Street SPDR MSCI Europe Utilities UCITS ETF EUR
+  15. XDWU.MI      +6.1%  Xtrackers MSCI World Utilities UCITS ETF 1C
 
-== 6M  (universe median +2.9%) ==
-   1. ARKG.MI     +50.3%  ARK Genomic Revolution UCITS ETF USD Accumulating
-   2. HLTW.PA     +27.5%  Amundi MSCI World Health Care UCITS ETF EUR Acc
-   3. GRE.PA      +23.8%  Amundi MSCI Greece UCITS ETF Dist
-   4. LYHLTW.SW   +23.7%  Amundi MSCI World Health Care UCITS ETF USD Acc
-   5. BTEC.SW     +21.4%  iShares Nasdaq US Biotechnology UCITS ETF
-   6. MIDD.SW     +16.2%  iShares FTSE 250 UCITS ETF
-   7. INR.PA      +15.8%  Amundi MSCI India Swap UCITS ETF EUR Acc
-   8. WELE.MI     +15.7%  Amundi S&P 500 Equal Weight ESG UCITS ETF Acc
-   9. DSP5.PA     +15.0%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
-  10. CEC.PA      +14.8%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
-  11. HLT.PA      +14.6%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
-  12. XDWF.MI     +14.5%  Xtrackers MSCI World Financials UCITS ETF 1C
-  13. BYBE.PA     +14.0%  Amundi S&P 500 Buyback UCITS ETF EUR (C)
-  14. SPEQ.MI     +13.9%  Invesco S&P 500 Equal Weight UCITS ETF Acc
-  15. UINC.L      +12.7%  First Trust US Equity Income UCITS ETF Dist
+== 6M  (universe median +1.6%) ==
+   1. ARKG.MI     +48.7%  ARK Genomic Revolution UCITS ETF USD Accumulating
+   2. HLTW.PA     +25.6%  Amundi MSCI World Health Care UCITS ETF EUR Acc
+   3. LYHLTW.SW   +20.8%  Amundi MSCI World Health Care UCITS ETF USD Acc
+   4. BTEC.SW     +20.5%  iShares Nasdaq US Biotechnology UCITS ETF
+   5. GRE.PA      +20.1%  Amundi MSCI Greece UCITS ETF Dist
+   6. DSP5.PA     +16.7%  Amundi MSCI USA Daily (-1x) Inverse UCITS ETF Acc
+   7. WELE.MI     +15.1%  Amundi S&P 500 Equal Weight ESG UCITS ETF Acc
+   8. MIDD.SW     +14.9%  iShares FTSE 250 UCITS ETF
+   9. INR.PA      +13.4%  Amundi MSCI India Swap UCITS ETF EUR Acc
+  10. HLT.PA      +13.1%  Amundi STOXX Europe 600 Healthcare UCITS ETF Acc
+  11. SPEQ.MI     +13.1%  Invesco S&P 500 Equal Weight UCITS ETF Acc
+  12. BYBE.PA     +12.8%  Amundi S&P 500 Buyback UCITS ETF EUR (C)
+  13. XDEB.MI     +12.6%  Xtrackers MSCI World Minimum Volatility UCITS ETF 1C
+  14. UINC.L      +12.6%  First Trust US Equity Income UCITS ETF Dist
+  15. XDWF.MI     +12.6%  Xtrackers MSCI World Financials UCITS ETF 1C
 
-== 1Y  (universe median +13.4%) ==
-   1. ARKG.MI     +57.0%  ARK Genomic Revolution UCITS ETF USD Accumulating
-   2. KRW.PA      +55.2%  Amundi MSCI Korea UCITS ETF Acc
-   3. IKRA.AS     +54.6%  iShares MSCI Korea UCITS ETF (Dist)
-   4. SXLE.AS     +51.0%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
-   5. STN.PA      +48.1%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
-   6. COMO.PA     +41.8%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
-   7. NRGW.PA     +38.9%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
-   8. CEC.PA      +38.9%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
-   9. LEVMIB.MI   +37.3%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
-  10. GRE.PA      +34.6%  Amundi MSCI Greece UCITS ETF Dist
-  11. AINF.AS     +29.8%  iShares AI Infrastructure UCITS ETF USD (Acc)
-  12. SEL.PA      +29.7%  Amundi Stoxx Europe Select Dividend 30 UCITS ETF Dist
-  13. BNK.PA      +28.1%  Amundi STOXX Europe 600 Banks UCITS ETF Acc
-  14. EMXC.PA     +27.9%  Amundi MSCI Emerging Ex China UCITS ETF Acc
-  15. CL2.PA      +26.7%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
+== 1Y  (universe median +14.7%) ==
+   1. ARKG.MI     +64.6%  ARK Genomic Revolution UCITS ETF USD Accumulating
+   2. KRW.PA      +63.5%  Amundi MSCI Korea UCITS ETF Acc
+   3. IKRA.AS     +61.6%  iShares MSCI Korea UCITS ETF (Dist)
+   4. SXLE.AS     +48.1%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
+   5. STN.PA      +46.7%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
+   6. LEVMIB.MI   +39.7%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
+   7. CEC.PA      +39.4%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
+   8. COMO.PA     +37.8%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
+   9. NRGW.PA     +37.6%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
+  10. AINF.AS     +34.9%  iShares AI Infrastructure UCITS ETF USD (Acc)
+  11. GRE.PA      +34.5%  Amundi MSCI Greece UCITS ETF Dist
+  12. VAPU.SW     +33.9%  Vanguard FTSE Developed Asia Pacific ex Japan UCITS ETF (USD) Accumulating
+  13. CL2.PA      +30.5%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
+  14. SEL.PA      +30.3%  Amundi Stoxx Europe Select Dividend 30 UCITS ETF Dist
+  15. BNK.PA      +29.3%  Amundi STOXX Europe 600 Banks UCITS ETF Acc
 
-== 3Y  (universe median +56.8%) ==
-   1. LEVMIB.MI  +215.5%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
-   2. GRE.PA     +143.2%  Amundi MSCI Greece UCITS ETF Dist
-   3. KRW.PA     +127.9%  Amundi MSCI Korea UCITS ETF Acc
-   4. IKRA.AS    +126.8%  iShares MSCI Korea UCITS ETF (Dist)
-   5. CL2.PA     +126.7%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
-   6. STZ.PA     +125.8%  State Street SPDR MSCI Europe Financials UCITS ETF EUR
-   7. CEC.PA     +122.5%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
-   8. BCHN.MI    +120.1%  Invesco CoinShares Global Blockchain UCITS ETF Acc
-   9. LVD.PA     +117.9%  Amundi LevDax Daily (2x) leveraged UCITS ETF Acc
-  10. COPX.MI    +103.5%  Global X Copper Miners UCITS ETF USD Accumulating
-  11. LVE.PA      +99.5%  Amundi EURO STOXX 50 Daily (2x) Leveraged UCITS ETF Acc
-  12. MIB.PA      +96.6%  Amundi FTSE MIB UCITS ETF Dist
-  13. GOLD.AS     +94.6%  Amundi Physical Gold ETC (C)
-  14. XDWF.MI     +89.3%  Xtrackers MSCI World Financials UCITS ETF 1C
-  15. BTEC.SW     +85.1%  iShares Nasdaq US Biotechnology UCITS ETF
+== 3Y  (universe median +55.9%) ==
+   1. LEVMIB.MI  +207.2%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
+   2. GRE.PA     +139.2%  Amundi MSCI Greece UCITS ETF Dist
+   3. KRW.PA     +132.9%  Amundi MSCI Korea UCITS ETF Acc
+   4. IKRA.AS    +130.4%  iShares MSCI Korea UCITS ETF (Dist)
+   5. CL2.PA     +127.9%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
+   6. STZ.PA     +122.1%  State Street SPDR MSCI Europe Financials UCITS ETF EUR
+   7. BCHN.MI    +120.3%  Invesco CoinShares Global Blockchain UCITS ETF Acc
+   8. CEC.PA     +119.7%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
+   9. LVD.PA     +112.9%  Amundi LevDax Daily (2x) leveraged UCITS ETF Acc
+  10. LVE.PA      +95.7%  Amundi EURO STOXX 50 Daily (2x) Leveraged UCITS ETF Acc
+  11. MIB.PA      +94.5%  Amundi FTSE MIB UCITS ETF Dist
+  12. GOLD.AS     +87.9%  Amundi Physical Gold ETC (C)
+  13. COPX.MI     +87.8%  Global X Copper Miners UCITS ETF USD Accumulating
+  14. XDWF.MI     +87.3%  Xtrackers MSCI World Financials UCITS ETF 1C
+  15. BTEC.SW     +85.9%  iShares Nasdaq US Biotechnology UCITS ETF
 
-== YTD  (universe median +10.9%) ==
-   1. SXLE.AS     +53.8%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
-   2. STN.PA      +53.4%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
-   3. ARKG.MI     +47.7%  ARK Genomic Revolution UCITS ETF USD Accumulating
-   4. KRW.PA      +46.0%  Amundi MSCI Korea UCITS ETF Acc
-   5. IKRA.AS     +45.9%  iShares MSCI Korea UCITS ETF (Dist)
-   6. NRGW.PA     +41.0%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
-   7. COMO.PA     +33.4%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
-   8. CEC.PA      +30.1%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
-   9. GRE.PA      +30.0%  Amundi MSCI Greece UCITS ETF Dist
-  10. LEVMIB.MI   +27.8%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
-  11. AINF.AS     +26.9%  iShares AI Infrastructure UCITS ETF USD (Acc)
-  12. XDWS.MI     +24.7%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
-  13. CL2.PA      +24.5%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
-  14. EMXC.PA     +24.1%  Amundi MSCI Emerging Ex China UCITS ETF Acc
-  15. UINC.L      +23.1%  First Trust US Equity Income UCITS ETF Dist
+== YTD  (universe median +10.5%) ==
+   1. ARKG.MI     +51.5%  ARK Genomic Revolution UCITS ETF USD Accumulating
+   2. STN.PA      +49.5%  State Street SPDR MSCI Europe Energy UCITS ETF EUR
+   3. KRW.PA      +49.3%  Amundi MSCI Korea UCITS ETF Acc
+   4. SXLE.AS     +49.2%  State Street SPDR S&P U.S. Energy Select Sector UCITS ETF USD
+   5. IKRA.AS     +48.2%  iShares MSCI Korea UCITS ETF (Dist)
+   6. NRGW.PA     +38.3%  Amundi S&P Global Energy Carbon Reduced UCITS ETF DR EUR (A)
+   7. COMO.PA     +29.4%  Amundi Bloomberg Equal-weight Commodity ex-Agriculture UCITS ETF Acc
+   8. AINF.AS     +28.5%  iShares AI Infrastructure UCITS ETF USD (Acc)
+   9. CEC.PA      +28.5%  Amundi MSCI Eastern Europe Ex Russia UCITS ETF Acc
+  10. GRE.PA      +27.8%  Amundi MSCI Greece UCITS ETF Dist
+  11. VAPU.SW     +26.7%  Vanguard FTSE Developed Asia Pacific ex Japan UCITS ETF (USD) Accumulating
+  12. CL2.PA      +25.1%  Amundi MSCI USA Daily (2x) Leveraged UCITS ETF Acc
+  13. LEVMIB.MI   +24.5%  Amundi FTSE MIB Daily (2x) Leveraged UCITS ETF Dist
+  14. EMXC.PA     +24.0%  Amundi MSCI Emerging Ex China UCITS ETF Acc
+  15. XDWS.MI     +23.9%  Xtrackers MSCI World Consumer Staples UCITS ETF 1C
