@@ -1,14 +1,13 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-11-13 to 2026-11-18 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-11-16 to 2026-11-19 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price      action  stop_loss  risk_pct
-2026-11-18 rtt_5020   BC.MI 90.599998  ENTER LONG  85.637141  5.477768
-2026-11-18 rtt_5020  BRE.MI  9.530000 ENTER SHORT  10.272143  7.787441
-2026-11-18 rtt_5020  CY4.MI 11.900000  ENTER LONG  10.621428 10.744299
-2026-11-18 rtt_5020  IWB.MI 15.560000  EXIT SHORT  16.022856       NaN
-2026-11-18 rtt_5020 MFEB.MI  2.898000 ENTER SHORT   3.067714  5.856254
+ last_date   signal ticker  price      action  stop_loss  risk_pct
+2026-11-19 rtt_5020 ERG.MI 22.480  ENTER LONG  21.425714  4.689880
+2026-11-19 rtt_5020 IRE.MI  2.304 ENTER SHORT   2.407714  4.501492
+2026-11-19 rtt_5020 PLN.MI  3.900  ENTER LONG   3.734286  4.249087
+2026-11-19 rtt_5020 TIP.MI  9.090  EXIT SHORT   9.414286       NaN
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-18)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-19)
 ===============================================================================================
