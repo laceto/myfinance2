@@ -1,7 +1,13 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 70
+window: 1 month ago   events: 73
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-20  (4 bear flips) --
+   BRE.MI    1->-1   rema_50100    marg=si   BREMBO Producer Manufacturing
+   ENEL.MI   1->-1   rema_50100150 marg=si   ENEL Utilities
+   PRT.MI    1->-1   rema_50100    marg=si   ESPRINET Distribution Services
+   PRT.MI    1->-1   rema_50100150 marg=si   ESPRINET Distribution Services
 
 -- 2026-11-19  (3 bear flips) --
    BGN.MI    1->-1   rema_100150   marg=si   BANCA GENERALI Finance
@@ -116,7 +122,4 @@ filter: marginabile=si only (short-sellable names)
 -- 2026-10-21  (1 bear flips) --
    LDO.MI    1->-1   rsma_50100    marg=si   LEONARDO Electronic Technology
 
--- 2026-10-20  (1 bear flips) --
-   TEN.MI    1->-1   rsma_50100150 marg=si   TENARIS Non-Energy Minerals
-
-Most frequent flippers: BC.MIx6, BRE.MIx6, MONC.MIx6, BGN.MIx5, BAMI.MIx5, IRE.MIx5, UCG.MIx4, LDO.MIx3, INW.MIx3, TGYM.MIx3
+Most frequent flippers: BRE.MIx7, BC.MIx6, MONC.MIx6, BGN.MIx5, BAMI.MIx5, IRE.MIx5, UCG.MIx4, LDO.MIx3, INW.MIx3, TGYM.MIx3
