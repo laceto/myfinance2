@@ -1,13 +1,23 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-11-16 to 2026-11-19 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-11-17 to 2026-11-20 (Last 4 Days)
 ===============================================================================================
- last_date   signal ticker  price      action  stop_loss  risk_pct
-2026-11-19 rtt_5020 ERG.MI 22.480  ENTER LONG  21.425714  4.689880
-2026-11-19 rtt_5020 IRE.MI  2.304 ENTER SHORT   2.407714  4.501492
-2026-11-19 rtt_5020 PLN.MI  3.900  ENTER LONG   3.734286  4.249087
-2026-11-19 rtt_5020 TIP.MI  9.090  EXIT SHORT   9.414286       NaN
+ last_date   signal  ticker   price      action  stop_loss  risk_pct
+2026-11-20 rtt_5020  ADB.MI  8.8200  EXIT SHORT   9.305714       NaN
+2026-11-20 rtt_5020  ARN.MI 16.0000 ENTER SHORT  17.468572  9.178574
+2026-11-20 rtt_5020  BFG.MI  8.1400  ENTER LONG   7.488572  8.002810
+2026-11-20 rtt_5020  CIR.MI  0.7470  ENTER LONG   0.717571  3.939567
+2026-11-20 rtt_5020  DHH.MI 23.0000  EXIT SHORT  24.485715       NaN
+2026-11-20 rtt_5020  FNM.MI  0.4345  ENTER LONG   0.414500  4.602991
+2026-11-20 rtt_5020  GPI.MI 15.1200  ENTER LONG  14.708572  2.721087
+2026-11-20 rtt_5020  INW.MI  7.2650  ENTER LONG   6.977857  3.952414
+2026-11-20 rtt_5020  ITD.MI  8.6200  ENTER LONG   8.205714  4.806100
+2026-11-20 rtt_5020  ITW.MI  0.7600  EXIT SHORT   0.838286       NaN
+2026-11-20 rtt_5020  NPI.MI  0.9250  ENTER LONG   0.897143  3.011586
+2026-11-20 rtt_5020 TFIN.MI  5.1650  ENTER LONG   5.143571  0.414885
+2026-11-20 rtt_5020  TRN.MI  9.4600  ENTER LONG   9.122286  3.569919
+2026-11-19 rtt_5020  PLN.MI  3.9000  ENTER LONG   3.734286  4.249087
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-19)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-20)
 ===============================================================================================
