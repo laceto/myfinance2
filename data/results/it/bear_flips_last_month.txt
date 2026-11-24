@@ -1,7 +1,11 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 73
+window: 1 month ago   events: 70
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-23  (2 bear flips) --
+   ISP.MI    1->-1   rbo_20        marg=si   INTESA SANPAOLO Finance
+   ISP.MI    0->-1   rtt_5020      marg=si   INTESA SANPAOLO Finance
 
 -- 2026-11-20  (4 bear flips) --
    BRE.MI    1->-1   rema_50100    marg=si   BREMBO Producer Manufacturing
@@ -111,15 +115,4 @@ filter: marginabile=si only (short-sellable names)
    TGYM.MI   1->-1   rbo_20        marg=si   TECHNOGYM Consumer Durables
    TGYM.MI   0->-1   rtt_5020      marg=si   TECHNOGYM Consumer Durables
 
--- 2026-10-23  (1 bear flips) --
-   A2A.MI    1->-1   rema_50100150 marg=si   A2A Utilities
-
--- 2026-10-22  (3 bear flips) --
-   BGN.MI    1->-1   rsma_50100    marg=si   BANCA GENERALI Finance
-   BGN.MI    1->-1   rsma_50100150 marg=si   BANCA GENERALI Finance
-   INW.MI    1->-1   rema_50100150 marg=si   INWIT Communications
-
--- 2026-10-21  (1 bear flips) --
-   LDO.MI    1->-1   rsma_50100    marg=si   LEONARDO Electronic Technology
-
-Most frequent flippers: BRE.MIx7, BC.MIx6, MONC.MIx6, BGN.MIx5, BAMI.MIx5, IRE.MIx5, UCG.MIx4, LDO.MIx3, INW.MIx3, TGYM.MIx3
+Most frequent flippers: BRE.MIx7, BC.MIx6, MONC.MIx6, BAMI.MIx5, IRE.MIx5, UCG.MIx4, ISP.MIx4, TGYM.MIx3, BGN.MIx3, PRT.MIx3

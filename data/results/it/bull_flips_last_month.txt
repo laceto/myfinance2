@@ -1,6 +1,14 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 150
+window: 1 month ago   events: 127
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-23  (6 bull flips) --
+   EVISO.MI  -1->1    rsma_50100150 marg=NaN  EVISO Utilities
+   PHN.MI    -1->1    rema_100150   marg=NaN  PHARMANUTRA Health Technology
+   PHN.MI    -1->1    rema_50100    marg=NaN  PHARMANUTRA Health Technology
+   SFT.MI    -1->1    rbo_20        marg=NaN  SOFTLAB Technology Services
+   SFT.MI    0->1    rtt_5020      marg=NaN  SOFTLAB Technology Services
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
 
 -- 2026-11-20  (6 bull flips) --
    BFG.MI    -1->1    rbo_20        marg=NaN  B.F Process Industries
@@ -163,39 +171,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    GSP.MI    -1->1    rema_100150   marg=NaN  GAS PLUS Utilities
    GSP.MI    -1->1    rema_50100150 marg=NaN  GAS PLUS Utilities
 
--- 2026-10-23  (8 bull flips) --
-   GSP.MI    -1->1    rbo_150       marg=NaN  GAS PLUS Utilities
-   ICF.MI    -1->1    rema_50100    marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
-   MET.MI    -1->1    rbo_20        marg=NaN  MET.EXTRA GROUP Finance
-   MET.MI    -1->1    rbo_50        marg=NaN  MET.EXTRA GROUP Finance
-   MET.MI    -1->1    rtt_5020      marg=NaN  MET.EXTRA GROUP Finance
-   PRY.MI    -1->1    rema_50100150 marg=si   PRYSMIAN Producer Manufacturing
-   SFL.MI    -1->1    rema_100150   marg=si   SAFILO GROUP Health Technology
-   SFL.MI    -1->1    rema_50100150 marg=si   SAFILO GROUP Health Technology
-
--- 2026-10-22  (16 bull flips) --
-   COM.MI    -1->1    rsma_50100    marg=NaN  COMER INDUSTRIES Producer Manufacturing
-   ERG.MI    -1->1    rsma_50100    marg=si   ERG Utilities
-   FCT.MI    -1->1    rbo_50        marg=si   FINCANTIERI Producer Manufacturing
-   FCT.MI    0->1    rtt_5020      marg=si   FINCANTIERI Producer Manufacturing
-   G.MI      -1->1    rbo_20        marg=NaN  GENERALI ASS Finance
-   G.MI      0->1    rtt_5020      marg=NaN  GENERALI ASS Finance
-   GHC.MI    -1->1    rbo_150       marg=NaN  GAROFALO HEALTH CARE Health Services
-   GHC.MI    -1->1    rbo_20        marg=NaN  GAROFALO HEALTH CARE Health Services
-   GHC.MI    -1->1    rema_50100    marg=NaN  GAROFALO HEALTH CARE Health Services
-   GHC.MI    0->1    rtt_5020      marg=NaN  GAROFALO HEALTH CARE Health Services
-   ICF.MI    -1->1    rbo_20        marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
-   ICF.MI    0->1    rtt_5020      marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
-   PRO.MI    -1->1    rbo_20        marg=NaN  BCA PROFILO Finance
-   PRO.MI    0->1    rtt_5020      marg=NaN  BCA PROFILO Finance
-   PST.MI    -1->1    rbo_20        marg=si   POSTE ITALIANE Finance
-   PST.MI    -1->0    rtt_5020      marg=si   POSTE ITALIANE Finance
-
--- 2026-10-21  (5 bull flips) --
-   CYB.MI    -1->1    rema_50100    marg=NaN  CYBEROO Technology Services
-   CYB.MI    -1->1    rsma_50100    marg=NaN  CYBEROO Technology Services
-   CYB.MI    -1->1    rsma_50100150 marg=NaN  CYBEROO Technology Services
-   TLS.MI    -1->1    rbo_20        marg=NaN  TELESIA Commercial Services
-   TLS.MI    -1->0    rtt_5020      marg=NaN  TELESIA Commercial Services
-
-Most frequent flippers: TLS.MIx8, CYB.MIx8, GHC.MIx5, ICF.MIx5, GSP.MIx5, PST.MIx4, FCT.MIx4, COM.MIx4, ERG.MIx4, SGF.MIx4
+Most frequent flippers: TLS.MIx7, CYB.MIx5, GSP.MIx4, SGF.MIx4, IOT.MIx4, SFT.MIx4, ELN.MIx4, SOL.MIx4, UCG.MIx4, PIRC.MIx4
