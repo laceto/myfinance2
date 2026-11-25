@@ -1,6 +1,27 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 127
+window: 1 month ago   events: 146
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-24  (19 bull flips) --
+   AEDES.MI  -1->1    rbo_20        marg=NaN  AEDES Finance
+   AEDES.MI  0->1    rtt_5020      marg=NaN  AEDES Finance
+   BO.MI     -1->1    rbo_20        marg=NaN  BORGOSESIA Finance
+   BO.MI     -1->1    rsma_100150   marg=NaN  BORGOSESIA Finance
+   BO.MI     -1->1    rsma_50100150 marg=NaN  BORGOSESIA Finance
+   BO.MI     0->1    rtt_5020      marg=NaN  BORGOSESIA Finance
+   CALT.MI   -1->1    rbo_20        marg=NaN  CALTAGIRONE Non-Energy Minerals
+   CALT.MI   -1->0    rtt_5020      marg=NaN  CALTAGIRONE Non-Energy Minerals
+   CE.MI     -1->1    rbo_20        marg=NaN  CREDEM Finance
+   CE.MI     -1->0    rtt_5020      marg=NaN  CREDEM Finance
+   ENV.MI    -1->1    rbo_20        marg=NaN  ENERVIT Health Technology
+   ENV.MI    -1->0    rtt_5020      marg=NaN  ENERVIT Health Technology
+   SFT.MI    -1->1    rbo_20        marg=NaN  SOFTLAB Technology Services
+   SFT.MI    0->1    rtt_5020      marg=NaN  SOFTLAB Technology Services
+   SL.MI     -1->1    rbo_50        marg=NaN  SANLORENZO Consumer Durables
+   SL.MI     -1->1    rema_100150   marg=NaN  SANLORENZO Consumer Durables
+   SL.MI     -1->1    rema_50100150 marg=NaN  SANLORENZO Consumer Durables
+   SL.MI     0->1    rtt_5020      marg=NaN  SANLORENZO Consumer Durables
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
 
 -- 2026-11-23  (6 bull flips) --
    EVISO.MI  -1->1    rsma_50100150 marg=NaN  EVISO Utilities
@@ -171,4 +192,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    GSP.MI    -1->1    rema_100150   marg=NaN  GAS PLUS Utilities
    GSP.MI    -1->1    rema_50100150 marg=NaN  GAS PLUS Utilities
 
-Most frequent flippers: TLS.MIx7, CYB.MIx5, GSP.MIx4, SGF.MIx4, IOT.MIx4, SFT.MIx4, ELN.MIx4, SOL.MIx4, UCG.MIx4, PIRC.MIx4
+Most frequent flippers: TLS.MIx8, SL.MIx7, SFT.MIx6, CYB.MIx5, GSP.MIx4, SGF.MIx4, IOT.MIx4, ELN.MIx4, SOL.MIx4, UCG.MIx4

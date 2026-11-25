@@ -1,7 +1,10 @@
 BEAR FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 70
+window: 1 month ago   events: 71
 change: state before->after  (1=bull, 0=neutral, -1=bear)
 filter: marginabile=si only (short-sellable names)
+
+-- 2026-11-24  (1 bear flips) --
+   ACE.MI    1->-1   rsma_50100150 marg=si   ACEA Utilities
 
 -- 2026-11-23  (2 bear flips) --
    ISP.MI    1->-1   rbo_20        marg=si   INTESA SANPAOLO Finance
