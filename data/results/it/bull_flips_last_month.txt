@@ -1,6 +1,21 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 146
+window: 1 month ago   events: 159
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-25  (13 bull flips) --
+   CED.MI    -1->1    rbo_20        marg=NaN  CALTAGIRONE EDIT Consumer Services
+   CED.MI    -1->0    rtt_5020      marg=NaN  CALTAGIRONE EDIT Consumer Services
+   ENAV.MI   -1->1    rema_100150   marg=si   ENAV Transportation
+   ENAV.MI   -1->1    rema_50100150 marg=si   ENAV Transportation
+   GHC.MI    -1->1    rbo_20        marg=NaN  GAROFALO HEALTH CARE Health Services
+   GHC.MI    0->1    rtt_5020      marg=NaN  GAROFALO HEALTH CARE Health Services
+   ICF.MI    -1->1    rsma_100150   marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
+   ICF.MI    -1->1    rsma_50100150 marg=NaN  INDUSTRIE CHIMICHE FORESTALI Process Industries
+   TIP.MI    -1->1    rbo_50        marg=NaN  TAMBURI Finance
+   TIP.MI    0->1    rtt_5020      marg=NaN  TAMBURI Finance
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
+   TWL.MI    -1->1    rbo_20        marg=NaN  TRAWELL CO Transportation
+   TWL.MI    0->1    rtt_5020      marg=NaN  TRAWELL CO Transportation
 
 -- 2026-11-24  (19 bull flips) --
    AEDES.MI  -1->1    rbo_20        marg=NaN  AEDES Finance
@@ -192,4 +207,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    GSP.MI    -1->1    rema_100150   marg=NaN  GAS PLUS Utilities
    GSP.MI    -1->1    rema_50100150 marg=NaN  GAS PLUS Utilities
 
-Most frequent flippers: TLS.MIx8, SL.MIx7, SFT.MIx6, CYB.MIx5, GSP.MIx4, SGF.MIx4, IOT.MIx4, ELN.MIx4, SOL.MIx4, UCG.MIx4
+Most frequent flippers: TLS.MIx9, SL.MIx7, SFT.MIx6, CYB.MIx5, GSP.MIx4, SGF.MIx4, IOT.MIx4, ELN.MIx4, ICF.MIx4, SOL.MIx4
