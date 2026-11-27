@@ -1,25 +1,17 @@
 
 ===============================================================================================
-  ACTIONABLE TRADES: 2026-11-20 to 2026-11-25 (Last 4 Days)
+  ACTIONABLE TRADES: 2026-11-23 to 2026-11-26 (Last 4 Days)
 ===============================================================================================
- last_date   signal  ticker     price     action  stop_loss  risk_pct
-2026-11-25 rtt_5020  AC5.MI  2.100000 ENTER LONG   2.020000  3.809524
-2026-11-25 rtt_5020  BST.MI  1.402000 ENTER LONG   1.327429  5.318933
-2026-11-25 rtt_5020  CED.MI  2.470000 EXIT SHORT   2.535714       NaN
-2026-11-25 rtt_5020  ELC.MI  1.025000 EXIT SHORT   1.102143       NaN
-2026-11-25 rtt_5020  FUM.MI  2.940000 ENTER LONG   2.872857  2.283768
-2026-11-25 rtt_5020  GHC.MI  5.140000 ENTER LONG   4.988571  2.946080
-2026-11-25 rtt_5020 GROW.MI  1.710000 ENTER LONG   1.608571  5.931495
-2026-11-25 rtt_5020  IRC.MI  2.110000 EXIT SHORT   2.232857       NaN
-2026-11-25 rtt_5020 MARR.MI  5.160000 EXIT SHORT   5.340000       NaN
-2026-11-25 rtt_5020 PHIL.MI 21.750000 ENTER LONG  20.600000  5.287356
-2026-11-25 rtt_5020   PQ.MI  2.260000 EXIT SHORT   2.340000       NaN
-2026-11-25 rtt_5020 RWAY.MI  4.270000 ENTER LONG   4.064643  4.809301
-2026-11-25 rtt_5020  SES.MI 87.800003 EXIT SHORT  97.535713       NaN
-2026-11-25 rtt_5020  TIP.MI  8.700000 ENTER LONG   8.295714  4.646962
-2026-11-25 rtt_5020  TWL.MI 22.799999 ENTER LONG  21.399999  6.140353
-2026-11-25 rtt_5020   UD.MI  3.160000 EXIT SHORT   3.265714       NaN
+ last_date   signal  ticker     price      action  stop_loss  risk_pct
+2026-11-26 rtt_5020 CIRC.MI 16.000000   EXIT LONG  14.692857       NaN
+2026-11-26 rtt_5020  COM.MI 45.200001  EXIT SHORT  46.414286       NaN
+2026-11-26 rtt_5020  DIA.MI 76.480003   EXIT LONG  72.048573       NaN
+2026-11-26 rtt_5020  GIS.MI  1.300000 ENTER SHORT   1.408571  8.351650
+2026-11-26 rtt_5020 MARP.MI  2.200000  EXIT SHORT   2.202857       NaN
+2026-11-26 rtt_5020 MARR.MI  5.280000  ENTER LONG   4.948572  6.277056
+2026-11-26 rtt_5020  SPM.MI  4.468000  ENTER LONG   4.184571  6.343523
+2026-11-26 rtt_5020   UD.MI  3.350000  ENTER LONG   3.147143  6.055435
 
 ===============================================================================================
-  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-25)
+  LATEST STATUS FOR ACTIVE SIGNALS (2026-11-26)
 ===============================================================================================
