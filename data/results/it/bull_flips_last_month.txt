@@ -1,6 +1,10 @@
 BULL FLIPS from daily_brief.txt (SIGNAL FLIPS section)
-window: 1 month ago   events: 162
+window: 1 month ago   events: 160
 change: state before->after  (1=bull, 0=neutral, -1=bear)
+
+-- 2026-11-27  (2 bull flips) --
+   CEM.MI    -1->1    rsma_50100    marg=NaN  CEMENTIR HOLDING Non-Energy Minerals
+   TLS.MI    -1->1    rsma_50100150 marg=NaN  TELESIA Commercial Services
 
 -- 2026-11-26  (5 bull flips) --
    COM.MI    -1->1    rbo_20        marg=NaN  COMER INDUSTRIES Producer Manufacturing
@@ -204,10 +208,4 @@ change: state before->after  (1=bull, 0=neutral, -1=bear)
    TGYM.MI   -1->1    rbo_50        marg=si   TECHNOGYM Consumer Durables
    TGYM.MI   -1->1    rtt_5020      marg=si   TECHNOGYM Consumer Durables
 
--- 2026-10-27  (4 bull flips) --
-   NEXI.MI   -1->1    rema_100150   marg=si   NEXI Finance
-   NEXI.MI   -1->1    rema_50100150 marg=si   NEXI Finance
-   SGF.MI    -1->1    rbo_20        marg=NaN  SOGEFI Producer Manufacturing
-   SGF.MI    0->1    rtt_5020      marg=NaN  SOGEFI Producer Manufacturing
-
-Most frequent flippers: TLS.MIx10, SL.MIx7, SFT.MIx6, COM.MIx5, CYB.MIx5, GHC.MIx5, SGF.MIx4, IOT.MIx4, ELN.MIx4, ICF.MIx4
+Most frequent flippers: TLS.MIx11, SL.MIx7, SFT.MIx6, COM.MIx5, CYB.MIx5, GHC.MIx5, IOT.MIx4, ELN.MIx4, ICF.MIx4, SOL.MIx4
